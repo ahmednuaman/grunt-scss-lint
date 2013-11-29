@@ -12,11 +12,12 @@ module.exports = function(grunt) {
       },
       options: {
         config: '.scss-lint.yml',
+        reporterOutput: 'scss-lint-report.xml'
       },
     },
 
     nodeunit: {
-      tests: ['test/*_test.js'],
+      tests: ['test/*-test.js'],
     },
   });
 

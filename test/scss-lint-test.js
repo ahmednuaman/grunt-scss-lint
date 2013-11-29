@@ -25,7 +25,7 @@ stdoutEqual = function(callback, done) {
 
 exports.scsslint = {
   fail: function(test) {
-    test.expect(1);
+    test.expect(3);
     var files = path.join(fixtures, 'fail.scss');
     scsslint.lint(files, options, function(results) {
       test.ok(results[0].indexOf('Class `Button` in selector should be written in all lowercase as `button`') !== -1, 'Should report bad case.');
@@ -33,14 +33,14 @@ exports.scsslint = {
       test.ok(results[2].indexOf('Color `black` should be written in hexadecimal form as `#000`') !== -1, 'Should report string colour usage.');
       test.done();
     });
-  }//,
+  },
 
-  // pass: function(test) {
-  //   test.expect(1);
-  //   var files = path.join(fixtures, 'pass.scss');
-  //   scsslint.lint(files, options, function(results) {
-  //     test.equal(results[0], 'Missing semicolon.', 'Should reporter a missing semicolon.');
-  //     test.done();
-  //   });
-  // }
+  pass: function(test) {
+    test.expect(1);
+    var files = path.join(fixtures, 'pass.scss');
+    scsslint.lint(files, options, function(results) {
+      test.ok(results[0] === '', 'There should be no lint errors');
+      test.done();
+    });
+  },
 };

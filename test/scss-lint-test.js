@@ -4,8 +4,9 @@ var path = require('path'),
     grunt = require('grunt'),
     scsslint = require('../tasks/lib/scss-lint').init(grunt),
     fixtures = path.join(__dirname, 'fixtures'),
+    reporterOutFile = path.join(__dirname, 'output.xml'),
     hooker = grunt.util.hooker,
-    options = { config: '../.scss-lint.yml' },
+    options = {config: '../.scss-lint.yml'},
     stdoutEqual;
 
 stdoutEqual = function(callback, done) {
@@ -43,4 +44,15 @@ exports.scsslint = {
       test.done();
     });
   },
+
+  reporter: function(test) {
+    test.expect(1);
+    var files = path.join(fixtures, 'fail.scss');
+    scsslint.lint(files, {reporterOutput: reporterOutFile}, function(results) {
+      var report = grunt.file.read(reporterOutFile);
+
+      test.ok(report.indexOf(results[0]) !== -1, 'Should write the errors out to a report');
+      test.done();
+    });
+  }
 };

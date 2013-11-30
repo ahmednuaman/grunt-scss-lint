@@ -57,7 +57,7 @@ exports.init = function (grunt) {
     // }
 
     args = args.concat(files);
-    console.log(['scss-lint'].concat(args).join(' '))
+
     child = grunt.util.spawn({
       cmd: 'scss-lint',
       args: args

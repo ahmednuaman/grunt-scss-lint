@@ -2,14 +2,10 @@ module.exports = function(grunt) {
   grunt.initConfig({
     scsslint: {
       allFiles: [
-        'test/fixtures/*.scss',
+        'test/fixtures/fail.scss',
+        'test/fixtures/pass.scss',
+        'test/fixtures/*.scss'
       ],
-      individualFiles: {
-        files: [
-          {src: 'test/fixtures/pass.scss'},
-          {src: 'test/fixtures/fail.scss'}
-        ],
-      },
       options: {
         config: '.scss-lint.yml',
         reporterOutput: 'scss-lint-report.xml'

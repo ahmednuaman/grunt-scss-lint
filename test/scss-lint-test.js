@@ -45,6 +45,15 @@ exports.scsslint = {
     });
   },
 
+  multipleFiles: function(test) {
+    test.expect(1);
+    var files = path.join(fixtures, 'pass.scss');
+    scsslint.lint([files, files, files], options, function(results) {
+      test.ok(results[0] === '', 'There should be no lint errors');
+      test.done();
+    });
+  },
+
   reporter: function(test) {
     test.expect(1);
     var files = path.join(fixtures, 'fail.scss');

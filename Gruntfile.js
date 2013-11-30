@@ -4,21 +4,15 @@ module.exports = function(grunt) {
       allFiles: [
         'test/fixtures/*.scss',
       ],
-      individualFiles: {
-        files: [
-          {src: 'test/fixtures/pass.scss'},
-          {src: 'test/fixtures/fail.scss'}
-        ],
-      },
       options: {
         config: '.scss-lint.yml',
         reporterOutput: 'scss-lint-report.xml'
-      },
+      }
     },
 
     nodeunit: {
-      tests: ['test/*-test.js'],
-    },
+      tests: ['test/*-test.js']
+    }
   });
 
   grunt.loadTasks('tasks');

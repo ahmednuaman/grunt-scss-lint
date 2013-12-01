@@ -1,4 +1,4 @@
-# grunt-scss-lint v0.0.1 [![Build Status](https://travis-ci.org/gruntjs/grunt-scss-lint.png?branch=master)](https://travis-ci.org/gruntjs/grunt-scss-lint)
+# grunt-scss-lint v0.0.1 [![Build Status](https://travis-ci.org/ahmednuaman/grunt-scss-lint.png?branch=master)](https://travis-ci.org/ahmednuaman/grunt-scss-lint)
 
 > Validate `.scss` files with `scss-lint`.
 

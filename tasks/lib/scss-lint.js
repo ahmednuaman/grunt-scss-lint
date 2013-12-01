@@ -24,7 +24,7 @@ exports.init = function (grunt) {
     xml.att('errors', results.length);
 
     _.forEach(results, function (result) {
-      if (!file) {
+      if (!result) {
         return;
       }
 

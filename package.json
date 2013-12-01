@@ -40,6 +40,10 @@
     "grunt": "0.4.2"
   },
   "keywords": [
-    "gruntplugin"
+    "gruntplugin",
+    "scss",
+    "lint",
+    "scss-lint",
+    "junit"
   ]
 }

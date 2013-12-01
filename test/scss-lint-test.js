@@ -1,5 +1,3 @@
-'use strict';
-
 var path = require('path'),
     grunt = require('grunt'),
     scsslint = require('../tasks/lib/scss-lint').init(grunt),

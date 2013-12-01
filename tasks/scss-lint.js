@@ -16,12 +16,6 @@ module.exports = function (grunt) {
       reporterOutput: null
     });
 
-    _.forEach(files, function(file, i) {
-      if (file.indexOf('/') !== 0) {
-        files[i] = cwd + '/' + file;
-      }
-    });
-
     grunt.verbose.writeflags(opts, 'scss-lint options');
 
     grunt.log.writeln('Running scss-lint on ' + target);

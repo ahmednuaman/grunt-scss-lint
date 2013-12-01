@@ -50,16 +50,16 @@ exports.scsslint = {
       test.ok(results[0] === '', 'There should be no lint errors');
       test.done();
     });
-  },
+  }//,
 
-  reporter: function(test) {
-    test.expect(1);
-    var files = path.join(fixtures, 'fail.scss');
-    scsslint.lint(files, {reporterOutput: reporterOutFile}, function(results) {
-      var report = grunt.file.read(reporterOutFile);
+  // reporter: function(test) {
+  //   test.expect(1);
+  //   var files = path.join(fixtures, 'fail.scss');
+  //   scsslint.lint(files, {reporterOutput: reporterOutFile}, function(results) {
+  //     var report = grunt.file.read(reporterOutFile);
 
-      test.ok(report.indexOf(results[0]) !== -1, 'Should write the errors out to a report');
-      test.done();
-    });
-  }
+  //     test.ok(report.indexOf(results[0]) !== -1, 'Should write the errors out to a report');
+  //     test.done();
+  //   });
+  // }
 };

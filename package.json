@@ -2,22 +2,22 @@
   "name": "grunt-scss-lint",
   "description": "Validate `.scss` files with `scss-lint`.",
   "version": "0.0.1",
-  "homepage": "https://github.com/gruntjs/grunt-scss-lint",
+  "homepage": "https://github.com/ahmednuaman/grunt-scss-lint",
   "author": {
     "name": "Ahmed Nuaman",
     "url": "http://ahmednuaman.com/"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/gruntjs/grunt-scss-lint.git"
+    "url": "git://github.com/ahmednuaman/grunt-scss-lint.git"
   },
   "bugs": {
-    "url": "https://github.com/gruntjs/grunt-scss-lint/issues"
+    "url": "https://github.com/ahmednuaman/grunt-scss-lint/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/gruntjs/grunt-scss-lint/blob/master/LICENSE-MIT"
+      "url": "https://github.com/ahmednuaman/grunt-scss-lint/blob/master/LICENSE-MIT"
     }
   ],
   "engines": {

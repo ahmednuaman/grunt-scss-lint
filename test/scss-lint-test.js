@@ -24,6 +24,7 @@ stdoutEqual = function(callback, done) {
 
 exports.scsslint = {
   fail: function(test) {
+    console.log('fail');
     test.expect(3);
     var files = path.join(fixtures, 'fail.scss');
     scsslint.lint(files, options, function(results) {
@@ -35,6 +36,7 @@ exports.scsslint = {
   },
 
   pass: function(test) {
+    console.log('pass');
     test.expect(1);
     var files = path.join(fixtures, 'pass.scss');
     scsslint.lint(files, options, function(results) {
@@ -44,22 +46,24 @@ exports.scsslint = {
   },
 
   multipleFiles: function(test) {
+    console.log('multipleFiles');
     test.expect(1);
     var files = path.join(fixtures, 'pass.scss');
     scsslint.lint([files, files, files], options, function(results) {
       test.ok(results[0] === '', 'There should be no lint errors');
       test.done();
     });
-  }//,
+  },
 
-  // reporter: function(test) {
-  //   test.expect(1);
-  //   var files = path.join(fixtures, 'fail.scss');
-  //   scsslint.lint(files, {reporterOutput: reporterOutFile}, function(results) {
-  //     var report = grunt.file.read(reporterOutFile);
+  reporter: function(test) {
+    console.log('reporter');
+    test.expect(1);
+    var files = path.join(fixtures, 'fail.scss');
+    scsslint.lint(files, {reporterOutput: reporterOutFile}, function(results) {
+      var report = grunt.file.read(reporterOutFile);
 
-  //     test.ok(report.indexOf(results[0]) !== -1, 'Should write the errors out to a report');
-  //     test.done();
-  //   });
-  // }
+      test.ok(report.indexOf(results[0]) !== -1, 'Should write the errors out to a report');
+      test.done();
+    });
+  }
 };

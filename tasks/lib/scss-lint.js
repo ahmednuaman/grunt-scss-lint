@@ -24,6 +24,10 @@ exports.init = function (grunt) {
     xml.att('errors', results.length);
 
     _.forEach(results, function (result) {
+      if (!file) {
+        return;
+      }
+
       file = result.match(/^([^:])+/)[0];
 
       if (!files[file]) {
@@ -49,7 +53,7 @@ exports.init = function (grunt) {
   exports.lint = function (files, options, done) {
     var args = [],
         config = options['config'],
-        spawn = require('child_process').spawn,
+        exec = require('child_process').exec,
         child;
 
     // if (config) {
@@ -59,26 +63,24 @@ exports.init = function (grunt) {
 
     args = args.concat(files);
 
-    child = spawn('scss-lint', args);
+    child = exec('scss-lint ' + args.join(' '), {
+      cwd: process.cwd()
+    }, function(err, results, code) {
+      results = results.split("\n");
 
-    child.stdout.on('data', function (data) {
-      results = data.split("\n");
+      if (code === 127) {
+        grunt.log.errorlns('Please make sure you install the `scss-lint` gem.');
+
+        return done(false);
+      }
 
       writeReport(options['reporterOutput'], results);
 
       done(results);
     });
 
-    child.stderr.on('data', function (data) {
-      grunt.log.errorlns(data);
-    });
-
-    child.on('close', function (code) {
-      if (code === 127) {
-        grunt.log.errorlns('Please make sure you install the `scss-lint` gem.');
-
-        return done(false);
-      }
+    child.stdout.on('write', function (out) {
+      grunt.log.writeln(out);
     });
   };
 

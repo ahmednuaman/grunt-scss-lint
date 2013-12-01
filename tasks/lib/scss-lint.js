@@ -66,7 +66,6 @@ exports.init = function (grunt) {
     child = exec('scss-lint ' + args.join(' '), {
       cwd: process.cwd()
     }, function(err, results, code) {
-      console.log(arguments);
       results = results.split("\n");
 
       if (code === 127) {

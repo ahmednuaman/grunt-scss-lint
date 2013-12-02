@@ -1,13 +1,10 @@
 module.exports = function (grunt) {
   var _ = require('lodash'),
-      path = require('path'),
       scsslint = require('./lib/scss-lint').init(grunt);
 
   grunt.registerMultiTask('scsslint', 'Validate `.scss` files with `scss-lint`.', function() {
-    var cwd = process.cwd(),
-        done = this.async(),
+    var done = this.async(),
         files = this.data,
-        output = '',
         target = this.target,
         opts;
 

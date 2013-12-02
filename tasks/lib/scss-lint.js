@@ -39,7 +39,7 @@ exports.init = function (grunt) {
 
     _.forEach(files, function (fileErrors, fileName) {
       spec = xml.ele('testcase', {
-        name: file
+        name: fileName
       });
 
       _.forEach(fileErrors, function (error) {

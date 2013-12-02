@@ -39,7 +39,9 @@ Default: `scss-lint`'s [default config file](https://github.com/causes/scss-lint
 Type: `String`
 Default: `scss-lint-report.xml`
 
-The jUnit XML file to save the output to. If you don't want this then set the option as `null`.### Usage Examples
+The jUnit XML file to save the output to. If you don't want this then set the option as `null`.
+
+### Usage Examples
 
 #### Example config
 

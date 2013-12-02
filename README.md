@@ -1,5 +1,5 @@
 # grunt-scss-lint v0.0.2
-[![Build Status](https://travis-ci.org/ahmednuaman/grunt-scss-lint.png?branch=master)](https://travis-ci.org/ahmednuaman/grunt-scss-lint)
+[![Build Status](https://travis-ci.org/ahmednuaman/grunt-scss-lint.png?branch=master)](https://travis-ci.org/ahmednuaman/grunt-scss-lint) [![Code Climate](https://codeclimate.com/github/ahmednuaman/grunt-scss-lint.png)](https://codeclimate.com/github/ahmednuaman/grunt-scss-lint)
 
 > Lint your `.scss` files
 

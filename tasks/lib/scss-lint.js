@@ -56,10 +56,10 @@ exports.init = function (grunt) {
         exec = require('child_process').exec,
         child;
 
-    // if (config) {
-    //   args.push('-c');
-    //   args.push(config);
-    // }
+    if (config) {
+      args.push('-c');
+      args.push(config);
+    }
 
     args = args.concat(files);
 

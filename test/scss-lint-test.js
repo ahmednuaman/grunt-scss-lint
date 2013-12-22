@@ -4,7 +4,7 @@ var path = require('path'),
     fixtures = path.join(__dirname, 'fixtures'),
     reporterOutFile = path.join(__dirname, 'output.xml'),
     hooker = grunt.util.hooker,
-    options = {config: '../.scss-lint.yml'},
+    options = {config: path.join(fixtures, '.scss-lint-test.yml')},
     stdoutEqual;
 
 stdoutEqual = function(callback, done) {

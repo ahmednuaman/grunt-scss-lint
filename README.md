@@ -32,7 +32,7 @@ This task requires you to have [Ruby](http://www.ruby-lang.org/en/downloads/), a
 Type: `String`
 Default: `scss-lint`'s [default config file](https://github.com/causes/scss-lint/blob/master/config/default.yml).
 
-**[Note that this isn't working correctly yet](https://github.com/causes/scss-lint/issues/46).**
+~~**[Note that this isn't working correctly yet](https://github.com/causes/scss-lint/issues/46).**~~
 
 #### reporterOutput
 

@@ -1,3 +1,9 @@
+v0.0.6:
+  date: 2013-12-25
+  changes:
+    - https://github.com/ahmednuaman/grunt-scss-lint/pull/3
+    - https://github.com/ahmednuaman/grunt-scss-lint/pull/5
+    - https://github.com/ahmednuaman/grunt-scss-lint/pull/7
 v0.0.5:
   date: 2013-12-23
   changes:

@@ -53,12 +53,18 @@ exports.init = function (grunt) {
   exports.lint = function (files, options, done) {
     var args = [],
         config = options['config'],
+        exclude = options['exclude'],
         exec = require('child_process').exec,
         child;
 
     if (config) {
       args.push('-c');
       args.push(config);
+    }
+
+    if (exclude) {
+      args.push('-e');
+      args.push(grunt.file.expand(exclude).join(','));
     }
 
     args = args.concat(files);

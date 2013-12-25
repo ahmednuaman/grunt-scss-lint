@@ -4,7 +4,8 @@ module.exports = function (grunt) {
 
   grunt.registerMultiTask('scsslint', 'Validate `.scss` files with `scss-lint`.', function() {
     var done = this.async(),
-        files = this.data,
+        files = this.filesSrc,
+        fileCount = this.filesSrc.length,
         target = this.target,
         opts;
 
@@ -21,7 +22,7 @@ module.exports = function (grunt) {
       var success = results[0] === '';
 
       if (success) {
-        grunt.log.oklns(target + ' files are lint free');
+        grunt.log.oklns(fileCount + ' files are lint free');
       } else {
         _.forEach(results, function(result) {
           grunt.log.writeln(result);

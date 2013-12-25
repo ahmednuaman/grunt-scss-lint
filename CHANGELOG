@@ -1,4 +1,4 @@
-v0.0.4:
+v0.0.7:
   date: 2013-12-25
   changes:
     - https://github.com/ahmednuaman/grunt-scss-lint/pull/4

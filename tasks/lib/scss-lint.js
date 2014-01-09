@@ -77,7 +77,7 @@ exports.init = function (grunt) {
       if (err && err.code === 127) {
         grunt.log.errorlns('1. Please make sure you have ruby installed: `ruby -v`');
         grunt.log.errorlns('2. Install the `scss-lint` gem by running:');
-        grunt.log.errorlns('gem update --system && gem install scss-lint');
+        grunt.log.errorlns('gem update --system && gem install bundler && bundle install');
 
         return done(false);
       }

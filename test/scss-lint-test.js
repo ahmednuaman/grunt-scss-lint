@@ -3,24 +3,7 @@ var path = require('path'),
     scsslint = require('../tasks/lib/scss-lint').init(grunt),
     fixtures = path.join(__dirname, 'fixtures'),
     reporterOutFile = path.join(__dirname, 'output.xml'),
-    hooker = grunt.util.hooker,
-    options = {config: path.join(fixtures, '.scss-lint-test.yml')},
-    stdoutEqual;
-
-stdoutEqual = function(callback, done) {
-  var actual = '';
-
-  hooker.hook(process.stdout, 'write', {
-    pre: function(result) {
-      actual += grunt.log.uncolor(result);
-      return hooker.preempt();
-    }
-  });
-
-  callback();
-  hooker.unhook(process.stdout, 'write');
-  done(actual);
-};
+    options = {config: path.join(fixtures, '.scss-lint-test.yml')};
 
 exports.scsslint = {
   fail: function(test) {
@@ -50,6 +33,16 @@ exports.scsslint = {
 
     scsslint.lint(files, options, function(results) {
       test.ok(results[0] === '', 'There should be no lint errors');
+      test.done();
+    });
+  },
+
+  failWithBadOptions: function(test) {
+    test.expect(1);
+    var files = '--incorrectlySpecifyingAnOptionAsAFile';
+
+    scsslint.lint(files, options, function(results) {
+      test.ok(!results, 'There should be no lint errors but should return failure');
       test.done();
     });
   },

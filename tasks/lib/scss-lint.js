@@ -14,6 +14,7 @@ exports.init = function (grunt) {
       return;
     }
 
+    results = results.split("\n");
     xml = xmlBuilder.create('testsuites');
 
     xml.ele('testsuite', {
@@ -72,8 +73,6 @@ exports.init = function (grunt) {
     child = exec('scss-lint ' + args.join(' '), {
       cwd: process.cwd()
     }, function(err, results, code) {
-      results = results.split("\n");
-
       if (err && err.code !== 65) {
         if (err.code === 127) {
           grunt.log.errorlns('1. Please make sure you have ruby installed: `ruby -v`');
@@ -88,12 +87,9 @@ exports.init = function (grunt) {
       }
 
       writeReport(options['reporterOutput'], results);
+      grunt.log.writeln(results);
 
       done(results);
-    });
-
-    child.stdout.on('write', function (out) {
-      grunt.log.writeln(out);
     });
   };
 

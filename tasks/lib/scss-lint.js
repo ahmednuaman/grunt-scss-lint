@@ -14,7 +14,7 @@ exports.init = function (grunt) {
       return;
     }
 
-    results = results.split("\n");
+    //results = results.split("\n");
     xml = xmlBuilder.create('testsuites');
 
     xml.ele('testsuite', {
@@ -90,10 +90,16 @@ exports.init = function (grunt) {
       }
 
       writeReport(options['reporterOutput'], results);
-      grunt.log.writeln(results);
+      //grunt.log.writeln(results);
 
       done(results);
     });
+    
+    child.stdout.on('write', function (out) {
+      grunt.log.writeln(out);
+    });
+
+
   };
 
   return exports;

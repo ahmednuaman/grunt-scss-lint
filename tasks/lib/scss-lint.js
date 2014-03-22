@@ -58,6 +58,12 @@ exports.init = function (grunt) {
         exec = require('child_process').exec,
         child;
 
+    args.push('scss-lint');
+
+    if (options.bundleExec) {
+      args.unshift('bundle', 'exec');
+    }
+
     if (config) {
       args.push('-c');
       args.push(config);
@@ -70,7 +76,7 @@ exports.init = function (grunt) {
 
     args = args.concat(files);
 
-    child = exec('scss-lint ' + args.join(' '), {
+    child = exec(args.join(' '), {
       cwd: process.cwd()
     }, function(err, results, code) {
       if (err && err.code !== 65) {

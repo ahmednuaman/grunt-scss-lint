@@ -87,7 +87,6 @@ exports.init = function (grunt) {
       }
 
       writeReport(options['reporterOutput'], results);
-      grunt.log.writeln(results);
 
       done(results);
     });

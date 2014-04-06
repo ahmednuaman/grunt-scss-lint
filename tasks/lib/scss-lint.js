@@ -77,7 +77,6 @@ exports.init = function (grunt) {
     if (bundleExec) {
       command = 'bundle exec ' + command;
     }
-    console.log(command);
     child = exec(command, {
       cwd: process.cwd()
     }, function(err, results, code) {

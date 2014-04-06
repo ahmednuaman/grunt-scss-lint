@@ -55,7 +55,9 @@ exports.init = function (grunt) {
     var args = [],
         config = options['config'],
         exclude = options['exclude'],
+        bundleExec = options['bundleExec'],
         exec = require('child_process').exec,
+        command = 'scss-lint',
         child;
 
     if (config) {
@@ -70,7 +72,13 @@ exports.init = function (grunt) {
 
     args = args.concat(files);
 
-    child = exec('scss-lint ' + args.join(' '), {
+    command += ' ' + args.join(' ');
+
+    if (bundleExec) {
+      command = 'bundle exec ' + command;
+    }
+    console.log(command);
+    child = exec(command, {
       cwd: process.cwd()
     }, function(err, results, code) {
       if (err && err.code !== 65) {

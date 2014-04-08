@@ -1,4 +1,4 @@
-before_install: gem install scss-lint; npm install -g grunt-cli
+before_install: gem install scss-lint; npm install -g grunt-cli; bundle install;
 install: npm install -d
 language: node_js
 node_js:

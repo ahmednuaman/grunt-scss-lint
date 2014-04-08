@@ -28,6 +28,17 @@ exports.scsslint = {
     });
   },
 
+  bundleExec: function(test) {
+    test.expect(1);
+    var files = path.join(fixtures, 'pass.scss');
+    options['bundleExec'] = true;
+    scsslint.lint(files, options, function(results) {
+      results = results.split("\n");
+      test.ok(results[0] === '', 'There should be no lint errors');
+      test.done();
+    });
+  },
+
   passWithExcludedFile: function(test) {
     test.expect(1);
     var files = path.join(fixtures, '*.scss'),

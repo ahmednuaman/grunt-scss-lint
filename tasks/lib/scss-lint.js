@@ -55,10 +55,14 @@ exports.init = function (grunt) {
     var args = [],
         config = options['config'],
         exclude = options['exclude'],
-        bundleExec = options['bundleExec'],
         exec = require('child_process').exec,
-        command = 'scss-lint',
         child;
+
+    args.push('scss-lint');
+
+    if (options.bundleExec) {
+      args.unshift('bundle', 'exec');
+    }
 
     if (config) {
       args.push('-c');
@@ -72,12 +76,7 @@ exports.init = function (grunt) {
 
     args = args.concat(files);
 
-    command += ' ' + args.join(' ');
-
-    if (bundleExec) {
-      command = 'bundle exec ' + command;
-    }
-    child = exec(command, {
+    child = exec(args.join(' '), {
       cwd: process.cwd()
     }, function(err, results, code) {
       if (err && err.code !== 65) {
@@ -94,6 +93,7 @@ exports.init = function (grunt) {
       }
 
       writeReport(options['reporterOutput'], results);
+      grunt.log.writeln(results);
 
       done(results);
     });

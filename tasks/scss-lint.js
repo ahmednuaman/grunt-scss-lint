@@ -11,7 +11,8 @@ module.exports = function (grunt) {
 
     opts = this.options({
       config: '.scss-lint.yml',
-      reporterOutput: null
+      reporterOutput: null,
+      bundleExec: false
     });
 
     grunt.verbose.writeflags(opts, 'scss-lint options');

@@ -72,7 +72,7 @@ exports.scsslint = {
   },
 
   reporter: function(test) {
-    test.expect(1);
+    test.expect(2);
     var files = path.join(fixtures, 'fail.scss');
     scsslint.lint(files, {reporterOutput: reporterOutFile}, function(results) {
       var report = grunt.file.read(reporterOutFile);

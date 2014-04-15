@@ -76,6 +76,10 @@ exports.init = function (grunt) {
 
     args = args.concat(files);
 
+    if (grunt.option('debug') !== undefined) {
+      grunt.log.debug("Run command: " + args.join(' '));
+    }
+
     child = exec(args.join(' '), {
       cwd: process.cwd()
     }, function(err, results, code) {

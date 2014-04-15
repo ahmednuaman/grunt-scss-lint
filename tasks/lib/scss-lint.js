@@ -14,7 +14,8 @@ exports.init = function (grunt) {
       return;
     }
 
-    results = results.split("\n");
+    results = (results.length !== 0) ? results.trim().split("\n") : [];
+
     xml = xmlBuilder.create('testsuites');
 
     xml.ele('testsuite', {

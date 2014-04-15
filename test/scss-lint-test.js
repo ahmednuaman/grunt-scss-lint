@@ -72,7 +72,7 @@ exports.scsslint = {
   },
 
   reporter: function(test) {
-    test.expect(1);
+    test.expect(2);
     var files = path.join(fixtures, 'fail.scss');
     scsslint.lint(files, {reporterOutput: reporterOutFile}, function(results) {
       var report = grunt.file.read(reporterOutFile);
@@ -80,6 +80,19 @@ exports.scsslint = {
       results = results.split("\n");
 
       test.ok(report.indexOf(results[0]) !== -1, 'Should write the errors out to a report');
+      test.ok(report.indexOf("errors=\"3\"") !== -1, 'Should write the number of errors out to a report');
+      test.done();
+    });
+  },
+
+  reporterErrors: function(test) {
+    test.expect(1);
+    var files = path.join(fixtures, 'pass.scss');
+    scsslint.lint(files, {reporterOutput: reporterOutFile}, function(results) {
+
+      var report = grunt.file.read(reporterOutFile);
+      
+      test.ok(report.indexOf("errors=\"0\"") !== -1, 'Should write the number of errors out to a report');
       test.done();
     });
   }

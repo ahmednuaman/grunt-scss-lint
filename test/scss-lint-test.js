@@ -1,5 +1,6 @@
 var path = require('path'),
     grunt = require('grunt'),
+    hooker = grunt.util.hooker,
     scsslint = require('../tasks/lib/scss-lint').init(grunt),
     fixtures = path.join(__dirname, 'fixtures'),
     reporterOutFile = path.join(__dirname, 'output.xml'),
@@ -25,6 +26,31 @@ exports.scsslint = {
       results = results.split("\n");
       test.ok(results[0] === '', 'There should be no lint errors');
       test.done();
+    });
+  },
+
+  debugOption: function(test) {
+    test.expect(1);
+    var files = path.join(fixtures, 'pass.scss');
+    var muted = grunt.log.muted;
+    var stdoutMsg = '';
+    grunt.log.muted = false;
+
+    hooker.hook(process.stdout, 'write', {
+      pre: function(result) {
+        stdoutMsg += grunt.log.uncolor(result);
+        return hooker.preempt();
+      }
+    });
+
+    grunt.option('debug', true);
+    scsslint.lint(files, options, function() {
+        grunt.option('debug', undefined);
+        hooker.unhook(process.stdout, 'write');
+        grunt.log.muted = muted;
+
+        test.ok(stdoutMsg.indexOf('Run command: scss-lint -c') !== -1, 'Show debug information');
+        test.done();
     });
   },
 

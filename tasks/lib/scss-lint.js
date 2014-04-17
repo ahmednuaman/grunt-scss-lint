@@ -79,7 +79,7 @@ exports.init = function (grunt) {
 
     child = exec(args.join(' '), {
       cwd: process.cwd()
-    }, function(err, results, code) {
+    }, function (err, results, code) {
       if (err && err.code !== 65) {
         if (err.code === 127) {
           grunt.log.errorlns('1. Please make sure you have ruby installed: `ruby -v`');

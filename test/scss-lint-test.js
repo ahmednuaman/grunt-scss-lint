@@ -31,9 +31,10 @@ exports.scsslint = {
 
   debugOption: function(test) {
     test.expect(1);
-    var files = path.join(fixtures, 'pass.scss');
-    var muted = grunt.log.muted;
-    var stdoutMsg = '';
+    var files = path.join(fixtures, 'pass.scss'),
+        muted = grunt.log.muted,
+        stdoutMsg = '';
+
     grunt.log.muted = false;
 
     hooker.hook(process.stdout, 'write', {

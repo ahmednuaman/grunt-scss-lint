@@ -11,10 +11,6 @@
     {
       "name": "Ahmed Nuaman",
       "url": "http://ahmednuaman.com/"
-    },
-    {
-      "name": "Mike Sherov",
-      "url": "http://mike.sherov.com"
     }
   ],
   "repository": {
@@ -38,16 +34,17 @@
   },
   "dependencies": {
     "lodash": "2.4.1",
-    "xmlbuilder": "2.1.0"
+    "xmlbuilder": "2.2.1"
   },
   "devDependencies": {
-    "grunt-contrib-jshint": "0.8.0",
-    "grunt-contrib-nodeunit": "0.3.2",
-    "grunt-contrib-internal": "0.4.7",
-    "grunt": ">= 0.4.0"
+    "grunt-contrib-jshint": "0.10.0",
+    "grunt-contrib-nodeunit": "0.3.3",
+    "grunt-contrib-internal": "0.4.9",
+    "grunt-jscs-checker": "0.4.1",
+    "grunt": ">=0.4.4"
   },
   "peerDependencies": {
-    "grunt": ">= 0.4.0"
+    "grunt": ">=0.4.4"
   },
   "keywords": [
     "gruntplugin",

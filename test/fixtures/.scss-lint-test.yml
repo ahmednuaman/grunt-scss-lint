@@ -1,5 +1,4 @@
 # Default application configuration that all configurations inherit from.
-# This is the same as the default config for the gem: https://github.com/causes/scss-lint/blob/master/config/default.yml
 linters:
   BorderZero:
     enabled: true
@@ -19,14 +18,19 @@ linters:
   DeclarationOrder:
     enabled: true
 
-  DeclaredName:
-    enabled: true
-
   DuplicateProperty:
     enabled: true
 
+  EmptyLineBetweenBlocks:
+    enabled: true
+    ignore_single_line_blocks: true
+
   EmptyRule:
     enabled: true
+
+  FinalNewline:
+    enabled: true
+    present: true
 
   HexFormat:
     enabled: true
@@ -40,17 +44,30 @@ linters:
 
   LeadingZero:
     enabled: true
+    style: exclude_zero # or 'include_zero'
+
+  NameFormat:
+    enabled: true
+    convention: hyphenated_lowercase # or 'BEM', or a regex pattern
 
   PlaceholderInExtend:
     enabled: true
+
+  PropertySortOrder:
+    enabled: true
+
+  PropertySpelling:
+    enabled: true
+    extra_properties: []
+
+  SelectorDepth:
+    enabled: true
+    max_depth: 3
 
   Shorthand:
     enabled: true
 
   SingleLinePerSelector:
-    enabled: true
-
-  SortedProperties:
     enabled: true
 
   SpaceAfterComma:
@@ -64,15 +81,30 @@ linters:
 
   SpaceBeforeBrace:
     enabled: true
+    allow_single_line_padding: false
+
+  SpaceBetweenParens:
+    enabled: true
+    spaces: 0
+
+  StringQuotes:
+    enabled: true
+    style: single_quotes # or double_quotes
 
   TrailingSemicolonAfterPropertyValue:
     enabled: true
 
-  UsageName:
+  UnnecessaryMantissa:
+    enabled: true
+
+  UrlFormat:
+    enabled: true
+
+  UrlQuotes:
     enabled: true
 
   ZeroUnit:
     enabled: true
 
-  Compass::PropertyWithMixin:
+  Compass::*:
     enabled: false

@@ -1,4 +1,6 @@
 {
+  "indent": 2,
+  "maxlen": 120,
   "node": true,
   "sub": true
 }

@@ -23,9 +23,14 @@ linters:
 
   EmptyLineBetweenBlocks:
     enabled: true
+    ignore_single_line_blocks: true
 
   EmptyRule:
     enabled: true
+
+  FinalNewline:
+    enabled: true
+    present: true
 
   HexFormat:
     enabled: true
@@ -39,9 +44,11 @@ linters:
 
   LeadingZero:
     enabled: true
+    style: exclude_zero # or 'include_zero'
 
   NameFormat:
     enabled: true
+    convention: hyphenated_lowercase # or 'BEM', or a regex pattern
 
   PlaceholderInExtend:
     enabled: true
@@ -74,6 +81,7 @@ linters:
 
   SpaceBeforeBrace:
     enabled: true
+    allow_single_line_padding: false
 
   SpaceBetweenParens:
     enabled: true
@@ -84,6 +92,12 @@ linters:
     style: single_quotes # or double_quotes
 
   TrailingSemicolonAfterPropertyValue:
+    enabled: true
+
+  UnnecessaryMantissa:
+    enabled: true
+
+  UrlFormat:
     enabled: true
 
   UrlQuotes:

@@ -27,17 +27,24 @@ This task requires you to have [Ruby](http://www.ruby-lang.org/en/downloads/), a
 
 ### Options
 
+#### bundleExec
+
+- Type: `Boolean`
+- Default: `false`
+
+You can choose to have your gems installed via [bundler](http://bundler.io) and if so, set this option to `true` to use the local gems.
+
 #### config
 
-Type: `String`
-Default: `scss-lint`'s [default config file](https://github.com/causes/scss-lint/blob/master/config/default.yml).
+- Type: `String`
+- Default: `scss-lint`'s [default config file](https://github.com/causes/scss-lint/blob/master/config/default.yml).
 
 ~~**[Note that this isn't working correctly yet](https://github.com/causes/scss-lint/issues/46).**~~
 
 #### reporterOutput
 
-Type: `String`
-Default: `scss-lint-report.xml`
+- Type: `String`
+- Default: `null`
 
 The jUnit XML file to save the output to. If you don't want this then set the option as `null`.
 
@@ -52,6 +59,7 @@ grunt.initConfig({
       'test/fixtures/*.scss',
     ],
     options: {
+      bundler: true,
       config: '.scss-lint.yml',
       reporterOutput: 'scss-lint-report.xml'
     },

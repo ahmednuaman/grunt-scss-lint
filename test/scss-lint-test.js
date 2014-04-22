@@ -44,7 +44,7 @@ exports.scsslint = {
     });
   },
 
-  debugOption: function(test) {
+  debugOption: function (test) {
     test.expect(1);
     var files = path.join(fixtures, 'pass.scss'),
         muted = grunt.log.muted,
@@ -53,14 +53,14 @@ exports.scsslint = {
     grunt.log.muted = false;
 
     hooker.hook(process.stdout, 'write', {
-      pre: function(result) {
+      pre: function (result) {
         stdoutMsg += grunt.log.uncolor(result);
         return hooker.preempt();
       }
     });
 
     grunt.option('debug', true);
-    scsslint.lint(files, options, function() {
+    scsslint.lint(files, options, function () {
         grunt.option('debug', undefined);
         hooker.unhook(process.stdout, 'write');
         grunt.log.muted = muted;
@@ -70,7 +70,7 @@ exports.scsslint = {
     });
   },
 
-  bundleExec: function(test) {
+  bundleExec: function (test) {
     test.expect(1);
     var files = path.join(fixtures, 'pass.scss');
     options['bundleExec'] = true;

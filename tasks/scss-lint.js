@@ -23,7 +23,7 @@ module.exports = function (grunt) {
       var success = _.isEmpty(results);
 
       if (success) {
-        grunt.log.oklns(fileCount + ' files are lint free');
+        grunt.log.oklns(fileCount + grunt.util.pluralize(fileCount, ' file is lint free/ files are lint free'));
       } else {
         grunt.log.writeln(results);
       }

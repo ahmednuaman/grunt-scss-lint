@@ -14,7 +14,7 @@ exports.init = function (grunt) {
       return;
     }
 
-    results = (results.length !== 0) ? results.trim().split("\n") : [];
+    results = (results.length !== 0) ? results.split("\n") : [];
 
     xml = xmlBuilder.create('testsuites');
 
@@ -97,9 +97,9 @@ exports.init = function (grunt) {
         return done(false);
       }
 
-      writeReport(options['reporterOutput'], results);
-      grunt.log.writeln(results);
+      results = results.trim();
 
+      writeReport(options['reporterOutput'], results);
       done(results);
     });
   };

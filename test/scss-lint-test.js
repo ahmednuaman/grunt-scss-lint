@@ -13,7 +13,7 @@ exports.scsslint = {
   },
 
   fail: function (test) {
-    test.expect(3);
+    test.expect(5);
     var files = path.join(fixtures, 'fail.scss');
     scsslint.lint(files, options, function (results) {
       results = results.split("\n");
@@ -30,6 +30,11 @@ exports.scsslint = {
         results[2].indexOf('Color `black` should be written in hexadecimal form as `#000`') !== -1,
         'Should report string colour usage.'
       );
+      test.ok(
+        results[3].indexOf('Files should end with a trailing newline') !== -1,
+        'Should report trailing newline.'
+      );
+      test.ok(results.length === 4);
       test.done();
     });
   },
@@ -61,12 +66,12 @@ exports.scsslint = {
 
     grunt.option('debug', true);
     scsslint.lint(files, options, function () {
-        grunt.option('debug', undefined);
-        hooker.unhook(process.stdout, 'write');
-        grunt.log.muted = muted;
+      grunt.option('debug', undefined);
+      hooker.unhook(process.stdout, 'write');
+      grunt.log.muted = muted;
 
-        test.ok(stdoutMsg.indexOf('Run command: scss-lint -c') !== -1, 'Show debug information');
-        test.done();
+      test.ok(stdoutMsg.indexOf('Run command: scss-lint -c') !== -1, 'Show debug information');
+      test.done();
     });
   },
 

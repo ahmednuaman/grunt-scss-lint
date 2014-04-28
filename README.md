@@ -59,7 +59,7 @@ grunt.initConfig({
       'test/fixtures/*.scss',
     ],
     options: {
-      bundler: true,
+      bundleExec: true,
       config: '.scss-lint.yml',
       reporterOutput: 'scss-lint-report.xml'
     },

@@ -1,6 +1,7 @@
   var path = require('path'),
     grunt = require('grunt'),
     hooker = grunt.util.hooker,
+    chalk = require('chalk'),
     scsslint = require('../tasks/lib/scss-lint').init(grunt),
     fixtures = path.join(__dirname, 'fixtures'),
     reporterOutFile = path.join(__dirname, 'output.xml'),
@@ -140,6 +141,30 @@ exports.scsslint = {
       var report = grunt.file.read(reporterOutFile);
 
       test.ok(report.indexOf('errors="0"') !== -1, 'Should write the number of errors out to a report');
+      test.done();
+    });
+  },
+
+  colorizeOutput: function (test) {
+    test.expect(3);
+    var file = path.join(fixtures, 'fail.scss');
+    scsslint.lint(file, {colorizeOutput: true}, function (results) {
+      var styles = chalk.styles;
+
+      results = results.split("\n")[0];
+
+      test.ok(
+        results.indexOf(styles.cyan.open + file) !== -1,
+        'Should report colorized file name.'
+      );
+      test.ok(
+        results.indexOf(styles.magenta.open + '1' !== -1,
+        'Should report colorized file line.')
+      );
+      test.ok(
+        results.indexOf(styles.yellow.open + '[W]' !== -1,
+        'Should report colorized warning.')
+      );
       test.done();
     });
   }

@@ -34,6 +34,13 @@ This task requires you to have [Ruby](http://www.ruby-lang.org/en/downloads/), a
 
 You can choose to have your gems installed via [bundler](http://bundler.io) and if so, set this option to `true` to use the local gems.
 
+#### colouriseOutput (or: _colorizeOutput_)
+
+- Type: `Boolean`
+- Default: `false`
+
+Get some nice looking output.
+
 #### config
 
 - Type: `String`
@@ -61,7 +68,9 @@ grunt.initConfig({
     options: {
       bundleExec: true,
       config: '.scss-lint.yml',
-      reporterOutput: 'scss-lint-report.xml'
+      reporterOutput: 'scss-lint-report.xml',
+      colouriseOutput: true,
+      // colorizeOutput: true
     },
   }
 });

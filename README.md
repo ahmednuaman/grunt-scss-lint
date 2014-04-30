@@ -69,8 +69,7 @@ grunt.initConfig({
       bundleExec: true,
       config: '.scss-lint.yml',
       reporterOutput: 'scss-lint-report.xml',
-      colouriseOutput: true,
-      // colorizeOutput: true
+      colouriseOutput: true, // Just the same as colorizeOutput: true
     },
   }
 });

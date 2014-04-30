@@ -37,7 +37,7 @@ You can choose to have your gems installed via [bundler](http://bundler.io) and 
 #### colouriseOutput (or: _colorizeOutput_)
 
 - Type: `Boolean`
-- Default: `false`
+- Default: `true`
 
 Get some nice looking output.
 

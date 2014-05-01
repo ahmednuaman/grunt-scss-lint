@@ -57,6 +57,7 @@ exports.init = function (grunt) {
         config = options['config'],
         exclude = options['exclude'],
         exec = require('child_process').exec,
+        env = process.env,
         child;
 
     args.push('scss-lint');
@@ -75,6 +76,10 @@ exports.init = function (grunt) {
       args.push(grunt.file.expand(exclude).join(','));
     }
 
+    if (options.colorizeOutput && options.colouriseOutput) {
+      env.CLICOLOR_FORCE = '1';
+    }
+
     args = args.concat(files);
 
     if (grunt.option('debug') !== undefined) {
@@ -82,7 +87,8 @@ exports.init = function (grunt) {
     }
 
     child = exec(args.join(' '), {
-      cwd: process.cwd()
+      cwd: process.cwd(),
+      env: env
     }, function (err, results, code) {
       if (err && err.code !== 65) {
         if (err.code === 127) {
@@ -99,7 +105,7 @@ exports.init = function (grunt) {
 
       results = results.trim();
 
-      writeReport(options['reporterOutput'], results);
+      writeReport(options['reporterOutput'], grunt.log.uncolor(results));
       done(results);
     });
   };

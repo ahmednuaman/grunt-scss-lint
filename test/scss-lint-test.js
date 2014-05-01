@@ -148,7 +148,7 @@ exports.scsslint = {
   colorizeOutput: function (test) {
     test.expect(3);
     var file = path.join(fixtures, 'fail.scss');
-    scsslint.lint(file, {colorizeOutput: true}, function (results) {
+    scsslint.lint(file, {colorizeOutput: true, colouriseOutput: true}, function (results) {
       var styles = chalk.styles;
 
       results = results.split("\n")[0];
@@ -164,30 +164,6 @@ exports.scsslint = {
       test.ok(
         results.indexOf(styles.yellow.open + '[W]' !== -1,
         'Should report colorized warning.')
-      );
-      test.done();
-    });
-  },
-
-  colouriseOutput: function (test) {
-    test.expect(3);
-    var file = path.join(fixtures, 'fail.scss');
-    scsslint.lint(file, {colouriseOutput: true}, function (results) {
-      var styles = chalk.styles;
-
-      results = results.split("\n")[0];
-
-      test.ok(
-        results.indexOf(styles.cyan.open + file) !== -1,
-        'Should report colourised file name.'
-      );
-      test.ok(
-        results.indexOf(styles.magenta.open + '1' !== -1,
-        'Should report colourised file line.')
-      );
-      test.ok(
-        results.indexOf(styles.yellow.open + '[W]' !== -1,
-        'Should report colourised warning.')
       );
       test.done();
     });

@@ -76,7 +76,7 @@ exports.init = function (grunt) {
       args.push(grunt.file.expand(exclude).join(','));
     }
 
-    if (options.colorizeOutput || options.colouriseOutput) {
+    if (options.colorizeOutput && options.colouriseOutput) {
       env.CLICOLOR_FORCE = '1';
     }
 

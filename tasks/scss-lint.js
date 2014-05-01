@@ -13,8 +13,7 @@ module.exports = function (grunt) {
       config: '.scss-lint.yml',
       reporterOutput: null,
       bundleExec: false,
-      colorizeOutput: true,
-      colouriseOutput: true
+      colorizeOutput: true
     });
 
     grunt.verbose.writeflags(opts, 'scss-lint options');

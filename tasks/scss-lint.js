@@ -7,7 +7,7 @@ module.exports = function (grunt) {
         files = this.filesSrc,
         fileCount = this.filesSrc.length,
         target = this.target,
-        opts;
+        opts, message;
 
     opts = this.options({
       config: '.scss-lint.yml',
@@ -24,7 +24,8 @@ module.exports = function (grunt) {
       var success = _.isEmpty(results);
 
       if (success) {
-        grunt.log.oklns(fileCount + ' files are lint free');
+        message = fileCount + grunt.util.pluralize(fileCount, ' file is lint free/ files are lint free');
+        grunt.log.oklns(message);
       } else {
         grunt.log.writeln(results);
       }

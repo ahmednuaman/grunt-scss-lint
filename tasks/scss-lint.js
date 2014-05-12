@@ -21,20 +21,11 @@ module.exports = function (grunt) {
     grunt.log.writeln('Running scss-lint on ' + target);
 
     scsslint.lint(files, opts, function (results) {
-      var success = _.isEmpty(results);
-
-      if (success) {
-        message = fileCount + grunt.util.pluralize(fileCount, ' file is lint free/ files are lint free');
-        grunt.log.oklns(message);
-      } else {
-        grunt.log.writeln(results);
-      }
-
       if (opts.reporterOutput) {
         grunt.log.writeln('Results have been written to: ' + opts.reporterOutput);
       }
 
-      done(success);
+      done(_.isEmpty(results));
     });
   });
 };

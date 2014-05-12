@@ -21,10 +21,6 @@ module.exports = function (grunt) {
     grunt.log.writeln('Running scss-lint on ' + target);
 
     scsslint.lint(files, opts, function (results) {
-      if (opts.reporterOutput) {
-        grunt.log.writeln('Results have been written to: ' + opts.reporterOutput);
-      }
-
       done(_.isEmpty(results));
     });
   });

@@ -115,7 +115,10 @@ exports.init = function (grunt) {
         grunt.log.writeln(results);
       }
 
-      writeReport(options['reporterOutput'], grunt.log.uncolor(results));
+      if (options.reporterOutput) {
+        writeReport(options.reporterOutput, grunt.log.uncolor(results));
+        grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
+      }
       done(results);
     });
   };

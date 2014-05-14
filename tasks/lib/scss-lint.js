@@ -58,6 +58,7 @@ exports.init = function (grunt) {
         exclude = options['exclude'],
         exec = require('child_process').exec,
         env = process.env,
+        fileCount = Array.isArray(files) ? files.length : 1,
         child;
 
     args.push('scss-lint');
@@ -90,6 +91,8 @@ exports.init = function (grunt) {
       cwd: process.cwd(),
       env: env
     }, function (err, results, code) {
+      var message;
+
       if (err && err.code !== 65) {
         if (err.code === 127) {
           grunt.log.errorlns('1. Please make sure you have ruby installed: `ruby -v`');
@@ -105,7 +108,17 @@ exports.init = function (grunt) {
 
       results = results.trim();
 
-      writeReport(options['reporterOutput'], grunt.log.uncolor(results));
+      if (!results) {
+        message = fileCount + grunt.util.pluralize(fileCount, ' file is lint free/ files are lint free');
+        grunt.log.oklns(message);
+      } else {
+        grunt.log.writeln(results);
+      }
+
+      if (options.reporterOutput) {
+        writeReport(options.reporterOutput, grunt.log.uncolor(results));
+        grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
+      }
       done(results);
     });
   };

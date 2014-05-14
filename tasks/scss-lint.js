@@ -7,7 +7,7 @@ module.exports = function (grunt) {
         files = this.filesSrc,
         fileCount = this.filesSrc.length,
         target = this.target,
-        opts;
+        opts, message;
 
     opts = this.options({
       config: '.scss-lint.yml',
@@ -21,19 +21,7 @@ module.exports = function (grunt) {
     grunt.log.writeln('Running scss-lint on ' + target);
 
     scsslint.lint(files, opts, function (results) {
-      var success = _.isEmpty(results);
-
-      if (success) {
-        grunt.log.oklns(fileCount + ' files are lint free');
-      } else {
-        grunt.log.writeln(results);
-      }
-
-      if (opts.reporterOutput) {
-        grunt.log.writeln('Results have been written to: ' + opts.reporterOutput);
-      }
-
-      done(success);
+      done(_.isEmpty(results));
     });
   });
 };

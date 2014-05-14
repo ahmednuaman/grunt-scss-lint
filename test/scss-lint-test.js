@@ -167,5 +167,54 @@ exports.scsslint = {
       );
       test.done();
     });
+  },
+
+  pluralizeSingleFile: function (test) {
+    test.expect(1);
+    var files = path.join(fixtures, 'pass.scss'),
+      muted = grunt.log.muted,
+      stdoutMsg = '';
+
+    grunt.log.muted = false;
+
+    hooker.hook(process.stdout, 'write', {
+      pre: function (result) {
+        stdoutMsg += grunt.log.uncolor(result);
+        return hooker.preempt();
+      }
+    });
+
+    scsslint.lint(files, options, function () {
+      hooker.unhook(process.stdout, 'write');
+      grunt.log.muted = muted;
+
+      test.ok(stdoutMsg.indexOf('1 file is lint free') !== -1, 'Report single file lint free');
+      test.done();
+    });
+  },
+
+  pluralizeMultipleFiles: function (test) {
+    test.expect(1);
+    var files = path.join(fixtures, 'pass.scss'),
+      muted = grunt.log.muted,
+      stdoutMsg = '';
+
+    grunt.log.muted = false;
+
+    hooker.hook(process.stdout, 'write', {
+      pre: function (result) {
+        stdoutMsg += grunt.log.uncolor(result);
+        return hooker.preempt();
+      }
+    });
+
+    files = [files, files];
+    scsslint.lint(files, options, function () {
+      hooker.unhook(process.stdout, 'write');
+      grunt.log.muted = muted;
+
+      test.ok(stdoutMsg.indexOf(files.length + ' files are lint free') !== -1, 'Report multiple files lint free');
+      test.done();
+    });
   }
 };

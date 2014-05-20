@@ -78,3 +78,6 @@ grunt.loadNpmTasks('grunt-scss-lint');
 
 grunt.registerTask('default', ['scsslint']);
 ```
+
+### Exit error codes
+If you're having problems with the task exiting with an error code, then have a look here: [https://github.com/causes/scss-lint/blob/master/lib/scss_lint/cli.rb](https://github.com/causes/scss-lint/blob/master/lib/scss_lint/cli.rb)

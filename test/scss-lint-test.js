@@ -28,7 +28,7 @@ exports.scsslint = {
         'Should report bad ordering.'
       );
       test.ok(
-        results[2].indexOf('Color `black` should be written in hexadecimal form as `#000`') !== -1,
+        results[2].indexOf('Color `black` should be written in hexadecimal form as `#000000`') !== -1,
         'Should report string colour usage.'
       );
       test.ok(

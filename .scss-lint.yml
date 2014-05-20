@@ -32,7 +32,15 @@ linters:
     enabled: true
     present: true
 
-  HexFormat:
+  HexLength:
+    enabled: true
+    style: short # or 'long'
+
+  HexNotation:
+    enabled: true
+    style: lowercase # or 'uppercase'
+
+  HexValidation:
     enabled: true
 
   IdWithExtraneousSelector:
@@ -45,6 +53,10 @@ linters:
   LeadingZero:
     enabled: true
     style: exclude_zero # or 'include_zero'
+
+  MergeableSelector:
+    enabled: true
+    force_nesting: true
 
   NameFormat:
     enabled: true

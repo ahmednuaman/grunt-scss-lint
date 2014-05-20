@@ -1,3 +1,7 @@
+v0.1.8:
+  date: 2014-05-20
+  changes:
+    - https://github.com/ahmednuaman/grunt-scss-lint/releases/tag/v0.1.8
 v0.1.7:
   date: 2014-05-01
   changes:

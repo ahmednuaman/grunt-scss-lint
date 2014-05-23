@@ -61,6 +61,8 @@ exports.init = function (grunt) {
         fileCount = Array.isArray(files) ? files.length : 1,
         child;
 
+    grunt.log.oklns('linting', files.length, grunt.util.pluralize(files.length, 'file/files'));
+
     args.push('scss-lint');
 
     if (options.bundleExec) {
@@ -113,6 +115,10 @@ exports.init = function (grunt) {
         grunt.log.oklns(message);
       } else {
         grunt.log.writeln(results);
+        
+        var errors = results.split("\n").length,
+            errStr = grunt.util.pluralize(errors, 'error/errors');
+        grunt.log.error(errors, errStr, 'found.');
       }
 
       if (options.reporterOutput) {

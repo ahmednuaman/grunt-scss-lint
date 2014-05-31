@@ -1,7 +1,9 @@
 exports.init = function (grunt) {
   var _ = require('lodash'),
       exports = {},
+      compact = {},
       xmlBuilder = require('xmlbuilder'),
+      chalk = require('chalk'),
       writeReport;
 
   writeReport = function (output, results) {
@@ -52,6 +54,63 @@ exports.init = function (grunt) {
     grunt.file.write(output, xml.end());
   };
 
+  compact = {
+    make: function (results) {
+
+      var output = {},
+      fileName = '',
+      matchesRe = /^(.+?\.scss)\:(\d+?)\s(\[\w+?\])\s(.+)/,
+      matches;
+      results = chalk.stripColor(results);
+      results = (results.length !== 0) ? results.split("\n") : [];
+
+      _.forEach(results, function (result) {
+
+        if (result === '') {
+          return false;
+        }
+
+        matches = matchesRe.exec(result);
+
+        if (fileName !== matches[1]) {
+          fileName = matches[1];
+          output[fileName] = [];
+        }
+
+        output[fileName].push({
+          line: matches[2],
+          type: matches[3],
+          description: matches[4]
+        });
+
+      });
+
+      return output;
+    },
+    output: function (results) {
+
+      var str = '',
+      iterateErrors = function (errors) {
+        var errorMsg = '';
+        _.forEach(errors, function (error) {
+          errorMsg += '  ' + chalk.magenta(error.line) + ': ' + error.description + '\n';
+        });
+        return errorMsg;
+      };
+      results = compact.make(results);
+
+      _.forEach(results, function (result, index, collection) {
+        str += '\n';
+        str += chalk.bold(index);
+        str += '\n';
+        str += iterateErrors(result);
+      });
+
+      return str;
+
+    }
+  };
+
   exports.lint = function (files, options, done) {
     var args = [],
         config = options['config'],
@@ -88,10 +147,12 @@ exports.init = function (grunt) {
     }
 
     child = exec(args.join(' '), {
+      maxBuffer: 300 * 1024,
       cwd: process.cwd(),
       env: env
     }, function (err, results, code) {
-      var message;
+      var message,
+      rawResults;
 
       if (err && err.code !== 65) {
         if (err.code === 127) {
@@ -107,6 +168,14 @@ exports.init = function (grunt) {
       }
 
       results = results.trim();
+      rawResults = results;
+
+      if (results && options.compact) {
+        results = compact.output(results);
+        if (!options.colorizeOutput) {
+          results = chalk.stripColor(results);
+        }
+      }
 
       if (!results) {
         message = fileCount + grunt.util.pluralize(fileCount, ' file is lint free/ files are lint free');
@@ -116,7 +185,7 @@ exports.init = function (grunt) {
       }
 
       if (options.reporterOutput) {
-        writeReport(options.reporterOutput, grunt.log.uncolor(results));
+        writeReport(options.reporterOutput, grunt.log.uncolor(rawResults));
         grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
       }
       done(results);

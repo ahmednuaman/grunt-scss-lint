@@ -5,6 +5,9 @@
     scsslint = require('../tasks/lib/scss-lint').init(grunt),
     fixtures = path.join(__dirname, 'fixtures'),
     reporterOutFile = path.join(__dirname, 'output.xml'),
+    escapeRe = function (str) {
+      return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    },
     options = {config: path.join(fixtures, '.scss-lint-test.yml')};
 
 exports.scsslint = {
@@ -90,7 +93,7 @@ exports.scsslint = {
   passWithExcludedFile: function (test) {
     test.expect(1);
     var files = path.join(fixtures, '*.scss'),
-        options = {exclude: path.join(fixtures, 'fail.scss')};
+        options = {exclude: [path.join(fixtures, 'fail.scss'), path.join(fixtures, 'fail2.scss')]};
 
     scsslint.lint(files, options, function (results) {
       results = results.split("\n");
@@ -165,6 +168,70 @@ exports.scsslint = {
         results.indexOf(styles.yellow.open + '[W]' !== -1,
         'Should report colorized warning.')
       );
+      test.done();
+    });
+  },
+
+  compactWithoutColor: function (test) {
+    test.expect(4);
+    var file1 = path.join(fixtures, 'fail.scss'),
+    file2 = path.join(fixtures, 'fail2.scss');
+    scsslint.lint([file1, file2], {colorizeOutput: false, compact: true}, function (results) {
+
+      results = results.split("\n");
+
+      test.ok(
+        results[1].indexOf(file1) !== -1,
+        'Should report file name of first file.'
+      );
+
+      test.ok(
+        results[2].indexOf('1:') !== -1,
+        'Should report line number for first file.'
+      );
+
+      test.ok(
+        typeof(/\:\s(.+)/.exec(results[2])[1]) === 'string',
+        'Should report description for first file.'
+      );
+
+      test.ok(
+        results[7].indexOf(file2) !== -1,
+        'Should report file name of second file.'
+      );
+
+      test.done();
+    });
+  },
+
+  compactWithColor: function (test) {
+    test.expect(4);
+    var file1 = path.join(fixtures, 'fail.scss'),
+    file2 = path.join(fixtures, 'fail2.scss');
+    scsslint.lint([file1, file2], {colorizeOutput: true, compact: true}, function (results) {
+      var styles = chalk.styles;
+      results = results.split("\n");
+
+      test.ok(
+        results[1].indexOf(styles.bold.open + file1) !== -1,
+        'Should report file name of first file.'
+      );
+
+      test.ok(
+        results[2].indexOf(styles.magenta.open + '1' + styles.magenta.close + ':') !== -1,
+        'Should report line number for first file.'
+      );
+
+      test.ok(
+        typeof(new RegExp(escapeRe(styles.magenta.close) + '\\:\\s(.+)').exec(results[2])[1]) === 'string',
+        'Should report description for first file.'
+      );
+
+      test.ok(
+        results[7].indexOf(styles.bold.open + file2) !== -1,
+        'Should report file name of second file.'
+      );
+
       test.done();
     });
   },

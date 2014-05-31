@@ -41,6 +41,13 @@ You can choose to have your gems installed via [bundler](http://bundler.io) and 
 
 Get some nice looking output.
 
+#### compact
+
+- Type: `Boolean`
+- Default: `false`
+
+Group related linted files for more easier error review. XML output will still be default from scss-lint.
+
 #### config
 
 - Type: `String`

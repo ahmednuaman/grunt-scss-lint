@@ -41,6 +41,10 @@ You can choose to have your gems installed via [bundler](http://bundler.io) and 
 
 Get some nice looking output.
 
+For colors to work on Windows, you first need to install 2 extra gems. This is because  of [Rainbow](https://github.com/sickill/rainbow#windows-support), a dependency of [scss-lint](https://github.com/causes/scss-lint).
+
+    gem install windows-pr win32console
+
 #### compact
 
 - Type: `Boolean`

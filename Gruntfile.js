@@ -28,7 +28,8 @@ module.exports = function (grunt) {
         config: '.scss-lint.yml',
         reporterOutput: 'scss-lint-report.xml',
         bundleExec: false,
-        colorizeOutput: true
+        colorizeOutput: true,
+        compact: true
       }
     },
 

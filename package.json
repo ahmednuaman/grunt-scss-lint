@@ -34,15 +34,15 @@
   },
   "dependencies": {
     "lodash": "2.4.1",
-    "xmlbuilder": "2.2.1"
+    "xmlbuilder": "2.2.1",
+    "chalk": "0.4.0"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "0.10.0",
     "grunt-contrib-nodeunit": "0.3.3",
     "grunt-contrib-internal": "0.4.9",
     "grunt-jscs-checker": "0.4.1",
-    "grunt": ">=0.4.4",
-    "chalk": "0.4.0"
+    "grunt": ">=0.4.4"
   },
   "peerDependencies": {
     "grunt": ">=0.4.4"

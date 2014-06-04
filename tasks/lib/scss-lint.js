@@ -154,7 +154,7 @@ exports.init = function (grunt) {
       var message,
       rawResults;
 
-      if (err && err.code !== 65) {
+      if (err && (err.code !== 65 && err.code !== 1)) {
         if (err.code === 127) {
           grunt.log.errorlns('1. Please make sure you have ruby installed: `ruby -v`');
           grunt.log.errorlns('2. Install the `scss-lint` gem by running:');

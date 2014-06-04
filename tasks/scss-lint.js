@@ -14,7 +14,8 @@ module.exports = function (grunt) {
       reporterOutput: null,
       bundleExec: false,
       colorizeOutput: true,
-      compact: false
+      compact: false,
+      force: false
     });
 
     grunt.verbose.writeflags(opts, 'scss-lint options');
@@ -22,7 +23,7 @@ module.exports = function (grunt) {
     grunt.log.writeln('Running scss-lint on ' + target);
 
     scsslint.lint(files, opts, function (results) {
-      done(_.isEmpty(results));
+      done(_.isEmpty(results) || opts.force);
     });
   });
 };

@@ -19,17 +19,32 @@ module.exports = function (grunt) {
     },
 
     scsslint: {
-      all: [
-        'test/fixtures/fail.scss',
-        'test/fixtures/pass.scss',
-        'test/fixtures/*.scss'
-      ],
-      options: {
-        config: '.scss-lint.yml',
-        reporterOutput: 'scss-lint-report.xml',
-        bundleExec: false,
-        colorizeOutput: true,
-        compact: true
+      all: {
+        options: {
+          config: '.scss-lint.yml',
+          reporterOutput: 'scss-lint-report.xml',
+          bundleExec: false,
+          colorizeOutput: true,
+          compact: true
+        },
+        files: [{
+          src: [
+            'test/fixtures/fail.scss',
+            'test/fixtures/pass.scss',
+            'test/fixtures/*.scss'
+          ]
+        }]
+      },
+      force: {
+        options: {
+          config: '.scss-lint.yml',
+          force: true
+        },
+        files: [{
+          src: [
+            'test/fixtures/fail.scss',
+          ]
+        }]
       }
     },
 

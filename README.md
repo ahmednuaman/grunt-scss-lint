@@ -66,6 +66,13 @@ Group related linted files for more easier error review. XML output will still b
 
 The jUnit XML file to save the output to. If you don't want this then set the option as `null`.
 
+#### force
+
+- Type: `Boolean`
+- Default: `false`
+
+When `true` the task will fail on lint errors. Same as using `--force`.
+
 ### Usage Examples
 
 #### Example config

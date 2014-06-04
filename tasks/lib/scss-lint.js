@@ -59,7 +59,7 @@ exports.init = function (grunt) {
 
       var output = {},
       fileName = '',
-      matchesRe = /^(.+?\.scss)\:(\d+?)\s(\[\w+?\])\s(.+)/,
+      matchesRe = /^(.+?\.scss)\:(\d+?)\s\-\s(.+)/,
       matches;
       results = chalk.stripColor(results);
       results = (results.length !== 0) ? results.split("\n") : [];
@@ -79,8 +79,7 @@ exports.init = function (grunt) {
 
         output[fileName].push({
           line: matches[2],
-          type: matches[3],
-          description: matches[4]
+          description: matches[3]
         });
 
       });

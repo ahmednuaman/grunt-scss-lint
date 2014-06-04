@@ -59,7 +59,7 @@ exports.init = function (grunt) {
 
       var output = {},
       fileName = '',
-      matchesRe = /^(.+?\.scss)\:(\d+?)\s(\[\w+?\])\s(.+)/,
+      matchesRe = /^(.+?\.scss)\:(\d+?)\s\-\s(.+)/,
       matches;
       results = chalk.stripColor(results);
       results = (results.length !== 0) ? results.split("\n") : [];
@@ -79,8 +79,7 @@ exports.init = function (grunt) {
 
         output[fileName].push({
           line: matches[2],
-          type: matches[3],
-          description: matches[4]
+          description: matches[3]
         });
 
       });
@@ -154,7 +153,7 @@ exports.init = function (grunt) {
       var message,
       rawResults;
 
-      if (err && err.code !== 65) {
+      if (err && (err.code !== 65 && err.code !== 1)) {
         if (err.code === 127) {
           grunt.log.errorlns('1. Please make sure you have ruby installed: `ruby -v`');
           grunt.log.errorlns('2. Install the `scss-lint` gem by running:');

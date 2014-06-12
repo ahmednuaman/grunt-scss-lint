@@ -61,7 +61,7 @@ exports.init = function (grunt) {
         fileCount = Array.isArray(files) ? files.length : 1,
         child;
 
-    grunt.log.oklns('linting', files.length, grunt.util.pluralize(files.length, 'file/files'));
+    grunt.log.oklns('linting', fileCount, grunt.util.pluralize(files.length, 'file/files'));
 
     args.push('scss-lint');
 

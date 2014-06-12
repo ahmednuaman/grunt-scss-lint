@@ -14,9 +14,24 @@ exports.scsslint = {
   },
 
   fail: function (test) {
-    test.expect(5);
-    var files = path.join(fixtures, 'fail.scss');
+    test.expect(7);
+    var files = path.join(fixtures, 'fail.scss'),
+      muted = grunt.log.muted,
+      stdoutMsg = '';
+
+    grunt.log.muted = false;
+
+    hooker.hook(process.stdout, 'write', {
+      pre: function (result) {
+        stdoutMsg += grunt.log.uncolor(result);
+        return hooker.preempt();
+      }
+    });
+
     scsslint.lint(files, options, function (results) {
+      hooker.unhook(process.stdout, 'write');
+      grunt.log.muted = muted;
+
       results = results.split("\n");
       test.ok(
         results[0].indexOf('Class `Button` in selector should be written in all lowercase as `button`') !== -1,
@@ -36,16 +51,42 @@ exports.scsslint = {
         'Should report trailing newline.'
       );
       test.ok(results.length === 4);
+
+      test.ok(
+        stdoutMsg.indexOf('linting 1 file') !== -1, 'Should report correct number of files to be linted');
+      test.ok(
+        stdoutMsg.indexOf('4 errors found.') !== -1, 'Should report correct number of errors');
+
       test.done();
     });
   },
 
   pass: function (test) {
-    test.expect(1);
-    var files = path.join(fixtures, 'pass.scss');
+
+    test.expect(3);
+    var files = path.join(fixtures, 'pass.scss'),
+      muted = grunt.log.muted,
+      stdoutMsg = '';
+
+    grunt.log.muted = false;
+
+    hooker.hook(process.stdout, 'write', {
+      pre: function (result) {
+        stdoutMsg += grunt.log.uncolor(result);
+        return hooker.preempt();
+      }
+    });
+    
     scsslint.lint(files, options, function (results) {
+      hooker.unhook(process.stdout, 'write');
+      grunt.log.muted = muted;
+
       results = results.split("\n");
       test.ok(results[0] === '', 'There should be no lint errors');
+      test.ok(
+        stdoutMsg.indexOf('linting 1 file') !== -1, 'Should report correct number of files to be linted');
+      test.ok(
+        stdoutMsg.indexOf('1 file is lint free') !== -1, 'Should report correct number of lint free files');
       test.done();
     });
   },

@@ -73,9 +73,11 @@ The jUnit XML file to save the output to. If you don't want this then set the op
 ```javascript
 grunt.initConfig({
   scsslint: {
-    allFiles: [
-      'test/fixtures/*.scss',
-    ],
+    allFiles: {
+      src: [
+        'test/fixtures/*.scss',
+      ]
+    },
     options: {
       bundleExec: true,
       config: '.scss-lint.yml',

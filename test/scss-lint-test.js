@@ -141,21 +141,57 @@ exports.scsslint = {
   },
 
   failWithBadOptions: function (test) {
-    test.expect(1);
-    var files = '--incorrectlySpecifyingAnOptionAsAFile';
+    test.expect(2);
+    var files = '--incorrectlySpecifyingAnOptionAsAFile',
+      muted = grunt.log.muted,
+      stdoutMsg = '';
+
+    grunt.log.muted = false;
+
+    hooker.hook(process.stdout, 'write', {
+      pre: function (result) {
+        stdoutMsg += grunt.log.uncolor(result);
+        return hooker.preempt();
+      }
+    });
 
     scsslint.lint(files, options, function (results) {
+      console.log(stdoutMsg);
+      hooker.unhook(process.stdout, 'write');
+      grunt.log.muted = muted;
+      test.ok(
+        stdoutMsg.indexOf('scss-lint failed with error code'),
+        'Should fail and provide an error code');
       test.ok(!results, 'There should be no lint errors but should return failure');
       test.done();
     });
   },
 
   multipleFiles: function (test) {
-    test.expect(1);
-    var files = path.join(fixtures, 'pass.scss');
+    test.expect(3);
+    var files = path.join(fixtures, 'pass.scss'),
+      muted = grunt.log.muted,
+      stdoutMsg = '';
+
+    grunt.log.muted = false;
+
+    hooker.hook(process.stdout, 'write', {
+      pre: function (result) {
+        stdoutMsg += grunt.log.uncolor(result);
+        return hooker.preempt();
+      }
+    });
+
     scsslint.lint([files, files, files], options, function (results) {
+      hooker.unhook(process.stdout, 'write');
+      grunt.log.muted = muted;
+
       results = results.split("\n");
       test.ok(results[0] === '', 'There should be no lint errors');
+      test.ok(
+        stdoutMsg.indexOf('linting 3 files') !== -1, 'Should report correct number of files to be linted');
+      test.ok(
+        stdoutMsg.indexOf('3 files are lint free') !== -1, 'Should report correct number of lint free files');
       test.done();
     });
   },

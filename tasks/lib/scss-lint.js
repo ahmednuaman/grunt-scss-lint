@@ -56,16 +56,15 @@ exports.init = function (grunt) {
 
   compact = {
     make: function (results) {
-
       var output = {},
-      fileName = '',
-      matchesRe = /^(.+?\.scss)\:(\d+?)\s(\[\w+?\])\s(.+)/,
-      matches;
+          fileName = '',
+          matchesRe = /^(.+?\.scss)\:(\d+?)\s(\[\w+?\])\s(.+)/,
+          matches;
+
       results = chalk.stripColor(results);
       results = (results.length !== 0) ? results.split("\n") : [];
 
       _.forEach(results, function (result) {
-
         if (result === '') {
           return false;
         }
@@ -82,21 +81,24 @@ exports.init = function (grunt) {
           type: matches[3],
           description: matches[4]
         });
-
       });
 
       return output;
     },
     output: function (results) {
-
       var str = '',
+          iterateErrors;
+
       iterateErrors = function (errors) {
         var errorMsg = '';
+
         _.forEach(errors, function (error) {
           errorMsg += '  ' + chalk.magenta(error.line) + ': ' + error.description + '\n';
         });
+
         return errorMsg;
       };
+
       results = compact.make(results);
 
       _.forEach(results, function (result, index, collection) {
@@ -107,7 +109,6 @@ exports.init = function (grunt) {
       });
 
       return str;
-
     }
   };
 

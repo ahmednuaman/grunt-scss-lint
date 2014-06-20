@@ -19,8 +19,6 @@ module.exports = function (grunt) {
 
     grunt.verbose.writeflags(opts, 'scss-lint options');
 
-    grunt.log.writeln('Running scss-lint on ' + target);
-
     scsslint.lint(files, opts, function (results) {
       done(_.isEmpty(results));
     });

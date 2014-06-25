@@ -185,7 +185,7 @@ exports.init = function (grunt) {
          if (!options.emitError) {
           grunt.log.writeln(results);
         } else {
-          grunt.event.emit('scss-lint-error', results);
+          grunt.event.emit('sass-lint-error', results);
         }
       }
 

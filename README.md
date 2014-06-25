@@ -70,7 +70,7 @@ The jUnit XML file to save the output to. If you don't want this then set the op
 - Type: `Boolean`
 - Default: `false`
 
-Emits a Grunt event on sass-lint error called `scss-lint-error`.
+Emits a Grunt event on sass-lint error called `sass-lint-error`.
 
 ### Usage Examples
 

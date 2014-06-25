@@ -47,8 +47,7 @@ exports.scsslint = {
     test.expect(1);
     var files = path.join(fixtures, 'pass.scss');
     scsslint.lint(files, options, function (results) {
-      results = results.split("\n");
-      test.ok(results[0] === '', 'There should be no lint errors');
+      test.ok(!results, 'There should be no lint errors');
       test.done();
     });
   },
@@ -83,9 +82,9 @@ exports.scsslint = {
     test.expect(1);
     var files = path.join(fixtures, 'pass.scss');
     options['bundleExec'] = true;
+
     scsslint.lint(files, options, function (results) {
-      results = results.split("\n");
-      test.ok(results[0] === '', 'There should be no lint errors');
+      test.ok(!results, 'There should be no lint errors');
       test.done();
     });
   },
@@ -96,8 +95,7 @@ exports.scsslint = {
         options = {exclude: [path.join(fixtures, 'fail.scss'), path.join(fixtures, 'fail2.scss')]};
 
     scsslint.lint(files, options, function (results) {
-      results = results.split("\n");
-      test.ok(results[0] === '', 'There should be no lint errors');
+      test.ok(!results, 'There should be no lint errors');
       test.done();
     });
   },
@@ -116,8 +114,7 @@ exports.scsslint = {
     test.expect(1);
     var files = path.join(fixtures, 'pass.scss');
     scsslint.lint([files, files, files], options, function (results) {
-      results = results.split("\n");
-      test.ok(results[0] === '', 'There should be no lint errors');
+      test.ok(!results, 'There should be no lint errors');
       test.done();
     });
   },
@@ -175,7 +172,7 @@ exports.scsslint = {
   compactWithoutColor: function (test) {
     test.expect(4);
     var file1 = path.join(fixtures, 'fail.scss'),
-    file2 = path.join(fixtures, 'fail2.scss');
+        file2 = path.join(fixtures, 'fail2.scss');
     scsslint.lint([file1, file2], {colorizeOutput: false, compact: true}, function (results) {
 
       results = results.split("\n");
@@ -281,6 +278,18 @@ exports.scsslint = {
       grunt.log.muted = muted;
 
       test.ok(stdoutMsg.indexOf(files.length + ' files are lint free') !== -1, 'Report multiple files lint free');
+      test.done();
+    });
+  },
+
+  emitError: function (test) {
+    test.expect(1);
+    var file1 = path.join(fixtures, 'fail.scss');
+    options['emitError'] = true;
+
+    scsslint.lint(file1, options, function (results) {
+      results = results.split("\n");
+      test.ok(results.length === 4);
       test.done();
     });
   }

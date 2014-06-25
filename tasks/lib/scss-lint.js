@@ -144,7 +144,7 @@ exports.init = function (grunt) {
     args = args.concat(files);
 
     if (grunt.option('debug') !== undefined) {
-      grunt.log.debug("Run command: " + args.join(' '));
+      grunt.log.debug('Run command: ' + args.join(' '));
     }
 
     child = exec(args.join(' '), {
@@ -193,6 +193,7 @@ exports.init = function (grunt) {
         writeReport(options.reporterOutput, grunt.log.uncolor(rawResults));
         grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
       }
+
       done(results);
     });
   };

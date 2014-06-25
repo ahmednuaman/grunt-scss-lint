@@ -66,6 +66,12 @@ Group related linted files for more easier error review. XML output will still b
 
 The jUnit XML file to save the output to. If you don't want this then set the option as `null`.
 
+#### emitError
+- Type: `Boolean`
+- Default: `false`
+
+emit grunt event on sass-lint error (`scss-lint-error`)
+
 ### Usage Examples
 
 #### Example config

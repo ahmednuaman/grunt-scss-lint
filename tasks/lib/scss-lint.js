@@ -144,7 +144,7 @@ exports.init = function (grunt) {
     args = args.concat(files);
 
     if (grunt.option('debug') !== undefined) {
-      grunt.log.debug("Run command: " + args.join(' '));
+      grunt.log.debug('Run command: ' + args.join(' '));
     }
 
     child = exec(args.join(' '), {
@@ -182,13 +182,18 @@ exports.init = function (grunt) {
         message = fileCount + grunt.util.pluralize(fileCount, ' file is lint free/ files are lint free');
         grunt.log.oklns(message);
       } else {
-        grunt.log.writeln(results);
+         if (!options.emitError) {
+          grunt.log.writeln(results);
+        } else {
+          grunt.event.emit('scss-lint-error', results);
+        }
       }
 
       if (options.reporterOutput) {
         writeReport(options.reporterOutput, grunt.log.uncolor(rawResults));
         grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
       }
+
       done(results);
     });
   };

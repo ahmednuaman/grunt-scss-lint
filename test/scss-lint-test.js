@@ -289,7 +289,7 @@ exports.scsslint = {
 
     scsslint.lint(file1, options, function (results) {
       results = results.split("\n");
-      test.ok(results.length == 4,'Should be four warnings.');
+      test.ok(results.length === 4);
       test.done();
     });
   }

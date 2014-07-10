@@ -30,6 +30,17 @@ module.exports = function (grunt) {
         bundleExec: false,
         colorizeOutput: true,
         compact: true
+      },
+      force: {
+        options: {
+          config: '.scss-lint.yml',
+          force: true
+        },
+        files: [{
+          src: [
+            'test/fixtures/fail.scss',
+          ]
+        }]
       }
     },
 

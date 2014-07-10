@@ -52,6 +52,48 @@ exports.scsslint = {
     });
   },
 
+  passWithForce: function (test) {
+    test.expect(2);
+    var files = path.join(fixtures, 'fail.scss'),
+      muted = grunt.log.muted,
+      stdout = [],
+
+      // Use tmpOptions to set options without affecting other tests.
+      tmpOptions = options;
+
+    tmpOptions.force = true;
+
+    grunt.log.muted = false;
+
+    // Store process.stdout in a variable.
+    hooker.hook(process.stdout, 'write', {
+      pre: function (result) {
+        stdout.push(grunt.log.uncolor(result));
+        return hooker.preempt();
+      }
+    });
+
+    // Run scsslint.
+    scsslint.lint(files, tmpOptions, function (results) {
+
+      // Turn off debugging after task runs.
+      grunt.option('debug', undefined);
+      hooker.unhook(process.stdout, 'write');
+      grunt.log.muted = muted;
+
+      // The scss-lint task should return results since it failed.
+      test.ok(results, 'Should return results.');
+
+      // There should be a message in stdout showing that force was used.
+      test.ok(
+        stdout[1].indexOf('scss-lint failed, but was run in force mode') !== -1,
+        'Should log forcing.'
+      );
+
+      test.done();
+    });
+  },
+
   debugOption: function (test) {
     test.expect(1);
     var files = path.join(fixtures, 'pass.scss'),
@@ -251,7 +293,6 @@ exports.scsslint = {
     scsslint.lint(files, options, function () {
       hooker.unhook(process.stdout, 'write');
       grunt.log.muted = muted;
-
       test.ok(stdoutMsg.indexOf('1 file is lint free') !== -1, 'Report single file lint free');
       test.done();
     });

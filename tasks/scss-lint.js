@@ -7,14 +7,16 @@ module.exports = function (grunt) {
         files = this.filesSrc,
         fileCount = this.filesSrc.length,
         target = this.target,
-        opts, message;
+        opts,
+        message;
 
     opts = this.options({
       config: '.scss-lint.yml',
       reporterOutput: null,
       bundleExec: false,
       colorizeOutput: true,
-      compact: false
+      compact: false,
+      force: true
     });
 
     grunt.verbose.writeflags(opts, 'scss-lint options');
@@ -22,7 +24,7 @@ module.exports = function (grunt) {
     grunt.log.writeln('Running scss-lint on ' + target);
 
     scsslint.lint(files, opts, function (results) {
-      done(_.isEmpty(results));
+      done(_.isEmpty(results) || opts.force);
     });
   });
 };

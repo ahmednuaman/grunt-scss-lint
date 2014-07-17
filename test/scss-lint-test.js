@@ -1,15 +1,15 @@
 var path = require('path'),
-  grunt = require('grunt'),
-  _ = require('lodash'),
-  hooker = grunt.util.hooker,
-  chalk = require('chalk'),
-  scsslint = require('../tasks/lib/scss-lint').init(grunt),
-  fixtures = path.join(__dirname, 'fixtures'),
-  reporterOutFile = path.join(__dirname, 'output.xml'),
-  escapeRe = function (str) {
-    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-  },
-  defaultOptions;
+    grunt = require('grunt'),
+    _ = require('lodash'),
+    hooker = grunt.util.hooker,
+    chalk = require('chalk'),
+    scsslint = require('../tasks/lib/scss-lint').init(grunt),
+    fixtures = path.join(__dirname, 'fixtures'),
+    reporterOutFile = path.join(__dirname, 'output.xml'),
+    escapeRe = function (str) {
+      return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    },
+    defaultOptions;
 
 defaultOptions = {
   config: path.join(fixtures, '.scss-lint-test.yml')
@@ -60,9 +60,9 @@ exports.scsslint = {
   passWithForce: function (test) {
     test.expect(2);
     var files = path.join(fixtures, 'fail.scss'),
-      muted = grunt.log.muted,
-      stdout = [],
-      testOptions;
+        muted = grunt.log.muted,
+        stdout = [],
+        testOptions;
 
       // Use testOptions to set options without affecting other tests.
       testOptions = _.assign({}, defaultOptions, {
@@ -129,7 +129,7 @@ exports.scsslint = {
   bundleExec: function (test) {
     test.expect(1);
     var files = path.join(fixtures, 'pass.scss'),
-      testOptions;
+        testOptions;
 
     testOptions = _.assign({}, defaultOptions, {
       bundleExec: true
@@ -144,7 +144,7 @@ exports.scsslint = {
   passWithExcludedFile: function (test) {
     test.expect(1);
     var files = path.join(fixtures, '*.scss'),
-      testOptions;
+        testOptions;
 
     testOptions = _.assign({}, defaultOptions, {
       exclude: [
@@ -183,7 +183,7 @@ exports.scsslint = {
   reporter: function (test) {
     test.expect(2);
     var files = path.join(fixtures, 'fail.scss'),
-      testOptions;
+        testOptions;
 
     testOptions = _.assign({}, defaultOptions, {
       reporterOutput: reporterOutFile
@@ -205,7 +205,7 @@ exports.scsslint = {
   reporterErrors: function (test) {
     test.expect(1);
     var files = path.join(fixtures, 'pass.scss'),
-      testOptions;
+        testOptions;
 
     testOptions = _.assign({}, defaultOptions, {
       reporterOutput: reporterOutFile
@@ -224,7 +224,7 @@ exports.scsslint = {
   colorizeOutput: function (test) {
     test.expect(3);
     var file = path.join(fixtures, 'fail.scss'),
-      testOptions;
+        testOptions;
 
     testOptions = _.assign({}, defaultOptions, {
       colorizeOutput: true,
@@ -293,8 +293,8 @@ exports.scsslint = {
   compactWithColor: function (test) {
     test.expect(4);
     var file1 = path.join(fixtures, 'fail.scss'),
-    file2 = path.join(fixtures, 'fail2.scss'),
-    testOptions;
+        file2 = path.join(fixtures, 'fail2.scss'),
+        testOptions;
 
     testOptions = _.assign({}, defaultOptions, {
       colorizeOutput: true,
@@ -333,8 +333,8 @@ exports.scsslint = {
   pluralizeSingleFile: function (test) {
     test.expect(1);
     var files = path.join(fixtures, 'pass.scss'),
-      muted = grunt.log.muted,
-      stdoutMsg = '';
+        muted = grunt.log.muted,
+        stdoutMsg = '';
 
     grunt.log.muted = false;
 
@@ -356,8 +356,8 @@ exports.scsslint = {
   pluralizeMultipleFiles: function (test) {
     test.expect(1);
     var files = path.join(fixtures, 'pass.scss'),
-      muted = grunt.log.muted,
-      stdoutMsg = '';
+        muted = grunt.log.muted,
+        stdoutMsg = '';
 
     grunt.log.muted = false;
 
@@ -381,7 +381,7 @@ exports.scsslint = {
   emitError: function (test) {
     test.expect(1);
     var file1 = path.join(fixtures, 'fail.scss'),
-    testOptions;
+        testOptions;
 
     testOptions = _.assign({}, defaultOptions, {
       emitError: true

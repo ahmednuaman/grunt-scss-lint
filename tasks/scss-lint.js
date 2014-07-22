@@ -24,7 +24,11 @@ module.exports = function (grunt) {
     grunt.log.writeln('Running scss-lint on ' + target);
 
     scsslint.lint(files, opts, function (results) {
-      done(_.isEmpty(results) || opts.force);
+      if (results === false) {
+        done(false);
+      } else {
+        done(_.isEmpty(results) || opts.force);
+      }
     });
   });
 };

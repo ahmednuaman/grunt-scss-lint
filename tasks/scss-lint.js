@@ -16,7 +16,7 @@ module.exports = function (grunt) {
       bundleExec: false,
       colorizeOutput: true,
       compact: false,
-      force: true
+      force: false
     });
 
     grunt.verbose.writeflags(opts, 'scss-lint options');

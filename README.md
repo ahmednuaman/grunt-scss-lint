@@ -72,6 +72,13 @@ The jUnit XML file to save the output to. If you don't want this then set the op
 
 Emits a Grunt event on scss-lint error called `scss-lint-error`.
 
+#### force
+
+- Type: `Boolean`
+- Default: `false`
+
+Set `force` to `true` to report scss-lint errors but not fail the task.
+
 ### Usage Examples
 
 #### Example config

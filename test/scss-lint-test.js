@@ -64,14 +64,12 @@ exports.scsslint = {
         stdout = [],
         testOptions;
 
-      // Use testOptions to set options without affecting other tests.
       testOptions = _.assign({}, defaultOptions, {
         force: true
       });
 
     grunt.log.muted = false;
 
-    // Store process.stdout in a variable.
     hooker.hook(process.stdout, 'write', {
       pre: function (result) {
         stdout.push(grunt.log.uncolor(result));
@@ -79,18 +77,14 @@ exports.scsslint = {
       }
     });
 
-    // Run scsslint.
     scsslint.lint(files, testOptions, function (results) {
 
-      // Turn off debugging after task runs.
       grunt.option('debug', undefined);
       hooker.unhook(process.stdout, 'write');
       grunt.log.muted = muted;
 
-      // The scss-lint task should return results since it failed.
       test.ok(results, 'Should return results.');
 
-      // There should be a message in stdout showing that force was used.
       test.ok(
         stdout[1].indexOf('scss-lint failed, but was run in force mode') !== -1,
         'Should log forcing.'

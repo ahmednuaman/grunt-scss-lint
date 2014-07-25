@@ -24,6 +24,9 @@ module.exports = function (grunt) {
         'test/fixtures/pass.scss',
         'test/fixtures/*.scss'
       ],
+      success: [
+        'test/fixtures/pass.scss'
+      ],
       options: {
         config: '.scss-lint.yml',
         reporterOutput: 'scss-lint-report.xml',

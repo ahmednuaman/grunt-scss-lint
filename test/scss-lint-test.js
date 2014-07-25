@@ -292,5 +292,30 @@ exports.scsslint = {
       test.ok(results.length === 4);
       test.done();
     });
+  },
+
+  exitCodeOnFailure: function (test) {
+    test.expect(1);
+    grunt.util.spawn({grunt: true, args: ["scsslint"]}, function (error, result, code) {
+      test.notEqual(code, 0);
+      test.done();
+    });
+  },
+
+  exitCodeAndOutputOnMissingRuby: function (test) {
+    test.expect(2);
+    grunt.util.spawn({grunt: true, args: ["scsslint"], opts: {env: {PATH: "."}}}, function (error, result, code) {
+      test.notEqual(code, 0);
+      test.ok(result.stdout.match("Please make sure you have ruby installed"));
+      test.done();
+    });
+  },
+
+  exitCodeOnSuccess: function (test) {
+    test.expect(1);
+    grunt.util.spawn({grunt: true, args: ["scsslint:success"]}, function (error, result, code) {
+      test.equal(code, 0);
+      test.done();
+    });
   }
 };

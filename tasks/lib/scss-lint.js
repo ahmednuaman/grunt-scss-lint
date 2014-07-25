@@ -182,10 +182,13 @@ exports.init = function (grunt) {
         message = fileCount + grunt.util.pluralize(fileCount, ' file is lint free/ files are lint free');
         grunt.log.oklns(message);
       } else {
-         if (!options.emitError) {
+        if (!options.emitError) {
           grunt.log.writeln(results);
         } else {
           grunt.event.emit('scss-lint-error', results);
+        }
+        if (options.force) {
+          grunt.log.writeln('scss-lint failed, but was run in force mode');
         }
       }
 

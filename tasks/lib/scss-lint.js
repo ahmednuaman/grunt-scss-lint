@@ -71,16 +71,18 @@ exports.init = function (grunt) {
 
         matches = matchesRe.exec(result);
 
-        if (fileName !== matches[1]) {
-          fileName = matches[1];
-          output[fileName] = [];
-        }
+        if (matches) {
+          if (fileName !== matches[1]) {
+            fileName = matches[1];
+            output[fileName] = [];
+          }
 
-        output[fileName].push({
-          line: matches[2],
-          type: matches[3],
-          description: matches[4]
-        });
+          output[fileName].push({
+            line: matches[2],
+            type: matches[3],
+            description: matches[4]
+          });
+        }
       });
 
       return output;

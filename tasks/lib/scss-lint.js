@@ -16,7 +16,7 @@ exports.init = function (grunt) {
       return;
     }
 
-    results = (results.length !== 0) ? results.split("\n") : [];
+    results = (results.length !== 0) ? results.split('\n') : [];
 
     xml = xmlBuilder.create('testsuites');
 
@@ -62,7 +62,7 @@ exports.init = function (grunt) {
           matches;
 
       results = chalk.stripColor(results);
-      results = (results.length !== 0) ? results.split("\n") : [];
+      results = results.length !== 0 ? results.split('\n') : [];
 
       _.forEach(results, function (result) {
         if (result === '') {
@@ -150,7 +150,7 @@ exports.init = function (grunt) {
     }
 
     child = exec(args.join(' '), {
-      maxBuffer: 300 * 1024,
+      maxBuffer: options.maxBuffer,
       cwd: process.cwd(),
       env: env
     }, function (err, results, code) {

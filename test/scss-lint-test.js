@@ -7,7 +7,7 @@ var path = require('path'),
     fixtures = path.join(__dirname, 'fixtures'),
     reporterOutFile = path.join(__dirname, 'output.xml'),
     escapeRe = function (str) {
-      return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+      return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
     },
     defaultOptions;
 
@@ -25,7 +25,7 @@ exports.scsslint = {
     test.expect(5);
     var files = path.join(fixtures, 'fail.scss');
     scsslint.lint(files, defaultOptions, function (results) {
-      results = results.split("\n");
+      results = results.split('\n');
       test.ok(
         results[0].indexOf('Class `Button` in selector should be written in all lowercase as `button`') !== -1,
         'Should report bad case.'
@@ -64,9 +64,9 @@ exports.scsslint = {
         stdout = [],
         testOptions;
 
-      testOptions = _.assign({}, defaultOptions, {
-        force: true
-      });
+    testOptions = _.assign({}, defaultOptions, {
+      force: true
+    });
 
     grunt.log.muted = false;
 
@@ -78,7 +78,6 @@ exports.scsslint = {
     });
 
     scsslint.lint(files, testOptions, function (results) {
-
       grunt.option('debug', undefined);
       hooker.unhook(process.stdout, 'write');
       grunt.log.muted = muted;
@@ -110,6 +109,7 @@ exports.scsslint = {
     });
 
     grunt.option('debug', true);
+
     scsslint.lint(files, defaultOptions, function () {
       grunt.option('debug', undefined);
       hooker.unhook(process.stdout, 'write');
@@ -186,7 +186,7 @@ exports.scsslint = {
     scsslint.lint(files, testOptions, function (results) {
       var report = grunt.file.read(reporterOutFile);
 
-      results = results.split("\n");
+      results = results.split('\n');
 
       test.ok(report.indexOf(results[0]) !== -1,
         'Should write the errors out to a report');
@@ -206,7 +206,6 @@ exports.scsslint = {
     });
 
     scsslint.lint(files, testOptions, function (results) {
-
       var report = grunt.file.read(reporterOutFile);
 
       test.ok(report.indexOf('errors="0"') !== -1,
@@ -228,7 +227,7 @@ exports.scsslint = {
     scsslint.lint(file, testOptions, function (results) {
       var styles = chalk.styles;
 
-      results = results.split("\n")[0];
+      results = results.split('\n')[0];
 
       test.ok(
         results.indexOf(styles.cyan.open + file) !== -1,
@@ -257,8 +256,7 @@ exports.scsslint = {
     });
 
     scsslint.lint([file1, file2], testOptions, function (results) {
-
-      results = results.split("\n");
+      results = results.split('\n');
 
       test.ok(
         results[1].indexOf(file1) !== -1,
@@ -298,7 +296,7 @@ exports.scsslint = {
 
     scsslint.lint([file1, file2], testOptions, function (results) {
       var styles = chalk.styles;
-      results = results.split("\n");
+      results = results.split('\n');
 
       test.ok(
         results[1].indexOf(styles.bold.open + file1) !== -1,
@@ -382,7 +380,7 @@ exports.scsslint = {
     });
 
     scsslint.lint(file1, testOptions, function (results) {
-      results = results.split("\n");
+      results = results.split('\n');
       test.ok(results.length === 4);
       test.done();
     });
@@ -390,7 +388,7 @@ exports.scsslint = {
 
   exitCodeOnFailure: function (test) {
     test.expect(1);
-    grunt.util.spawn({grunt: true, args: ["scsslint"]}, function (error, result, code) {
+    grunt.util.spawn({grunt: true, args: ['scsslint']}, function (error, result, code) {
       test.notEqual(code, 0);
       test.done();
     });
@@ -398,17 +396,32 @@ exports.scsslint = {
 
   exitCodeAndOutputOnMissingRuby: function (test) {
     test.expect(2);
-    grunt.util.spawn({grunt: true, args: ["scsslint"], opts: {env: {PATH: "."}}}, function (error, result, code) {
+    grunt.util.spawn({grunt: true, args: ['scsslint'], opts: {env: {PATH: '.'}}}, function (error, result, code) {
       test.notEqual(code, 0);
-      test.ok(result.stdout.match("Please make sure you have ruby installed"));
+      test.ok(result.stdout.match('Please make sure you have ruby installed'));
       test.done();
     });
   },
 
   exitCodeOnSuccess: function (test) {
     test.expect(1);
-    grunt.util.spawn({grunt: true, args: ["scsslint:success"]}, function (error, result, code) {
+    grunt.util.spawn({grunt: true, args: ['scsslint:success']}, function (error, result, code) {
       test.equal(code, 0);
+      test.done();
+    });
+  },
+
+  maxBuffer: function (test) {
+    test.expect(1);
+    var files = path.join(fixtures, 'fail.scss'),
+        testOptions;
+
+    testOptions = _.assign({}, defaultOptions, {
+      maxBuffer: false
+    });
+
+    scsslint.lint(files, testOptions, function (results) {
+      test.ok(!results, 'There should be no lint errors');
       test.done();
     });
   }

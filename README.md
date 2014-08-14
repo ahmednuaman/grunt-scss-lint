@@ -79,6 +79,13 @@ Emits a Grunt event on scss-lint error called `scss-lint-error`.
 
 Set `force` to `true` to report scss-lint errors but not fail the task.
 
+#### maxBuffer
+
+- Type: `Number` or `Boolean`
+- Default: `300 * 1024`
+
+Set `maxBuffer` for the `child_process.exec` process, [if you're linting a lot of files and you're recieving no output](https://github.com/ahmednuaman/grunt-scss-lint/issues/63) then you can try and increase this value. Setting it to `false`, `0`, `NaN` or `Infinite` will not return any `stdout` or `stderr` and the task will think that everything's fine.
+
 ### Usage Examples
 
 #### Example config

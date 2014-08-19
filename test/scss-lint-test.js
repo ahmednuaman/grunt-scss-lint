@@ -386,6 +386,21 @@ exports.scsslint = {
     });
   },
 
+  emitSuccess: function (test) {
+    test.expect(1);
+    var files = path.join(fixtures, 'pass.scss'),
+        testOptions;
+
+    testOptions = _.assign({}, defaultOptions, {
+      emitSuccess: true
+    });
+
+    scsslint.lint(files, testOptions, function (results) {
+      test.ok(!results, 'There should be no lint errors');
+      test.done();
+    });
+  },
+
   exitCodeOnFailure: function (test) {
     test.expect(1);
     grunt.util.spawn({grunt: true, args: ['scsslint']}, function (error, result, code) {

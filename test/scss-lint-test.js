@@ -292,5 +292,15 @@ exports.scsslint = {
       test.ok(results.length === 4);
       test.done();
     });
+  },
+
+  emitSuccess: function (test) {
+    test.expect(1);
+    var files = path.join(fixtures, 'pass.scss');
+    options['emitSuccess'] = true;
+    scsslint.lint(files, options, function (results) {
+      test.ok(!results, 'There should be no lint errors');
+      test.done();
+    });
   }
 };

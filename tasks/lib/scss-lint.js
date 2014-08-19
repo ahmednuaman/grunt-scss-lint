@@ -179,8 +179,13 @@ exports.init = function (grunt) {
       }
 
       if (!results) {
-        message = fileCount + grunt.util.pluralize(fileCount, ' file is lint free/ files are lint free');
-        grunt.log.oklns(message);
+        if (!options.emitSuccess) {
+          message = fileCount + grunt.util.pluralize(fileCount, ' file is lint free/ files are lint free');
+          grunt.log.oklns(message);
+        } else {
+          grunt.event.emit('scss-lint-success');
+        }
+
       } else {
          if (!options.emitError) {
           grunt.log.writeln(results);

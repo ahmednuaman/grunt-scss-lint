@@ -187,7 +187,6 @@ exports.init = function (grunt) {
         } else {
           grunt.event.emit('scss-lint-success');
         }
-
       } else {
         if (!options.emitError) {
           grunt.log.writeln(results);

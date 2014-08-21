@@ -1,7 +1,7 @@
 {
   "name": "grunt-scss-lint",
   "description": "Validate `.scss` files with `scss-lint`.",
-  "version": "0.1.12",
+  "version": "0.3.3",
   "homepage": "https://github.com/ahmednuaman/grunt-scss-lint",
   "author": {
     "name": "Ahmed Nuaman",
@@ -38,14 +38,14 @@
   },
   "dependencies": {
     "lodash": "2.4.1",
-    "xmlbuilder": "2.2.1",
-    "chalk": "0.4.0"
+    "xmlbuilder": "2.4.3",
+    "chalk": "0.5.1"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "0.10.0",
     "grunt-contrib-nodeunit": "0.4.1",
     "grunt-contrib-internal": "0.4.10",
-    "grunt-jscs-checker": "0.4.1",
+    "grunt-jscs": "0.6.2",
     "grunt": ">=0.4.5"
   },
   "peerDependencies": {

@@ -124,19 +124,11 @@ exports.scsslint = {
     test.expect(1);
     var files = path.join(fixtures, 'pass.scss'),
         testOptions;
-<<<<<<< HEAD
 
     testOptions = _.assign({}, defaultOptions, {
       bundleExec: true
     });
 
-=======
-
-    testOptions = _.assign({}, defaultOptions, {
-      bundleExec: true
-    });
-
->>>>>>> origin/master
     scsslint.lint(files, testOptions, function (results) {
       test.ok(!results, 'There should be no lint errors');
       test.done();
@@ -208,19 +200,11 @@ exports.scsslint = {
     test.expect(1);
     var files = path.join(fixtures, 'pass.scss'),
         testOptions;
-<<<<<<< HEAD
 
     testOptions = _.assign({}, defaultOptions, {
       reporterOutput: reporterOutFile
     });
 
-=======
-
-    testOptions = _.assign({}, defaultOptions, {
-      reporterOutput: reporterOutFile
-    });
-
->>>>>>> origin/master
     scsslint.lint(files, testOptions, function (results) {
       var report = grunt.file.read(reporterOutFile);
 
@@ -266,19 +250,11 @@ exports.scsslint = {
     var file1 = path.join(fixtures, 'fail.scss'),
         file2 = path.join(fixtures, 'fail2.scss'),
         testOptions;
-<<<<<<< HEAD
 
     testOptions = _.assign({}, defaultOptions, {
       compact: true
     });
 
-=======
-
-    testOptions = _.assign({}, defaultOptions, {
-      compact: true
-    });
-
->>>>>>> origin/master
     scsslint.lint([file1, file2], testOptions, function (results) {
       results = results.split('\n');
 

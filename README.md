@@ -72,11 +72,28 @@ The jUnit XML file to save the output to. If you don't want this then set the op
 
 Emits a Grunt event on scss-lint error called `scss-lint-error`.
 
+
 #### emitSuccess
 - Type: `Boolean`
 - Default: `false`
 
 Emits a Grunt event on scss-lint success called `scss-lint-success`.
+
+
+#### force
+
+- Type: `Boolean`
+- Default: `false`
+
+Set `force` to `true` to report scss-lint errors but not fail the task.
+
+#### maxBuffer
+
+- Type: `Number` or `Boolean`
+- Default: `300 * 1024`
+
+Set `maxBuffer` for the `child_process.exec` process, [if you're linting a lot of files and you're recieving no output](https://github.com/ahmednuaman/grunt-scss-lint/issues/63) then you can try and increase this value. Setting it to `false`, `0`, `NaN` or `Infinite` will not return any `stdout` or `stderr` and the task will think that everything's fine.
+>>>>>>> origin/master
 
 ### Usage Examples
 

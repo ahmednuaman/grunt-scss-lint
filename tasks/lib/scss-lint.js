@@ -16,7 +16,7 @@ exports.init = function (grunt) {
       return;
     }
 
-    results = (results.length !== 0) ? results.split("\n") : [];
+    results = (results.length !== 0) ? results.split('\n') : [];
 
     xml = xmlBuilder.create('testsuites');
 
@@ -62,7 +62,7 @@ exports.init = function (grunt) {
           matches;
 
       results = chalk.stripColor(results);
-      results = (results.length !== 0) ? results.split("\n") : [];
+      results = results.length !== 0 ? results.split('\n') : [];
 
       _.forEach(results, function (result) {
         if (result === '') {
@@ -71,16 +71,18 @@ exports.init = function (grunt) {
 
         matches = matchesRe.exec(result);
 
-        if (fileName !== matches[1]) {
-          fileName = matches[1];
-          output[fileName] = [];
-        }
+        if (matches) {
+          if (fileName !== matches[1]) {
+            fileName = matches[1];
+            output[fileName] = [];
+          }
 
-        output[fileName].push({
-          line: matches[2],
-          type: matches[3],
-          description: matches[4]
-        });
+          output[fileName].push({
+            line: matches[2],
+            type: matches[3],
+            description: matches[4]
+          });
+        }
       });
 
       return output;
@@ -148,14 +150,14 @@ exports.init = function (grunt) {
     }
 
     child = exec(args.join(' '), {
-      maxBuffer: 300 * 1024,
+      maxBuffer: options.maxBuffer,
       cwd: process.cwd(),
       env: env
     }, function (err, results, code) {
       var message,
       rawResults;
 
-      if (err && err.code !== 65) {
+      if (err && err.code !== 1 && err.code !== 2 && err.code !== 65) {
         if (err.code === 127) {
           grunt.log.errorlns('1. Please make sure you have ruby installed: `ruby -v`');
           grunt.log.errorlns('2. Install the `scss-lint` gem by running:');
@@ -187,10 +189,13 @@ exports.init = function (grunt) {
         }
 
       } else {
-         if (!options.emitError) {
+        if (!options.emitError) {
           grunt.log.writeln(results);
         } else {
           grunt.event.emit('scss-lint-error', results);
+        }
+        if (options.force) {
+          grunt.log.writeln('scss-lint failed, but was run in force mode');
         }
       }
 

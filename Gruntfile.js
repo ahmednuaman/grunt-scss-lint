@@ -24,12 +24,26 @@ module.exports = function (grunt) {
         'test/fixtures/pass.scss',
         'test/fixtures/*.scss'
       ],
+      success: [
+        'test/fixtures/pass.scss'
+      ],
       options: {
         config: '.scss-lint.yml',
         reporterOutput: 'scss-lint-report.xml',
         bundleExec: false,
         colorizeOutput: true,
         compact: true
+      },
+      force: {
+        options: {
+          config: '.scss-lint.yml',
+          force: true
+        },
+        files: [{
+          src: [
+            'test/fixtures/fail.scss'
+          ]
+        }]
       }
     },
 
@@ -43,7 +57,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-internal');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
-  grunt.loadNpmTasks('grunt-jscs-checker');
+  grunt.loadNpmTasks('grunt-jscs');
 
   grunt.registerTask('test', ['jscs', 'jshint', 'nodeunit']);
 

@@ -117,7 +117,7 @@ exports.init = function (grunt) {
 
       _.forEach(results, function (result, index, collection) {
         str += '\n';
-        str += chalk.cyan.bold(index);
+        str += chalk.bold(index);
         str += '\n';
         str += iterateErrors(result);
       });

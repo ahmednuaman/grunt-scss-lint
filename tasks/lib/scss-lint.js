@@ -211,7 +211,7 @@ exports.init = function (grunt) {
         grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
       }
 
-      done(results);
+      done(results, err && err.code === 1, err && err.code === 2);
     });
   };
 

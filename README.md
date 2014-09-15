@@ -77,14 +77,7 @@ Emits a Grunt event on scss-lint error called `scss-lint-error`.
 - Type: `Boolean`
 - Default: `false`
 
-Set `force` to `true` to report scss-lint errors and warnings but not fail the task if either are present.
-
-#### forceWarnings
-
-- Type: `Boolean`
-- Default: `false`
-
-Set `forceWarnings` to `true` to report scss-lint errors and warnings; do not fail the task for warnings but do fail for errors.
+Set `force` to `true` to report scss-lint errors but not fail the task.
 
 #### maxBuffer
 

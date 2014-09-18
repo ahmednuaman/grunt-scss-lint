@@ -299,7 +299,7 @@ exports.scsslint = {
       results = results.split('\n');
 
       test.ok(
-        results[1].indexOf(styles.cyan.open + file1) !== -1,
+        results[1].indexOf(styles.bold.open + file1) !== -1,
         'Should report file name of first file.'
       );
 
@@ -314,7 +314,7 @@ exports.scsslint = {
       );
 
       test.ok(
-        results[7].indexOf(styles.cyan.open + file2) !== -1,
+        results[7].indexOf(styles.bold.open + file2) !== -1,
         'Should report file name of second file.'
       );
 

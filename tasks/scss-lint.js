@@ -17,7 +17,6 @@ module.exports = function (grunt) {
       colorizeOutput: true,
       compact: false,
       force: false,
-      forceWarnings: false,
       maxBuffer: 300 * 1024
     });
 
@@ -25,15 +24,11 @@ module.exports = function (grunt) {
 
     grunt.log.writeln('Running scss-lint on ' + target);
 
-    scsslint.lint(files, opts, function (results, hasWarning, hasError) {
+    scsslint.lint(files, opts, function (results) {
       if (results === false) {
         done(false);
       } else {
-        if (!hasError && opts.forceWarnings) {
-          done(true);
-        } else {
-          done(_.isEmpty(results) || opts.force);
-        }
+        done(_.isEmpty(results) || opts.force);
       }
     });
   });

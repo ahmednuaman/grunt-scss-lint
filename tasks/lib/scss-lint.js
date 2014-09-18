@@ -80,7 +80,7 @@ exports.init = function (grunt) {
           output[fileName].push({
             line: matches[2],
             type: matches[3],
-            description: matches[4].split(':')
+            description: matches[4]
           });
         }
       });
@@ -95,19 +95,7 @@ exports.init = function (grunt) {
         var errorMsg = '';
 
         _.forEach(errors, function (error) {
-          if (error.type === '[W]') {
-            errorMsg += '  ' + 
-                        chalk.magenta(error.line) + ': ' + 
-                        chalk.yellow(error.type) + ' ' + 
-                        chalk.green(error.description[0]) + ': ' + 
-                        error.description[1] + '\n';
-          } else {
-            errorMsg += '  ' + 
-                        chalk.magenta(error.line) + ': ' + 
-                        chalk.red(error.type) + ' ' + 
-                        chalk.green(error.description[0]) + ': ' + 
-                        error.description[1] + '\n';
-          }
+          errorMsg += '  ' + chalk.magenta(error.line) + ': ' + error.description + '\n';
         });
 
         return errorMsg;
@@ -117,7 +105,7 @@ exports.init = function (grunt) {
 
       _.forEach(results, function (result, index, collection) {
         str += '\n';
-        str += chalk.cyan.bold(index);
+        str += chalk.bold(index);
         str += '\n';
         str += iterateErrors(result);
       });
@@ -211,7 +199,7 @@ exports.init = function (grunt) {
         grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
       }
 
-      done(results, err && err.code === 1, err && err.code === 2);
+      done(results);
     });
   };
 

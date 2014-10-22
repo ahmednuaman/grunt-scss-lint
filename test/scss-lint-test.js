@@ -25,21 +25,27 @@ exports.scsslint = {
     test.expect(5);
     var files = path.join(fixtures, 'fail.scss');
     scsslint.lint(files, defaultOptions, function (results) {
+      var rawResults = results;
       results = results.split('\n');
       test.ok(
-        results[0].indexOf('Class `Button` in selector should be written in all lowercase as `button`') !== -1,
-        'Should report bad case.'
+        results[0] &&
+        (results[0].indexOf('Class `Button` in selector should be written in all lowercase as `button`') !== -1 ||
+         results[0].indexOf('Selector `Button` should be written in lowercase') !== -1),
+        'Should report bad case.' + rawResults
       );
       test.ok(
+        results[1] &&
         results[1].indexOf('Properties should be sorted in order, with vendor-prefixed extensions before the ' +
           'standardized CSS property') !== -1,
         'Should report bad ordering.'
       );
       test.ok(
+        results[2] && 
         results[2].indexOf('Color `black` should be written in hexadecimal form as `#000000`') !== -1,
         'Should report string colour usage.'
       );
       test.ok(
+        results[3] && 
         results[3].indexOf('Files should end with a trailing newline') !== -1,
         'Should report trailing newline.'
       );
@@ -53,6 +59,15 @@ exports.scsslint = {
     var files = path.join(fixtures, 'pass.scss');
     scsslint.lint(files, defaultOptions, function (results) {
       test.ok(!results, 'There should be no lint errors');
+      test.done();
+    });
+  },
+
+  pathsWithSpaces: function (test) {
+    test.expect(1);
+    var files = path.join(fixtures, 'fail with spaces.scss');
+    scsslint.lint(files, defaultOptions, function (results) {
+      test.ok(results, 'There should be lint errors');
       test.done();
     });
   },
@@ -85,7 +100,7 @@ exports.scsslint = {
       test.ok(results, 'Should return results.');
 
       test.ok(
-        stdout[1].indexOf('scss-lint failed, but was run in force mode') !== -1,
+        stdout[1] && stdout[1].indexOf('scss-lint failed, but was run in force mode') !== -1,
         'Should log forcing.'
       );
 
@@ -259,21 +274,22 @@ exports.scsslint = {
       results = results.split('\n');
 
       test.ok(
-        results[1].indexOf(file1) !== -1,
+        results[1] && results[1].indexOf(file1) !== -1,
         'Should report file name of first file.'
       );
 
       test.ok(
-        results[2].indexOf('1:') !== -1,
+        results[2] && results[2].indexOf('1:') !== -1,
         'Should report line number for first file.'
       );
 
       test.ok(
-        typeof(/\:\s(.+)/.exec(results[2])[1]) === 'string',
+        results[2] && typeof(/\:\s(.+)/.exec(results[2])[1]) === 'string',
         'Should report description for first file.'
       );
 
       test.ok(
+        results[7] &&
         results[7].indexOf(file2) !== -1,
         'Should report file name of second file.'
       );
@@ -299,21 +315,23 @@ exports.scsslint = {
       results = results.split('\n');
 
       test.ok(
-        results[1].indexOf(styles.cyan.open + file1) !== -1,
+        results[1] && results[1].indexOf(styles.cyan.open + file1) !== -1,
         'Should report file name of first file.'
       );
 
       test.ok(
-        results[2].indexOf(styles.magenta.open + '1' + styles.magenta.close + ':') !== -1,
+        results[2] && results[2].indexOf(styles.magenta.open + '1' + styles.magenta.close + ':') !== -1,
         'Should report line number for first file.'
       );
 
       test.ok(
+        results[2] &&
         typeof(new RegExp(escapeRe(styles.magenta.close) + '\\:\\s(.+)').exec(results[2])[1]) === 'string',
         'Should report description for first file.'
       );
 
       test.ok(
+        results[7] &&
         results[7].indexOf(styles.cyan.open + file2) !== -1,
         'Should report file name of second file.'
       );

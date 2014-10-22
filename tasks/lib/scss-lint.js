@@ -4,7 +4,15 @@ exports.init = function (grunt) {
       compact = {},
       xmlBuilder = require('xmlbuilder'),
       chalk = require('chalk'),
+      quoteArgument,
       writeReport;
+
+  quoteArgument = function (arg) {
+    if (arg.indexOf(' ') !== -1) {
+      arg = '"' + arg + '"';
+    }
+    return arg;
+  };
 
   writeReport = function (output, results) {
     var files = {},
@@ -143,17 +151,19 @@ exports.init = function (grunt) {
 
     if (config) {
       args.push('-c');
-      args.push(config);
+      args.push(quoteArgument(config));
     }
 
     if (exclude) {
       args.push('-e');
-      args.push(grunt.file.expand(exclude).join(','));
+      args.push(grunt.file.expand(exclude).map(quoteArgument).join(','));
     }
 
     if (options.colorizeOutput) {
       env.CLICOLOR_FORCE = '1';
     }
+
+    files = Array.isArray(files) ? files.map(quoteArgument) : quoteArgument(files);
 
     args = args.concat(files);
 

@@ -1,7 +1,7 @@
 {
   "name": "grunt-scss-lint",
   "description": "Validate `.scss` files with `scss-lint`.",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "homepage": "https://github.com/ahmednuaman/grunt-scss-lint",
   "author": {
     "name": "Ahmed Nuaman",

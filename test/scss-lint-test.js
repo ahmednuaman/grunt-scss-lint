@@ -27,7 +27,7 @@ exports.scsslint = {
     scsslint.lint(files, defaultOptions, function (results) {
       results = results.split('\n');
       test.ok(
-        results[0].indexOf('Class `Button` in selector should be written in all lowercase as `button`') !== -1,
+        results[0].indexOf('Selector `Button` should be written in lowercase') !== -1,
         'Should report bad case.'
       );
       test.ok(

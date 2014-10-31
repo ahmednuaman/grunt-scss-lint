@@ -59,6 +59,13 @@ Group related linted files for more easier error review. XML output will still b
 
 ~~**[Note that this isn't working correctly yet](https://github.com/causes/scss-lint/issues/46).**~~
 
+#### exclude
+
+- Type: `String` or `Array`
+- Default `null`
+
+Exclude one or more files from being linted.
+
 #### reporterOutput
 
 - Type: `String`

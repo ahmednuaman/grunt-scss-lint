@@ -24,6 +24,13 @@ module.exports = function (grunt) {
 
     grunt.log.writeln('Running scss-lint on ' + target);
 
+    // Do nothing if there are no files to lint.
+    if (!files.length) {
+        grunt.log.error('0 files linted. Please check your ignored files.');
+        done();
+        return;
+    }
+
     scsslint.lint(files, opts, function (results) {
       if (results === false) {
         done(false);

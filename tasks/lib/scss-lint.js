@@ -80,7 +80,7 @@ exports.init = function (grunt) {
           output[fileName].push({
             line: matches[2],
             type: matches[3],
-            description: matches[4]
+            description: matches[4].split(':')
           });
         }
       });
@@ -95,7 +95,19 @@ exports.init = function (grunt) {
         var errorMsg = '';
 
         _.forEach(errors, function (error) {
-          errorMsg += '  ' + chalk.magenta(error.line) + ': ' + error.description + '\n';
+          if (error.type === '[W]') {
+            errorMsg += '  ' + 
+                        chalk.magenta(error.line) + ': ' + 
+                        chalk.yellow(error.type) + ' ' + 
+                        chalk.green(error.description[0]) + ': ' + 
+                        error.description[1] + '\n';
+          } else {
+            errorMsg += '  ' + 
+                        chalk.magenta(error.line) + ': ' + 
+                        chalk.red(error.type) + ' ' + 
+                        chalk.green(error.description[0]) + ': ' + 
+                        error.description[1] + '\n';
+          }
         });
 
         return errorMsg;
@@ -105,7 +117,7 @@ exports.init = function (grunt) {
 
       _.forEach(results, function (result, index, collection) {
         str += '\n';
-        str += chalk.bold(index);
+        str += chalk.cyan.bold(index);
         str += '\n';
         str += iterateErrors(result);
       });

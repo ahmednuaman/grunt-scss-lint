@@ -388,9 +388,14 @@ exports.scsslint = {
 
   emitSuccess: function (test) {
     test.expect(1);
-    var files = path.join(fixtures, 'pass.scss');
-    options['emitSuccess'] = true;
-    scsslint.lint(files, options, function (results) {
+    var files = path.join(fixtures, 'pass.scss'),
+        testOptions;
+
+    testOptions = _.assign({}, defaultOptions, {
+      emitSuccess: true
+    });
+
+    scsslint.lint(files, testOptions, function (results) {
       test.ok(!results, 'There should be no lint errors');
       test.done();
     });

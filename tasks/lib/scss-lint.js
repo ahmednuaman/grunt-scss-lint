@@ -96,16 +96,16 @@ exports.init = function (grunt) {
 
         _.forEach(errors, function (error) {
           if (error.type === '[W]') {
-            errorMsg += '  ' + 
-                        chalk.magenta(error.line) + ': ' + 
-                        chalk.yellow(error.type) + ' ' + 
-                        chalk.green(error.description[0]) + ': ' + 
+            errorMsg += '  ' +
+                        chalk.magenta(error.line) + ': ' +
+                        chalk.yellow(error.type) + ' ' +
+                        chalk.green(error.description[0]) + ': ' +
                         error.description[1] + '\n';
           } else {
-            errorMsg += '  ' + 
-                        chalk.magenta(error.line) + ': ' + 
-                        chalk.red(error.type) + ' ' + 
-                        chalk.green(error.description[0]) + ': ' + 
+            errorMsg += '  ' +
+                        chalk.magenta(error.line) + ': ' +
+                        chalk.red(error.type) + ' ' +
+                        chalk.green(error.description[0]) + ': ' +
                         error.description[1] + '\n';
           }
         });

@@ -27,12 +27,11 @@ exports.scsslint = {
     scsslint.lint(files, defaultOptions, function (results) {
       results = results.split('\n');
       test.ok(
-        results[0].indexOf('Class `Button` in selector should be written in all lowercase as `button`') !== -1,
+        results[0].indexOf('SelectorFormat: Selector `Button` should be written in lowercase with hyphens') !== -1,
         'Should report bad case.'
       );
       test.ok(
-        results[1].indexOf('Properties should be sorted in order, with vendor-prefixed extensions before the ' +
-          'standardized CSS property') !== -1,
+        results[1].indexOf('PropertySortOrder: Properties should be ordered color, display') !== -1,
         'Should report bad ordering.'
       );
       test.ok(

@@ -29,10 +29,10 @@ This task requires you to have [Ruby](http://www.ruby-lang.org/en/downloads/), a
 
 #### bundleExec
 
-- Type: `Boolean`
+- Type: `Boolean` or `String`
 - Default: `false`
 
-You can choose to have your gems installed via [bundler](http://bundler.io) and if so, set this option to `true` to use the local gems.
+You can choose to have your gems installed via [bundler](http://bundler.io) and if so, set this option to `true` to use the local gems. This will require that your `Gemfile` is in the same directory as your `Gruntfile.js`; if that is not the case, use a string that is the path to the directory where `Gemfile` is - the same place commands like `bundle exec scss-lint` should be ran from.
 
 #### colorizeOutput
 

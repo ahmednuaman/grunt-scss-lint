@@ -4,6 +4,7 @@ exports.init = function (grunt) {
       compact = {},
       xmlBuilder = require('xmlbuilder'),
       chalk = require('chalk'),
+      path = require('path'),
       writeReport;
 
   writeReport = function (output, results) {
@@ -134,21 +135,40 @@ exports.init = function (grunt) {
         env = process.env,
         fileCount = Array.isArray(files) ? files.length : 1,
         child;
-
-    args.push('scss-lint');
-
-    if (options.bundleExec) {
-      args.unshift('bundle', 'exec');
+    
+    if (options.bundleExec === true) {
+      args.push('bundle exec scss-lint');
+    } else if (options.bundleExec) {
+      // path string given to location of 'Gemfile'
+      args.push('cd ' + options.bundleExec.trim() + ' && bundle exec scss-lint');
+      config = path.relative(options.bundleExec, config);
+      exclude = grunt.file.expand(exclude);
+      var newExclude = [];
+      exclude.forEach(function(item) {
+        "use strict";
+        newExclude.push(path.relative(options.bundleExec, item));
+      });
+      exclude = newExclude;
+      var newFiles = [];
+      files.forEach(function(file) {
+        "use strict";
+        newFiles.push(path.relative(options.bundleExec, file));
+      });
+      files = newFiles;
+      //console.log(files);
+    } else {
+      args.push('scss-lint');
     }
 
     if (config) {
       args.push('-c');
-      args.push(config);
+      args.push('"' + config + '"');
     }
 
     if (exclude) {
       args.push('-e');
-      args.push(grunt.file.expand(exclude).join(','));
+      //args.push(grunt.file.expand(exclude).join(','));
+      args.push(exclude.join(','));
     }
 
     if (options.colorizeOutput) {

@@ -164,6 +164,12 @@ exports.init = function (grunt) {
       args.push('-c');
       args.push('"' + config + '"');
     }
+    
+    if (options.format !== 'Default') {
+      args.push('--format ' + options.format.trim());
+      options.colorizeOutput = false;
+      options.compact = false;
+    }
 
     if (exclude) {
       args.push('-e');
@@ -225,7 +231,7 @@ exports.init = function (grunt) {
           grunt.log.writeln('scss-lint failed, but was run in force mode');
         }
       }
-
+      
       if (options.reporterOutput) {
         writeReport(options.reporterOutput, grunt.log.uncolor(rawResults));
         grunt.log.writeln('Results have been written to: ' + options.reporterOutput);

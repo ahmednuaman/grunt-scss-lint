@@ -73,6 +73,13 @@ Exclude one or more files from being linted.
 
 The jUnit XML file to save the output to. If you don't want this then set the option as `null`.
 
+#### format
+
+- Type: `String`
+- Default: `Default`
+
+The Output Format you'd like to see, like JSON. Options are listed on [scss-lint/formatters](https://github.com/causes/scss-lint#formatters).
+
 #### emitError
 - Type: `Boolean`
 - Default: `false`

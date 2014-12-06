@@ -14,6 +14,7 @@ module.exports = function (grunt) {
       config: '.scss-lint.yml',
       reporterOutput: null,
       format: 'Default',
+      out: 'STDOUT',
       bundleExec: false,
       colorizeOutput: true,
       compact: false,

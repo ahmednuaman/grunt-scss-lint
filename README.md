@@ -80,6 +80,13 @@ The jUnit XML file to save the output to. If you don't want this then set the op
 
 The Output Format you'd like to see, like JSON. Options are listed on [scss-lint/formatters](https://github.com/causes/scss-lint#formatters).
 
+#### out
+
+- Type: `String`
+- Default: `STDOUT`
+
+Where to write the output to, you can pick any path for a file output, or leave the default to just show it in the Terminal output (STDOUT). Basically adds `--out {your value}` as documented at [scss-lint](https://github.com/causes/scss-lint). Can be combined with `format` above to output a formatted file to a location.
+
 #### emitError
 - Type: `Boolean`
 - Default: `false`

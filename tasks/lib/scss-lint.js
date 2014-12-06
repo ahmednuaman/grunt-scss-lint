@@ -141,21 +141,24 @@ exports.init = function (grunt) {
     } else if (options.bundleExec) {
       // path string given to location of 'Gemfile'
       args.push('cd ' + options.bundleExec.trim() + ' && bundle exec scss-lint');
+      
       config = path.relative(options.bundleExec, config);
       exclude = grunt.file.expand(exclude);
+      
       var newExclude = [];
       exclude.forEach(function(item) {
-        "use strict";
         newExclude.push(path.relative(options.bundleExec, item));
       });
       exclude = newExclude;
+      
       var newFiles = [];
       files.forEach(function(file) {
-        "use strict";
         newFiles.push(path.relative(options.bundleExec, file));
       });
       files = newFiles;
-      // console.log(files);
+      
+      options.out = path.relative(options.bundleExec, options.out);
+      
     } else {
       args.push('scss-lint');
     }
@@ -171,6 +174,12 @@ exports.init = function (grunt) {
       options.compact = false;
     }
 
+    if (options.out !== 'STDOUT') {
+      args.push('--out ' + options.out.trim());
+      options.colorizeOutput = false;
+      options.compact = false;
+    }
+    
     if (exclude) {
       args.push('-e');
       //args.push(grunt.file.expand(exclude).join(','));

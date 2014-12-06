@@ -146,13 +146,13 @@ exports.init = function (grunt) {
       exclude = grunt.file.expand(exclude);
       
       var newExclude = [];
-      exclude.forEach(function(item) {
+      exclude.forEach(function (item) {
         newExclude.push(path.relative(options.bundleExec, item));
       });
       exclude = newExclude;
       
       var newFiles = [];
-      files.forEach(function(file) {
+      files.forEach(function (file) {
         newFiles.push(path.relative(options.bundleExec, file));
       });
       files = newFiles;
@@ -182,7 +182,6 @@ exports.init = function (grunt) {
     
     if (exclude) {
       args.push('-e');
-      //args.push(grunt.file.expand(exclude).join(','));
       args.push(exclude.join(','));
     }
 

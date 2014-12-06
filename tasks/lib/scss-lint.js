@@ -155,7 +155,7 @@ exports.init = function (grunt) {
         newFiles.push(path.relative(options.bundleExec, file));
       });
       files = newFiles;
-      //console.log(files);
+      // console.log(files);
     } else {
       args.push('scss-lint');
     }
@@ -182,7 +182,6 @@ exports.init = function (grunt) {
     }
 
     args = args.concat(files);
-
     if (grunt.option('debug') !== undefined) {
       grunt.log.debug('Run command: ' + args.join(' '));
     }

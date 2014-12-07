@@ -5,6 +5,7 @@ exports.init = function (grunt) {
       xmlBuilder = require('xmlbuilder'),
       chalk = require('chalk'),
       path = require('path'),
+      fs = require('fs'),
       writeReport;
 
   writeReport = function (output, results) {
@@ -61,7 +62,7 @@ exports.init = function (grunt) {
           fileName = '',
           matchesRe = /^(.+?\.scss)\:(\d+?)\s(\[\w+?\])\s(.+)/,
           matches;
-
+      
       results = chalk.stripColor(results);
       results = results.length !== 0 ? results.split('\n') : [];
 
@@ -80,6 +81,7 @@ exports.init = function (grunt) {
 
           output[fileName].push({
             line: matches[2],
+            fileName: fileName,
             type: matches[3],
             description: matches[4].split(':')
           });
@@ -88,7 +90,7 @@ exports.init = function (grunt) {
 
       return output;
     },
-    output: function (results) {
+    output: function (results, options) {
       var str = '',
           iterateErrors;
 
@@ -108,6 +110,25 @@ exports.init = function (grunt) {
                         chalk.red(error.type) + ' ' + 
                         chalk.green(error.description[0]) + ': ' +
                         _.rest(error.description) + '\n';
+          }
+          //var file = path.relative(process.cwd(), path.resolve(error.fileName));
+          if (options.showCode) {
+            var file;
+            if (options.bundleExec) {
+              file = path.resolve(options.bundleExec, error.fileName);
+            } else {
+              file = error.fileName;
+            }
+            var contents = fs.readFileSync(file, "utf8");
+            var code = contents.split('\n');
+            errorMsg += '  ' +
+              code[(error.line - 3)] + '\n' +
+              code[(error.line - 2)] + '\n' +
+              chalk.bold(code[(error.line - 1)]) + '\n' +
+              code[(error.line)] + '\n' +
+              code[(error.line + 1)] + '\n' +
+              code[(error.line + 2)] + '\n' +
+              '\n' + '\n';
           }
         });
 
@@ -217,7 +238,7 @@ exports.init = function (grunt) {
       rawResults = results;
 
       if (results && options.compact) {
-        results = compact.output(results);
+        results = compact.output(results, options);
         if (!options.colorizeOutput) {
           results = chalk.stripColor(results);
         }

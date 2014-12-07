@@ -18,6 +18,7 @@ module.exports = function (grunt) {
       bundleExec: false,
       colorizeOutput: true,
       compact: false,
+      showCode: false,
       force: false,
       maxBuffer: 300 * 1024
     });

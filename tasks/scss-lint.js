@@ -13,6 +13,8 @@ module.exports = function (grunt) {
     opts = this.options({
       config: '.scss-lint.yml',
       reporterOutput: null,
+      format: 'Default',
+      out: null,
       bundleExec: false,
       colorizeOutput: true,
       compact: false,

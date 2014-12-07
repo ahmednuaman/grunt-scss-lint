@@ -4,6 +4,7 @@ exports.init = function (grunt) {
       compact = {},
       xmlBuilder = require('xmlbuilder'),
       chalk = require('chalk'),
+      path = require('path'),
       writeReport;
 
   writeReport = function (output, results) {
@@ -100,13 +101,13 @@ exports.init = function (grunt) {
                         chalk.magenta(error.line) + ': ' + 
                         chalk.yellow(error.type) + ' ' + 
                         chalk.green(error.description[0]) + ': ' + 
-                        error.description[1] + '\n';
+                        _.rest(error.description) + '\n';
           } else {
             errorMsg += '  ' + 
                         chalk.magenta(error.line) + ': ' + 
                         chalk.red(error.type) + ' ' + 
-                        chalk.green(error.description[0]) + ': ' + 
-                        error.description[1] + '\n';
+                        chalk.green(error.description[0]) + ': ' +
+                        _.rest(error.description) + '\n';
           }
         });
 
@@ -134,21 +135,52 @@ exports.init = function (grunt) {
         env = process.env,
         fileCount = Array.isArray(files) ? files.length : 1,
         child;
-
-    args.push('scss-lint');
-
-    if (options.bundleExec) {
-      args.unshift('bundle', 'exec');
+    
+    if (options.bundleExec === true) {
+      args.push('bundle exec scss-lint');
+    } else if (options.bundleExec) {
+      // path string given to location of 'Gemfile'
+      args.push('cd ' + options.bundleExec.trim() + ' && bundle exec scss-lint');
+      
+      config = path.relative(options.bundleExec, config);
+      exclude = grunt.file.expand(exclude);
+      
+      var newExclude = [];
+      exclude.forEach(function (item) {
+        newExclude.push(path.relative(options.bundleExec, item));
+      });
+      exclude = newExclude;
+      
+      var newFiles = [];
+      files.forEach(function (file) {
+        newFiles.push(path.relative(options.bundleExec, file));
+      });
+      files = newFiles;
+      
+    } else {
+      args.push('scss-lint');
     }
 
     if (config) {
       args.push('-c');
-      args.push(config);
+      args.push('"' + config + '"');
+    }
+    
+    if (options.format !== 'Default') {
+      args.push('--format ' + options.format.trim());
+      options.colorizeOutput = false;
+      options.compact = false;
     }
 
+    if (options.out) {
+      args.push('--out ' + options.out.trim());
+      options.colorizeOutput = false;
+      options.compact = false;
+    }
+    
     if (exclude) {
       args.push('-e');
-      args.push(grunt.file.expand(exclude).join(','));
+      args.push(exclude.join(','));
     }
 
     if (options.colorizeOutput) {
@@ -156,7 +188,6 @@ exports.init = function (grunt) {
     }
 
     args = args.concat(files);
-
     if (grunt.option('debug') !== undefined) {
       grunt.log.debug('Run command: ' + args.join(' '));
     }
@@ -205,7 +236,7 @@ exports.init = function (grunt) {
           grunt.log.writeln('scss-lint failed, but was run in force mode');
         }
       }
-
+      
       if (options.reporterOutput) {
         writeReport(options.reporterOutput, grunt.log.uncolor(rawResults));
         grunt.log.writeln('Results have been written to: ' + options.reporterOutput);

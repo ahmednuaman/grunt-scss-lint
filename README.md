@@ -29,10 +29,10 @@ This task requires you to have [Ruby](http://www.ruby-lang.org/en/downloads/), a
 
 #### bundleExec
 
-- Type: `Boolean`
+- Type: `Boolean` or `String`
 - Default: `false`
 
-You can choose to have your gems installed via [bundler](http://bundler.io) and if so, set this option to `true` to use the local gems.
+You can choose to have your gems installed via [bundler](http://bundler.io) and if so, set this option to `true` to use the local gems. This will require that your `Gemfile` is in the same directory as your `Gruntfile.js`; if that is not the case, use a string that is the path to the directory where `Gemfile` is - the same place commands like `bundle exec scss-lint` should be ran from.
 
 #### colorizeOutput
 
@@ -72,6 +72,20 @@ Exclude one or more files from being linted.
 - Default: `null`
 
 The jUnit XML file to save the output to. If you don't want this then set the option as `null`.
+
+#### format
+
+- Type: `String`
+- Default: `Default`
+
+The Output Format you'd like to see, like JSON. Options are listed on [scss-lint/formatters](https://github.com/causes/scss-lint#formatters).
+
+#### out
+
+- Type: `String`
+- Default: `null`
+
+Where to write the output to, you can pick any path for a file output, or leave the default to just show it in the Terminal output (STDOUT). Basically adds `--out {your value}` as documented at [scss-lint](https://github.com/causes/scss-lint). Can be combined with `format` above to output a formatted file to a location.
 
 #### emitError
 - Type: `Boolean`

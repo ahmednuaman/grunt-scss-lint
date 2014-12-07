@@ -370,17 +370,43 @@ exports.scsslint = {
   },
 
   emitError: function (test) {
-    test.expect(1);
+    test.expect(2);
     var file1 = path.join(fixtures, 'fail.scss'),
+        eventEmitted = false,
         testOptions;
 
     testOptions = _.assign({}, defaultOptions, {
       emitError: true
     });
 
+    grunt.event.on('scss-lint-error', function () {
+      eventEmitted = true;
+    });
+
     scsslint.lint(file1, testOptions, function (results) {
       results = results.split('\n');
       test.ok(results.length === 4);
+      test.ok(eventEmitted === true);
+      test.done();
+    });
+  },
+
+  emitSuccess: function (test) {
+    test.expect(1);
+    var file1 = path.join(fixtures, 'pass.scss'),
+        eventEmitted = false,
+        testOptions;
+
+    testOptions = _.assign({}, defaultOptions, {
+      emitSuccess: true
+    });
+
+    grunt.event.on('scss-lint-success', function () {
+      eventEmitted = true;
+    });
+
+    scsslint.lint(file1, testOptions, function (results) {
+      test.ok(eventEmitted === true);
       test.done();
     });
   },

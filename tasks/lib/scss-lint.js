@@ -157,8 +157,6 @@ exports.init = function (grunt) {
       });
       files = newFiles;
       
-      options.out = path.relative(options.bundleExec, options.out);
-      
     } else {
       args.push('scss-lint');
     }
@@ -174,7 +172,7 @@ exports.init = function (grunt) {
       options.compact = false;
     }
 
-    if (options.out !== 'STDOUT') {
+    if (options.out) {
       args.push('--out ' + options.out.trim());
       options.colorizeOutput = false;
       options.compact = false;

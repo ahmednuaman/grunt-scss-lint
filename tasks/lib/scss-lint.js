@@ -101,13 +101,13 @@ exports.init = function (grunt) {
                         chalk.magenta(error.line) + ': ' + 
                         chalk.yellow(error.type) + ' ' + 
                         chalk.green(error.description[0]) + ': ' + 
-                        error.description[1] + '\n';
+                        _.rest(error.description) + '\n';
           } else {
             errorMsg += '  ' + 
                         chalk.magenta(error.line) + ': ' + 
                         chalk.red(error.type) + ' ' + 
-                        chalk.green(error.description[0]) + ': ' + 
-                        error.description[1] + '\n';
+                        chalk.green(error.description[0]) + ': ' +
+                        _.rest(error.description) + '\n';
           }
         });
 

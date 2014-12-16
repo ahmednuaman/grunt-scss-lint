@@ -165,11 +165,9 @@ exports.init = function (grunt) {
       args.push('cd ' + options.bundleExec.trim() + ' && bundle exec scss-lint');
       
       config = path.relative(options.bundleExec, config);
-      console.log("OUT: ", out);
       if (out !== null) {
         out = path.relative(options.bundleExec, out);
       }
-      console.log("OUT: ", out);
       exclude = grunt.file.expand(exclude);
       
       var newExclude = [];

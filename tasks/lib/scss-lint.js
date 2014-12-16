@@ -151,6 +151,7 @@ exports.init = function (grunt) {
   exports.lint = function (files, options, done) {
     var args = [],
         config = options['config'],
+        out = options['out'],
         exclude = options['exclude'],
         exec = require('child_process').exec,
         env = process.env,
@@ -164,6 +165,11 @@ exports.init = function (grunt) {
       args.push('cd ' + options.bundleExec.trim() + ' && bundle exec scss-lint');
       
       config = path.relative(options.bundleExec, config);
+      console.log("OUT: ", out);
+      if (out !== null) {
+        out = path.relative(options.bundleExec, out);
+      }
+      console.log("OUT: ", out);
       exclude = grunt.file.expand(exclude);
       
       var newExclude = [];
@@ -192,9 +198,9 @@ exports.init = function (grunt) {
       options.colorizeOutput = false;
       options.compact = false;
     }
-
-    if (options.out) {
-      args.push('--out ' + options.out.trim());
+    
+    if (out) {
+      args.push('--out ' + '"' + out.trim() + '"');
       options.colorizeOutput = false;
       options.compact = false;
     }

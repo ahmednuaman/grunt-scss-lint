@@ -11,7 +11,7 @@ module.exports = function (grunt) {
         message;
 
     opts = this.options({
-      config: '.scss-lint.yml',
+      config: 'node_modules/grunt-scss-lint/.scss-lint.yml',
       reporterOutput: null,
       bundleExec: false,
       colorizeOutput: true,

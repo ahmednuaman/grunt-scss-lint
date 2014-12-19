@@ -55,9 +55,9 @@ Group related linted files for more easier error review. XML output will still b
 #### config
 
 - Type: `String`
-- Default: `scss-lint`'s [default config file](https://github.com/causes/scss-lint/blob/master/config/default.yml).
+- Default: `node_modules/grunt-scss-lint/.scss-lint.yml`.
 
-~~**[Note that this isn't working correctly yet](https://github.com/causes/scss-lint/issues/46).**~~
+Specify a configuration file.
 
 #### exclude
 

@@ -1,4 +1,6 @@
 # grunt-scss-lint
+
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ahmednuaman/grunt-scss-lint?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/ahmednuaman/grunt-scss-lint.png?branch=master)](https://travis-ci.org/ahmednuaman/grunt-scss-lint) [![Code Climate](https://codeclimate.com/github/ahmednuaman/grunt-scss-lint.png)](https://codeclimate.com/github/ahmednuaman/grunt-scss-lint) [![NPM version](https://badge.fury.io/js/grunt-scss-lint.png)](http://badge.fury.io/js/grunt-scss-lint)
 
 > Lint your `.scss` files

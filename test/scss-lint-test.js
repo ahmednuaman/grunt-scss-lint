@@ -12,7 +12,7 @@ var path = require('path'),
     defaultOptions;
 
 defaultOptions = {
-  config: path.join(fixtures, '.scss-lint-test.yml')
+  config: '.scss-lint.yml'
 };
 
 exports.scsslint = {

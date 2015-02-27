@@ -18,6 +18,10 @@ module.exports = function (grunt) {
       }
     },
 
+    'mocha_istanbul': {
+      tests: ['test/**/*.js']
+    },
+
     scsslint: {
       all: [
         'test/fixtures/fail.scss',
@@ -28,38 +32,31 @@ module.exports = function (grunt) {
         'test/fixtures/pass.scss'
       ],
       options: {
-        config: '.scss-lint.yml',
         reporterOutput: 'scss-lint-report.xml',
-        bundleExec: false,
+        bundleExec: true,
         colorizeOutput: true,
         compact: true
-      },
-      force: {
-        options: {
-          config: '.scss-lint.yml',
-          force: true
-        },
-        files: [{
-          src: [
-            'test/fixtures/fail.scss'
-          ]
-        }]
       }
     },
 
-    nodeunit: {
-      tests: ['test/*-test.js']
+    watch: {
+      test: {
+        files: ['<%= jshint.all %>', '<%= mocha_istanbul.tests %>'],
+        tasks: ['test'],
+        options: {
+          spawn: false
+        }
+      }
     }
   });
 
   grunt.loadTasks('tasks');
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-internal');
-  grunt.loadNpmTasks('grunt-contrib-nodeunit');
+  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-jscs');
+  grunt.loadNpmTasks('grunt-mocha-istanbul');
 
-  grunt.registerTask('test', ['jscs', 'jshint', 'nodeunit']);
-
-  grunt.registerTask('default', ['test']);
+  grunt.registerTask('default', ['watch']);
+  grunt.registerTask('test', ['jscs', 'jshint', 'mocha_istanbul']);
 };

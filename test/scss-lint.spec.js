@@ -1,63 +1,54 @@
-var path = require('path'),
-    grunt = require('grunt'),
-    _ = require('lodash'),
-    hooker = grunt.util.hooker,
+var _ = require('lodash'),
     chalk = require('chalk'),
-    scsslint = require('../tasks/lib/scss-lint').init(grunt),
-    fixtures = path.join(__dirname, 'fixtures'),
-    reporterOutFile = path.join(__dirname, 'output.xml'),
+    expect = require('expect.js'),
+    fs = require('fs'),
+    
     escapeRe = function (str) {
       return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
     },
-    defaultOptions;
 
-defaultOptions = {
-  config: path.join(fixtures, '.scss-lint-test.yml')
-};
+    grunt = require('grunt'),
+    hooker = grunt.util.hooker,
+    scsslint = require('../tasks/lib/scss-lint').init(grunt),
 
-exports.scsslint = {
-  setUp: function (done) {
-    grunt.file.delete(reporterOutFile);
-    done();
-  },
+    path = require('path'),
+    fixtures = path.join(__dirname, 'fixtures'),
+    defaultOptions = {
+      config: path.join(fixtures, '.scss-lint-test.yml')
+    },
+    reporterOutFile = path.join(__dirname, 'output.xml');
 
-  fail: function (test) {
-    test.expect(5);
+describe('grunt-scss-lint', function () {
+  beforeEach(function (done) {
+    fs.stat(reporterOutFile, function (err, stats) {
+      if (!err) {
+        fs.unlink(reporterOutput, done);
+      } else {
+        done();
+      }
+    });
+  });
+
+  it('fail', function () {
     var files = path.join(fixtures, 'fail.scss');
     scsslint.lint(files, defaultOptions, function (results) {
       results = results.split('\n');
-      test.ok(
-        results[0].indexOf('SelectorFormat: Selector `Button` should be written in lowercase with hyphens') !== -1,
-        'Should report bad case.'
-      );
-      test.ok(
-        results[1].indexOf('PropertySortOrder: Properties should be ordered color, display') !== -1,
-        'Should report bad ordering.'
-      );
-      test.ok(
-        results[2].indexOf('Color `black` should be written in hexadecimal form as `#000000`') !== -1,
-        'Should report string colour usage.'
-      );
-      test.ok(
-        results[3].indexOf('Files should end with a trailing newline') !== -1,
-        'Should report trailing newline.'
-      );
-      test.ok(results.length === 4);
-      test.done();
+      expect(results[0]).to.contain('SelectorFormat: Selector `Button` should be written in lowercase with hyphens');
+      expect(results[1]).to.contain('PropertySortOrder: Properties should be ordered color, display');
+      expect(results[2]).to.contain('Color `black` should be written in hexadecimal form as `#000000`');
+      expect(results[3]).to.contain('Files should end with a trailing newline');
+      expect(results.length).to.be(4);
     });
-  },
+  });
 
-  pass: function (test) {
-    test.expect(1);
+  it('pass', function () {
     var files = path.join(fixtures, 'pass.scss');
     scsslint.lint(files, defaultOptions, function (results) {
-      test.ok(!results, 'There should be no lint errors');
-      test.done();
+      expect(results).to.not.be.ok();
     });
-  },
+  });
 
-  passWithForce: function (test) {
-    test.expect(2);
+  it('pass with force', function () {
     var files = path.join(fixtures, 'fail.scss'),
         muted = grunt.log.muted,
         stdout = [],
@@ -81,19 +72,11 @@ exports.scsslint = {
       hooker.unhook(process.stdout, 'write');
       grunt.log.muted = muted;
 
-      test.ok(results, 'Should return results.');
-
-      test.ok(
-        stdout[1].indexOf('scss-lint failed, but was run in force mode') !== -1,
-        'Should log forcing.'
-      );
-
-      test.done();
+      expect(stdout[1]).to.contain('scss-lint failed, but was run in force mode');
     });
-  },
+  });
 
-  debugOption: function (test) {
-    test.expect(1);
+  it('debug option', function () {
     var files = path.join(fixtures, 'pass.scss'),
         muted = grunt.log.muted,
         stdoutMsg = '';
@@ -114,13 +97,11 @@ exports.scsslint = {
       hooker.unhook(process.stdout, 'write');
       grunt.log.muted = muted;
 
-      test.ok(stdoutMsg.indexOf('Run command: scss-lint -c') !== -1, 'Show debug information');
-      test.done();
+      expect(stdoutMsg).to.contain('Run command: scss-lint -c');
     });
-  },
+  });
 
-  bundleExec: function (test) {
-    test.expect(1);
+  it('bundle exec', function () {
     var files = path.join(fixtures, 'pass.scss'),
         testOptions;
 
@@ -129,13 +110,11 @@ exports.scsslint = {
     });
 
     scsslint.lint(files, testOptions, function (results) {
-      test.ok(!results, 'There should be no lint errors');
-      test.done();
+      expect(results).to.not.be.ok();
     });
-  },
+  });
 
-  passWithExcludedFile: function (test) {
-    test.expect(1);
+  it('pass with excluded file', function () {
     var files = path.join(fixtures, '*.scss'),
         testOptions;
 
@@ -147,34 +126,26 @@ exports.scsslint = {
     });
 
     scsslint.lint(files, testOptions, function (results) {
-      test.ok(!results, 'There should be no lint errors');
-      test.done();
+      expect(results).to.not.be.ok();
     });
-  },
+  });
 
-  failWithBadOptions: function (test) {
-    test.expect(1);
+  it('fail with bad options', function () {
     var files = '--incorrectlySpecifyingAnOptionAsAFile';
 
     scsslint.lint(files, defaultOptions, function (results) {
-      test.ok(!results,
-        'There should be no lint errors but should return failure');
-      test.done();
+      expect(results).to.not.be.ok();
     });
-  },
+  });
 
-  multipleFiles: function (test) {
-    test.expect(1);
+  it('multiple files', function () {
     var files = path.join(fixtures, 'pass.scss');
     scsslint.lint([files, files, files], defaultOptions, function (results) {
-      test.ok(!results,
-        'There should be no lint errors');
-      test.done();
+      expect(results).to.not.be.ok();
     });
-  },
+  });
 
-  reporter: function (test) {
-    test.expect(2);
+  it('reporter', function () {
     var files = path.join(fixtures, 'fail.scss'),
         testOptions;
 
@@ -184,19 +155,14 @@ exports.scsslint = {
 
     scsslint.lint(files, testOptions, function (results) {
       var report = grunt.file.read(reporterOutFile);
-
       results = results.split('\n');
 
-      test.ok(report.indexOf(results[0]) !== -1,
-        'Should write the errors out to a report');
-      test.ok(report.indexOf('errors="4"') !== -1,
-        'Should write the number of errors out to a report');
-      test.done();
+      expect(report).to.contain(results[0]);
+      expect(report).to.contain('errors="4"');
     });
-  },
+  });
 
-  reporterErrors: function (test) {
-    test.expect(1);
+  it('reporter errors', function () {
     var files = path.join(fixtures, 'pass.scss'),
         testOptions;
 
@@ -207,14 +173,11 @@ exports.scsslint = {
     scsslint.lint(files, testOptions, function (results) {
       var report = grunt.file.read(reporterOutFile);
 
-      test.ok(report.indexOf('errors="0"') !== -1,
-        'Should write the number of errors out to a report');
-      test.done();
+      expect(report).to.contain('errors="0"');
     });
-  },
+  });
 
-  colorizeOutput: function (test) {
-    test.expect(3);
+  it('colorize output', function () {
     var file = path.join(fixtures, 'fail.scss'),
         testOptions;
 
@@ -225,27 +188,15 @@ exports.scsslint = {
 
     scsslint.lint(file, testOptions, function (results) {
       var styles = chalk.styles;
-
       results = results.split('\n')[0];
 
-      test.ok(
-        results.indexOf(styles.cyan.open + file) !== -1,
-        'Should report colorized file name.'
-      );
-      test.ok(
-        results.indexOf(styles.magenta.open + '1' !== -1,
-        'Should report colorized file line.')
-      );
-      test.ok(
-        results.indexOf(styles.yellow.open + '[W]' !== -1,
-        'Should report colorized warning.')
-      );
-      test.done();
+      expect(results).to.contain(styles.cyan.open + file);
+      expect(results).to.contain(styles.magenta.open + '1');
+      expect(results).to.contain(styles.yellow.open + '[W]');
     });
-  },
+  });
 
-  compactWithoutColor: function (test) {
-    test.expect(4);
+  it('compact without color', function () {
     var file1 = path.join(fixtures, 'fail.scss'),
         file2 = path.join(fixtures, 'fail2.scss'),
         testOptions;
@@ -257,32 +208,14 @@ exports.scsslint = {
     scsslint.lint([file1, file2], testOptions, function (results) {
       results = results.split('\n');
 
-      test.ok(
-        results[1].indexOf(file1) !== -1,
-        'Should report file name of first file.'
-      );
-
-      test.ok(
-        results[2].indexOf('1:') !== -1,
-        'Should report line number for first file.'
-      );
-
-      test.ok(
-        typeof(/\:\s(.+)/.exec(results[2])[1]) === 'string',
-        'Should report description for first file.'
-      );
-
-      test.ok(
-        results[7].indexOf(file2) !== -1,
-        'Should report file name of second file.'
-      );
-
-      test.done();
+      expect(results[1]).to.contain(file1);
+      expect(results[2]).to.contain('1:');
+      expect(typeof(/\:\s(.+)/.exec(results[2])[1])).to.be('string');
+      expect(results[7]).to.contain(file2);
     });
-  },
+  });
 
-  compactWithColor: function (test) {
-    test.expect(4);
+  it('compact with color', function () {
     var file1 = path.join(fixtures, 'fail.scss'),
         file2 = path.join(fixtures, 'fail2.scss'),
         testOptions;
@@ -297,32 +230,14 @@ exports.scsslint = {
       var styles = chalk.styles;
       results = results.split('\n');
 
-      test.ok(
-        results[1].indexOf(styles.cyan.open + file1) !== -1,
-        'Should report file name of first file.'
-      );
-
-      test.ok(
-        results[2].indexOf(styles.magenta.open + '1' + styles.magenta.close + ':') !== -1,
-        'Should report line number for first file.'
-      );
-
-      test.ok(
-        typeof(new RegExp(escapeRe(styles.magenta.close) + '\\:\\s(.+)').exec(results[2])[1]) === 'string',
-        'Should report description for first file.'
-      );
-
-      test.ok(
-        results[7].indexOf(styles.cyan.open + file2) !== -1,
-        'Should report file name of second file.'
-      );
-
-      test.done();
+      expect(results[1]).to.contain(styles.cyan.open + file1);
+      expect(results[2]).to.contain(styles.magenta.open + '1' + styles.magenta.close + ':');
+      expect(typeof(new RegExp(escapeRe(styles.magenta.close) + '\\:\\s(.+)').exec(results[2])[1])).to.be('string');
+      expect(results[7]).to.contain(styles.cyan.open + file2);
     });
-  },
+  });
 
-  pluralizeSingleFile: function (test) {
-    test.expect(1);
+  it('pluralize single file', function () {
     var files = path.join(fixtures, 'pass.scss'),
         muted = grunt.log.muted,
         stdoutMsg = '';
@@ -339,13 +254,12 @@ exports.scsslint = {
     scsslint.lint(files, defaultOptions, function () {
       hooker.unhook(process.stdout, 'write');
       grunt.log.muted = muted;
-      test.ok(stdoutMsg.indexOf('1 file is lint free') !== -1, 'Report single file lint free');
-      test.done();
-    });
-  },
 
-  pluralizeMultipleFiles: function (test) {
-    test.expect(1);
+      expect(stdoutMsg).to.contain('1 file is lint free');
+    });
+  });
+
+  it('pluralize multiple files', function () {
     var files = path.join(fixtures, 'pass.scss'),
         muted = grunt.log.muted,
         stdoutMsg = '';
@@ -364,13 +278,11 @@ exports.scsslint = {
       hooker.unhook(process.stdout, 'write');
       grunt.log.muted = muted;
 
-      test.ok(stdoutMsg.indexOf(files.length + ' files are lint free') !== -1, 'Report multiple files lint free');
-      test.done();
+      expect(stdoutMsg).to.contain(files.length + ' files are lint free');
     });
-  },
+  });
 
-  emitError: function (test) {
-    test.expect(2);
+  it('emit error', function () {
     var file1 = path.join(fixtures, 'fail.scss'),
         eventEmitted = false,
         testOptions;
@@ -385,14 +297,13 @@ exports.scsslint = {
 
     scsslint.lint(file1, testOptions, function (results) {
       results = results.split('\n');
-      test.ok(results.length === 4);
-      test.ok(eventEmitted === true);
-      test.done();
-    });
-  },
 
-  emitSuccess: function (test) {
-    test.expect(1);
+      expect(results.length).to.be(4);
+      expect(eventEmitted).to.be.ok();
+    });
+  });
+
+  it('emit success', function () {
     var file1 = path.join(fixtures, 'pass.scss'),
         eventEmitted = false,
         testOptions;
@@ -406,38 +317,30 @@ exports.scsslint = {
     });
 
     scsslint.lint(file1, testOptions, function (results) {
-      test.ok(eventEmitted === true);
-      test.done();
+      expect(eventEmitted).to.be.ok();
     });
-  },
+  });
 
-  exitCodeOnFailure: function (test) {
-    test.expect(1);
+  it('exit code on failure', function () {
     grunt.util.spawn({grunt: true, args: ['scsslint']}, function (error, result, code) {
-      test.notEqual(code, 0);
-      test.done();
+      expect(code).not.to.be(0);
     });
-  },
+  });
 
-  exitCodeAndOutputOnMissingRuby: function (test) {
-    test.expect(2);
+  it('exit code and output on missing ruby', function () {
     grunt.util.spawn({grunt: true, args: ['scsslint'], opts: {env: {PATH: '.'}}}, function (error, result, code) {
-      test.notEqual(code, 0);
-      test.ok(result.stdout.match('Please make sure you have ruby installed'));
-      test.done();
+      expect(code).not.to.be(0);
+      expect(result.stdout).to.contain('Please make sure you have ruby installed');
     });
-  },
+  });
 
-  exitCodeOnSuccess: function (test) {
-    test.expect(1);
+  it('exit code on success', function () {
     grunt.util.spawn({grunt: true, args: ['scsslint:success']}, function (error, result, code) {
-      test.equal(code, 0);
-      test.done();
+      expect(code).to.be(0);
     });
-  },
+  });
 
-  maxBuffer: function (test) {
-    test.expect(1);
+  it('max buffer', function () {
     var files = path.join(fixtures, 'fail.scss'),
         testOptions;
 
@@ -446,8 +349,7 @@ exports.scsslint = {
     });
 
     scsslint.lint(files, testOptions, function (results) {
-      test.ok(!results, 'There should be no lint errors');
-      test.done();
+      expect(results).not.to.be.ok();
     });
-  }
-};
+  });
+});

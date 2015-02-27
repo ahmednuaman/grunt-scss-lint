@@ -1,6 +1,18 @@
 {
+  "camelcase": true,
+  "curly": true,
+  "freeze": true,
   "indent": 2,
+  "quotmark": "single",
   "maxlen": 120,
   "node": true,
-  "sub": true
+  "sub": true,
+  "globals"   : {
+    "describe": false,
+    "it": false,
+    "before": false,
+    "beforeEach": false,
+    "after": false,
+    "afterEach": false
+  }
 }

@@ -36,6 +36,13 @@ This task requires you to have [Ruby](http://www.ruby-lang.org/en/downloads/), a
 
 You can choose to have your gems installed via [bundler](http://bundler.io) and if so, set this option to `true` to use the local gems.
 
+#### gemVersion
+
+- Type: `String`
+- Default: `null`
+
+Select a particular version of the scss-lint Ruby gem at the task level.
+
 #### colorizeOutput
 
 - Type: `Boolean`

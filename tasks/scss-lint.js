@@ -13,6 +13,7 @@ module.exports = function (grunt) {
     opts = this.options({
       config: 'node_modules/grunt-scss-lint/.scss-lint.yml',
       reporterOutput: null,
+      gemVersion: null,
       bundleExec: false,
       colorizeOutput: true,
       compact: false,

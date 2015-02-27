@@ -141,6 +141,10 @@ exports.init = function (grunt) {
       args.unshift('bundle', 'exec');
     }
 
+    if (options.gemVersion) {
+      args.push('"_' + options.gemVersion + '_"');
+    }
+
     if (config) {
       args.push('-c');
       args.push(config);

@@ -35,9 +35,10 @@ describe('grunt-scss-lint', function () {
       results = results.split('\n');
       expect(results[0]).to.contain('SelectorFormat: Selector `Button` should be written in lowercase with hyphens');
       expect(results[1]).to.contain('PropertySortOrder: Properties should be ordered color, display');
-      expect(results[2]).to.contain('Color `black` should be written in hexadecimal form as `#000000`');
-      expect(results[3]).to.contain('Files should end with a trailing newline');
-      expect(results.length).to.be(4);
+      expect(results[2]).to.contain('Color literals like `black` should only be used in variable declarations');
+      expect(results[3]).to.contain('Color `black` should be written in hexadecimal form as `#000000`');
+      expect(results[4]).to.contain('Files should end with a trailing newline');
+      expect(results.length).to.be(5);
     });
   });
 
@@ -71,8 +72,7 @@ describe('grunt-scss-lint', function () {
       grunt.option('debug', undefined);
       hooker.unhook(process.stdout, 'write');
       grunt.log.muted = muted;
-
-      expect(stdout[1]).to.contain('scss-lint failed, but was run in force mode');
+      expect(_.last(stdout)).to.contain('scss-lint failed, but was run in force mode');
       done();
     });
   });

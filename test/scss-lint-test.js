@@ -134,6 +134,38 @@ exports.scsslint = {
     });
   },
 
+  gemVersion: function (test) {
+    test.expect(1);
+    var files = path.join(fixtures, 'pass.scss'),
+        muted = grunt.log.muted,
+        stdoutMsg = '',
+        testOptions;
+
+    grunt.log.muted = false;
+
+    testOptions = _.assign({}, defaultOptions, {
+      gemVersion: 'test_version'
+    });
+
+    grunt.option('debug', true);
+
+    hooker.hook(process.stdout, 'write', {
+      pre: function (result) {
+        stdoutMsg += grunt.log.uncolor(result);
+        return hooker.preempt();
+      }
+    });
+
+    scsslint.lint(files, testOptions, function (results) {
+      grunt.option('debug', undefined);
+      hooker.unhook(process.stdout, 'write');
+      grunt.log.muted = muted;
+
+      test.ok(stdoutMsg.indexOf('Run command: scss-lint \"_test_version_\" -c') !== -1, 'Apply gem version hint');
+      test.done();
+    });
+  },
+
   passWithExcludedFile: function (test) {
     test.expect(1);
     var files = path.join(fixtures, '*.scss'),

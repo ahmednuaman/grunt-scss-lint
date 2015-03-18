@@ -43,8 +43,8 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "lodash": "^3.3.1",
-    "xmlbuilder": "^2.6.1",
+    "lodash": "^3.5.0",
+    "xmlbuilder": "^2.6.2",
     "chalk": "^1.0.0"
   },
   "devDependencies": {
@@ -55,8 +55,10 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-jscs": "^1.5.0",
     "grunt-mocha-istanbul": "^2.3.1",
-    "istanbul": "^0.3.6",
-    "mocha": "^2.1.0"
+    "istanbul": "^0.3.8",
+    "mocha": "^2.2.1",
+    "nock-exec": "git+https://github.com/ahmednuaman/nock-exec.git",
+    "proxyquire": "^1.4.0"
   },
   "keywords": [
     "gruntplugin",

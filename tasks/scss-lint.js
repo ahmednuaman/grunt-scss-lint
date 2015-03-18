@@ -11,17 +11,20 @@ module.exports = function (grunt) {
         message;
 
     opts = this.options({
-      config: 'node_modules/grunt-scss-lint/.scss-lint.yml',
       reporterOutput: null,
       bundleExec: false,
+      colouriseOutput: true,
       colorizeOutput: true,
       compact: false,
       force: false,
       maxBuffer: 300 * 1024
     });
 
-    grunt.verbose.writeflags(opts, 'scss-lint options');
+    if (opts.colouriseOutput !== opts.colorizeOutput) {
+      opts.colorizeOutput = false;
+    }
 
+    grunt.verbose.writeflags(opts, 'scss-lint options');
     grunt.log.writeln('Running scss-lint on ' + target);
 
     scsslint.lint(files, opts, function (results) {

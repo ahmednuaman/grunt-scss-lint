@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "lodash": "2.4.1",
-    "xmlbuilder": "2.4.3",
+    "xmlbuilder": "2.5.1",
     "chalk": "0.5.1"
   },
   "devDependencies": {

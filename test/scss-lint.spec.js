@@ -2,6 +2,7 @@ var _ = require('lodash'),
     chalk = require('chalk'),
     expect = require('expect.js'),
     fs = require('fs'),
+    sinon = require('sinon'),
     
     escapeRe = function (str) {
       return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
@@ -234,88 +235,50 @@ describe('grunt-scss-lint', function () {
     });
   });
 
-  it('pluralise single file', function (done) {
-    var muted = grunt.log.muted,
-        stdoutMsg = '';
-
-    grunt.log.muted = false;
-
-    hooker.hook(process.stdout, 'write', {
-      pre: function (result) {
-        stdoutMsg += grunt.log.uncolor(result);
-        return hooker.preempt();
-      }
-    });
-
-    scsslint.lint(filePass, defaultOptions, function () {
-      hooker.unhook(process.stdout, 'write');
-      grunt.log.muted = muted;
-
-      expect(stdoutMsg).to.contain('1 file is lint free');
-      done();
+  it('pluralise single file', function () {
+    scsslint.lint(filePass, defaultOptions, function (results) {
+      expect(results).to.contain('1 file is lint free');
     });
   });
 
-  it('pluralise multiple files', function (done) {
-    var muted = grunt.log.muted,
-        stdoutMsg = '',
-        files;
+  it('pluralise multiple files', function () {
+    var files = [filePass, filePass];
 
-    grunt.log.muted = false;
-
-    hooker.hook(process.stdout, 'write', {
-      pre: function (result) {
-        stdoutMsg += grunt.log.uncolor(result);
-        return hooker.preempt();
-      }
-    });
-
-    files = [filePass, filePass];
-    scsslint.lint(files, defaultOptions, function () {
-      hooker.unhook(process.stdout, 'write');
-      grunt.log.muted = muted;
-
-      expect(stdoutMsg).to.contain(files.length + ' files are lint free');
-      done();
+    scsslint.lint(files, defaultOptions, function (results) {
+      expect(results).to.contain(files.length + ' files are lint free');
     });
   });
 
-  it('emit error', function (done) {
-    var eventEmitted = false,
+  it('emit error', function () {
+    var eventSpy = sinon.spy(),
         testOptions;
 
     testOptions = _.assign({}, defaultOptions, {
       emitError: true
     });
 
-    grunt.event.on('scss-lint-error', function () {
-      eventEmitted = true;
-    });
+    grunt.event.on('scss-lint-error', eventSpy);
 
     scsslint.lint(fileFail, testOptions, function (results) {
       results = results.split('\n');
 
       expect(results.length).to.be(5);
-      expect(eventEmitted).to.be.ok();
-      done();
+      expect(eventSpy.called).to.be.ok();
     });
   });
 
-  it('emit success', function (done) {
-    var eventEmitted = false,
+  it('emit success', function () {
+    var eventSpy = sinon.spy(),
         testOptions;
 
     testOptions = _.assign({}, defaultOptions, {
       emitSuccess: true
     });
 
-    grunt.event.on('scss-lint-success', function () {
-      eventEmitted = true;
-    });
+    grunt.event.on('scss-lint-success', eventSpy);
 
     scsslint.lint(filePass, testOptions, function (results) {
-      expect(eventEmitted).to.be.ok();
-      done();
+      expect(eventSpy.called).to.be.ok();
     });
   });
 

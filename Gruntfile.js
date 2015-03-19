@@ -24,18 +24,76 @@ module.exports = function (grunt) {
 
     scsslint: {
       all: [
-        'test/fixtures/fail.scss',
-        'test/fixtures/pass.scss',
         'test/fixtures/*.scss'
       ],
-      success: [
+      pass: [
         'test/fixtures/pass.scss'
       ],
+      fail: [
+        'test/fixtures/fail.scss'
+      ],
+      multiple: [
+        'test/fixtures/pass.scss',
+        'test/fixtures/pass.scss',
+        'test/fixtures/pass.scss'
+      ],
+      force: {
+        options: {
+          force: true
+        },
+        src: ['test/fixtures/fail.scss']
+      },
+      exclude: {
+        options: {
+          exclude: [
+            'test/fixtures/fail.scss',
+            'test/fixtures/fail2.scss'
+          ]
+        },
+        src: ['test/fixtures/pass.scss']
+      },
+      colorizeOutput: {
+        options: {
+          colorizeOutput: true
+        },
+        src: ['test/fixtures/fail.scss']
+      },
+      colouriseOutput: {
+        options: {
+          colouriseOutput: true
+        },
+        src: ['test/fixtures/fail.scss']
+      },
+      compactWithColorizeOutput: {
+        options: {
+          compact: true,
+          colorizeOutput: true
+        },
+        src: ['test/fixtures/fail.scss']
+      },
+      compactWithColouriseOutput: {
+        options: {
+          compact: true,
+          colouriseOutput: true
+        },
+        src: ['test/fixtures/fail.scss']
+      },
+      compactWithoutColorizeOutput: {
+        options: {
+          compact: true,
+          colorizeOutput: false
+        },
+        src: ['test/fixtures/fail.scss']
+      },
+      compactWithoutColouriseOutput: {
+        options: {
+          compact: true,
+          colouriseOutput: false
+        },
+        src: ['test/fixtures/fail.scss']
+      },
       options: {
-        reporterOutput: 'scss-lint-report.xml',
-        bundleExec: true,
-        colorizeOutput: true,
-        compact: true
+        reporterOutput: 'scss-lint-report.xml'
       }
     },
 

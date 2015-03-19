@@ -151,6 +151,8 @@ exports.init = function (grunt) {
       args.push(grunt.file.expand(exclude).join(','));
     }
 
+    options.colorizeOutput = options.colorizeOutput || options.colouriseOutput;
+
     if (options.colorizeOutput) {
       env.CLICOLOR_FORCE = '1';
     }

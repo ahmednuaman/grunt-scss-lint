@@ -13,25 +13,21 @@ module.exports = function (grunt) {
     opts = this.options({
       reporterOutput: null,
       bundleExec: false,
-      colouriseOutput: true,
-      colorizeOutput: true,
+      colouriseOutput: false,
+      colorizeOutput: false,
       compact: false,
       force: false,
       maxBuffer: 300 * 1024
     });
 
-    if (opts.colouriseOutput !== opts.colorizeOutput) {
-      opts.colorizeOutput = false;
-    }
-
     grunt.verbose.writeflags(opts, 'scss-lint options');
     grunt.log.writeln('Running scss-lint on ' + target);
 
     scsslint.lint(files, opts, function (results) {
-      if (results === false) {
-        done(false);
+      if (opts.force || !results) {
+        done();
       } else {
-        done(_.isEmpty(results) || opts.force);
+        done(false);
       }
     });
   });

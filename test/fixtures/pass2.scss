@@ -1,0 +1,14 @@
+$black: #000;
+
+.button {
+  color: $black;
+  display: block;
+}
+
+.test {
+  .foo,
+  .bar {
+    margin: 10px;
+    padding: 10px;
+  }
+}

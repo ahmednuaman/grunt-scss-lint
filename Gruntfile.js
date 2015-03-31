@@ -34,7 +34,7 @@ module.exports = function (grunt) {
       ],
       multiple: [
         'test/fixtures/pass.scss',
-        'test/fixtures/pass.scss',
+        'test/fixtures/pass2.scss',
         'test/fixtures/pass.scss'
       ],
       force: {
@@ -51,46 +51,6 @@ module.exports = function (grunt) {
           ]
         },
         src: ['test/fixtures/pass.scss']
-      },
-      colorizeOutput: {
-        options: {
-          colorizeOutput: true
-        },
-        src: ['test/fixtures/fail.scss']
-      },
-      colouriseOutput: {
-        options: {
-          colouriseOutput: true
-        },
-        src: ['test/fixtures/fail.scss']
-      },
-      compactWithColorizeOutput: {
-        options: {
-          compact: true,
-          colorizeOutput: true
-        },
-        src: ['test/fixtures/fail.scss']
-      },
-      compactWithColouriseOutput: {
-        options: {
-          compact: true,
-          colouriseOutput: true
-        },
-        src: ['test/fixtures/fail.scss']
-      },
-      compactWithoutColorizeOutput: {
-        options: {
-          compact: true,
-          colorizeOutput: false
-        },
-        src: ['test/fixtures/fail.scss']
-      },
-      compactWithoutColouriseOutput: {
-        options: {
-          compact: true,
-          colouriseOutput: false
-        },
-        src: ['test/fixtures/fail.scss']
       },
       options: {
         reporterOutput: 'scss-lint-report.xml'

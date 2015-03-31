@@ -118,18 +118,6 @@ describe('grunt-scss-lint', function () {
     });
   });
 
-  it('multiple files', function (done) {
-    spawn({
-      cmd: 'grunt',
-      args: ['scsslint:multiple']
-    }, function (error, results, code) {
-      results = results.stdout;
-      expect(results).to.contain('1 file is lint free');
-      expect(results).to.contain('Done, without errors.');
-      done();
-    });
-  });
-
   it('reporter with errors', function (done) {
     spawn({
       cmd: 'grunt',
@@ -177,7 +165,7 @@ describe('grunt-scss-lint', function () {
   });
 
   describe('compact without colour', function () {
-    ['ColouriseOutput', 'ColorizeOutput'].forEach(function (task) {
+    ['colouriseOutput', 'colorizeOutput'].forEach(function (task) {
       it(task, function (done) {
         var scsslint = require('../tasks/lib/scss-lint').init(grunt),
             testOptions;
@@ -202,7 +190,7 @@ describe('grunt-scss-lint', function () {
   });
 
   describe('compact with colour', function () {
-    ['ColouriseOutput', 'ColorizeOutput'].forEach(function (task) {
+    ['colouriseOutput', 'colorizeOutput'].forEach(function (task) {
       it(task, function (done) {
         var scsslint = require('../tasks/lib/scss-lint').init(grunt),
             testOptions;
@@ -216,7 +204,7 @@ describe('grunt-scss-lint', function () {
           var styles = chalk.styles;
           results = results.split('\n');
           
-          expect(results[1]).to.contain(styles.cyan.open + fileFail);
+          expect(results[1]).to.contain(styles.cyan.open + styles.bold.open + fileFail);
           expect(results[2]).to.contain(styles.magenta.open + '1');
           done();
         });
@@ -224,26 +212,22 @@ describe('grunt-scss-lint', function () {
     });
   });
 
-  it('pluralise single file', function () {
+  it('pluralise single file', function (done) {
     spawn({
       cmd: 'grunt',
       args: ['scsslint:pass']
     }, function (error, results, code) {
-      var report = grunt.file.read(reporterOutFile);
-
-      expect(report).to.contain('1 file is lint free');
+      expect(results.stdout).to.contain('1 file is lint free');
       done();
     });
   });
 
-  it('pluralise multiple files', function () {
+  it('pluralise multiple files', function (done) {
     spawn({
       cmd: 'grunt',
       args: ['scsslint:multiple']
     }, function (error, results, code) {
-      var report = grunt.file.read(reporterOutFile);
-
-      expect(report).to.contain('files is lint free');
+      expect(results.stdout).to.contain('files are lint free');
       done();
     });
   });

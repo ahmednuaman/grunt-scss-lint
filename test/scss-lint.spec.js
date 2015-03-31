@@ -83,7 +83,7 @@ describe('grunt-scss-lint', function () {
   it('bundle exec', function (done) {
     var instance = nockExec('bundle exec scss-lint ' + filePass).exit(0),
         scsslint = proxyquire('../tasks/lib/scss-lint', {
-          child_process: nockExec.moduleStub
+          'child_process': nockExec.moduleStub
         }).init(grunt);
 
     testOptions = _.assign({}, defaultOptions, {
@@ -110,7 +110,7 @@ describe('grunt-scss-lint', function () {
 
   it('fail with bad options', function (done) {
     var files = '--incorrectlySpecifyingAnOptionAsAFile',
-        scsslint = require('../tasks/lib/scss-lint').init(grunt);;
+        scsslint = require('../tasks/lib/scss-lint').init(grunt);
 
     scsslint.lint(files, defaultOptions, function (results) {
       expect(results).to.not.be.ok();
@@ -157,14 +157,17 @@ describe('grunt-scss-lint', function () {
   describe('colourised output', function () {
     ['colouriseOutput', 'colorizeOutput'].forEach(function (task) {
       it(task, function (done) {
-        spawn({
-          cmd: 'grunt',
-          args: ['scsslint:' + task]
-        }, function (error, results, code) {
-          var styles = chalk.styles;
-          results = results.stdout.split('\n')[2];
+        var scsslint = require('../tasks/lib/scss-lint').init(grunt),
+            testOptions;
 
-          expect(results).to.contain(styles.cyan.open + fileFail.replace(process.cwd() + '/', ''));
+        testOptions = _.assign({}, defaultOptions);
+        testOptions[task] = true;
+
+        scsslint.lint(fileFail, testOptions, function (results) {
+          var styles = chalk.styles;
+          results = results.split('\n')[0];
+
+          expect(results).to.contain(styles.cyan.open + fileFail);
           expect(results).to.contain(styles.magenta.open + '1');
           expect(results).to.contain(styles.yellow.open + '[W]');
           done();
@@ -176,15 +179,22 @@ describe('grunt-scss-lint', function () {
   describe('compact without colour', function () {
     ['ColouriseOutput', 'ColorizeOutput'].forEach(function (task) {
       it(task, function (done) {
-        spawn({
-          cmd: 'grunt',
-          args: ['scsslint:compactWithout' + task]
-        }, function (error, results, code) {
-          var styles = chalk.styles;
-          results = results.stdout.split('\n');
+        var scsslint = require('../tasks/lib/scss-lint').init(grunt),
+            testOptions;
 
-          expect(results[3]).to.contain(fileFail.replace(process.cwd() + '/', ''));
-          expect(results[4]).to.contain('1: [W] SelectorFormat:');
+        testOptions = _.assign({}, defaultOptions, {
+          compact: true
+        });
+        testOptions[task] = false;
+
+        scsslint.lint(fileFail, testOptions, function (results) {
+          var styles = chalk.styles;
+          results = results.split('\n');
+
+          expect(results[1]).to.contain(fileFail);
+          expect(results[2]).to.contain('1: [W] SelectorFormat:');
+          expect(results[1]).not.to.contain(styles.cyan.open + fileFail);
+          expect(results[2]).not.to.contain(styles.magenta.open + '1');
           done();
         });
       });
@@ -194,16 +204,20 @@ describe('grunt-scss-lint', function () {
   describe('compact with colour', function () {
     ['ColouriseOutput', 'ColorizeOutput'].forEach(function (task) {
       it(task, function (done) {
-        spawn({
-          cmd: 'grunt',
-          args: ['scsslint:compactWith' + task]
-        }, function (error, results, code) {
-          var styles = chalk.styles;
-          console.log(results.stdout);
-          results = results.stdout.split('\n');
+        var scsslint = require('../tasks/lib/scss-lint').init(grunt),
+            testOptions;
 
-          expect(results[3]).to.contain(styles.cyan.open + fileFail.replace(process.cwd() + '/', ''));
-          expect(results[4]).to.contain(styles.magenta.open + '1' + styles.magenta.close + ':');
+        testOptions = _.assign({}, defaultOptions, {
+          compact: true
+        });
+        testOptions[task] = true;
+
+        scsslint.lint(fileFail, testOptions, function (results) {
+          var styles = chalk.styles;
+          results = results.split('\n');
+          
+          expect(results[1]).to.contain(styles.cyan.open + fileFail);
+          expect(results[2]).to.contain(styles.magenta.open + '1');
           done();
         });
       });
@@ -211,21 +225,32 @@ describe('grunt-scss-lint', function () {
   });
 
   it('pluralise single file', function () {
-    scsslint.lint(filePass, defaultOptions, function (results) {
-      expect(results).to.contain('1 file is lint free');
+    spawn({
+      cmd: 'grunt',
+      args: ['scsslint:pass']
+    }, function (error, results, code) {
+      var report = grunt.file.read(reporterOutFile);
+
+      expect(report).to.contain('1 file is lint free');
+      done();
     });
   });
 
   it('pluralise multiple files', function () {
-    var files = [filePass, filePass];
+    spawn({
+      cmd: 'grunt',
+      args: ['scsslint:multiple']
+    }, function (error, results, code) {
+      var report = grunt.file.read(reporterOutFile);
 
-    scsslint.lint(files, defaultOptions, function (results) {
-      expect(results).to.contain(files.length + ' files are lint free');
+      expect(report).to.contain('files is lint free');
+      done();
     });
   });
 
   it('emit error', function () {
     var eventSpy = sinon.spy(),
+        scsslint = require('../tasks/lib/scss-lint').init(grunt),
         testOptions;
 
     testOptions = _.assign({}, defaultOptions, {
@@ -244,6 +269,7 @@ describe('grunt-scss-lint', function () {
 
   it('emit success', function () {
     var eventSpy = sinon.spy(),
+        scsslint = require('../tasks/lib/scss-lint').init(grunt),
         testOptions;
 
     testOptions = _.assign({}, defaultOptions, {

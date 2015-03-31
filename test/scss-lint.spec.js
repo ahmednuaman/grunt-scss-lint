@@ -269,7 +269,6 @@ describe('grunt-scss-lint', function () {
 
   it('exit code on failure', function (done) {
     spawn({
-      grunt: true,
       cmd: 'grunt', 
       args: ['scsslint']
     }, function (error, result, code) {
@@ -296,27 +295,30 @@ describe('grunt-scss-lint', function () {
     });
   });
 
-  xit('exit code on success', function (done) {
+  it('exit code on success', function (done) {
     spawn({
-      grunt: true,
       cmd: 'grunt', 
-      args: ['scsslint:success']
+      args: ['scsslint:pass']
     }, function (error, result, code) {
       expect(code).to.be(0);
       done();
     });
   });
 
-  xit('max buffer', function (done) {
-    var testOptions;
+  it('max buffer', function () {
+    var execSpy = sinon.spy(),
+        scsslint = proxyquire('../tasks/lib/scss-lint', {
+          'child_process': {
+            exec: execSpy
+          }
+        }).init(grunt),
+        testOptions;
 
     testOptions = _.assign({}, defaultOptions, {
-      maxBuffer: false
+      maxBuffer: 100
     });
 
-    scsslint.lint(fileFail, testOptions, function (results) {
-      expect(results).not.to.be.ok();
-      done();
-    });
+    scsslint.lint(filePass, testOptions);
+    expect(execSpy.calledWith(sinon.match.string, sinon.match.has('maxBuffer', 100), sinon.match.function)).to.be.ok();
   });
 });

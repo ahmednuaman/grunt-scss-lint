@@ -18,48 +18,63 @@ module.exports = function (grunt) {
       }
     },
 
+    'mocha_istanbul': {
+      tests: ['test/**/*.js']
+    },
+
     scsslint: {
       all: [
-        'test/fixtures/fail.scss',
-        'test/fixtures/pass.scss',
         'test/fixtures/*.scss'
       ],
-      success: [
+      pass: [
         'test/fixtures/pass.scss'
       ],
-      options: {
-        config: '.scss-lint.yml',
-        reporterOutput: 'scss-lint-report.xml',
-        bundleExec: false,
-        colorizeOutput: true,
-        compact: true
-      },
+      fail: [
+        'test/fixtures/fail.scss'
+      ],
+      multiple: [
+        'test/fixtures/pass.scss',
+        'test/fixtures/pass2.scss',
+        'test/fixtures/pass.scss'
+      ],
       force: {
         options: {
-          config: '.scss-lint.yml',
           force: true
         },
-        files: [{
-          src: [
-            'test/fixtures/fail.scss'
+        src: ['test/fixtures/fail.scss']
+      },
+      exclude: {
+        options: {
+          exclude: [
+            'test/fixtures/fail.scss',
+            'test/fixtures/fail2.scss'
           ]
-        }]
+        },
+        src: ['test/fixtures/pass.scss']
+      },
+      options: {
+        reporterOutput: 'scss-lint-report.xml'
       }
     },
 
-    nodeunit: {
-      tests: ['test/*-test.js']
+    watch: {
+      test: {
+        files: ['<%= jshint.all %>', '<%= mocha_istanbul.tests %>'],
+        tasks: ['test'],
+        options: {
+          spawn: false
+        }
+      }
     }
   });
 
   grunt.loadTasks('tasks');
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-internal');
-  grunt.loadNpmTasks('grunt-contrib-nodeunit');
+  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-jscs');
+  grunt.loadNpmTasks('grunt-mocha-istanbul');
 
-  grunt.registerTask('test', ['jscs', 'jshint', 'nodeunit']);
-
-  grunt.registerTask('default', ['test']);
+  grunt.registerTask('default', ['watch']);
+  grunt.registerTask('test', ['jscs', 'jshint', 'mocha_istanbul']);
 };

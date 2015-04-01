@@ -34,26 +34,29 @@
       "url": "https://github.com/ahmednuaman/grunt-scss-lint/blob/master/LICENSE-MIT"
     }
   ],
-  "engines": {
-    "node": ">= 0.8.0"
-  },
   "scripts": {
+    "codeclimate": "CODECLIMATE_REPO_TOKEN=dbf49c8de102d946c65f8195714e9d58591833be9975cd897bae0f0908c05235 codeclimate < coverage/lcov.info",
+    "preinstall": "bundle",
     "test": "grunt test"
   },
   "dependencies": {
-    "lodash": "2.4.1",
-    "xmlbuilder": "2.4.3",
-    "chalk": "0.5.1"
+    "lodash": "^3.5.0",
+    "xmlbuilder": "^2.6.2",
+    "chalk": "^1.0.0"
   },
   "devDependencies": {
-    "grunt-contrib-jshint": "0.10.0",
-    "grunt-contrib-nodeunit": "0.4.1",
-    "grunt-contrib-internal": "0.4.10",
-    "grunt-jscs": "0.6.2",
-    "grunt": ">=0.4.5"
-  },
-  "peerDependencies": {
-    "grunt": ">=0.4.5"
+    "codeclimate-test-reporter": "0.0.4",
+    "expect.js": "^0.3.1",
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-jscs": "^1.5.0",
+    "grunt-mocha-istanbul": "^2.3.1",
+    "istanbul": "^0.3.8",
+    "mocha": "^2.2.1",
+    "nock-exec": "git+https://github.com/ahmednuaman/nock-exec.git",
+    "proxyquire": "^1.4.0",
+    "sinon": "^1.14.1"
   },
   "keywords": [
     "gruntplugin",

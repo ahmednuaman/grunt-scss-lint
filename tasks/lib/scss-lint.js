@@ -1,9 +1,10 @@
 exports.init = function (grunt) {
   var _ = require('lodash'),
+      chalk = require('chalk'),
+      exec = require('child_process').exec,
       exports = {},
       compact = {},
       xmlBuilder = require('xmlbuilder'),
-      chalk = require('chalk'),
       writeReport;
 
   writeReport = function (output, results) {
@@ -130,9 +131,8 @@ exports.init = function (grunt) {
     var args = [],
         config = options['config'],
         exclude = options['exclude'],
-        exec = require('child_process').exec,
         env = process.env,
-        fileCount = Array.isArray(files) ? files.length : 1,
+        fileCount = _.isArray(files) ? files.length : 1,
         child;
 
     args.push('scss-lint');
@@ -151,6 +151,8 @@ exports.init = function (grunt) {
       args.push(grunt.file.expand(exclude).join(','));
     }
 
+    options.colorizeOutput = options.colorizeOutput || options.colouriseOutput;
+
     if (options.colorizeOutput) {
       env.CLICOLOR_FORCE = '1';
     }
@@ -167,7 +169,7 @@ exports.init = function (grunt) {
       env: env
     }, function (err, results, code) {
       var message,
-      rawResults;
+          rawResults;
 
       if (err && err.code !== 1 && err.code !== 2 && err.code !== 65) {
         if (err.code === 127) {

@@ -247,7 +247,7 @@ describe('grunt-scss-lint', function () {
       results = results.split('\n');
 
       expect(results.length).to.be(5);
-      expect(eventSpy.called).to.be.ok();
+      sinon.assert.calledOnce(eventSpy);
     });
   });
 
@@ -319,6 +319,6 @@ describe('grunt-scss-lint', function () {
     });
 
     scsslint.lint(filePass, testOptions);
-    expect(execSpy.calledWith(sinon.match.string, sinon.match.has('maxBuffer', 100), sinon.match.function)).to.be.ok();
+    sinon.assert.calledWith(execSpy, sinon.match.string, sinon.match.has('maxBuffer', 100), sinon.match.func);
   });
 });

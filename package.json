@@ -36,8 +36,7 @@
   ],
   "scripts": {
     "codeclimate": "CODECLIMATE_REPO_TOKEN=dbf49c8de102d946c65f8195714e9d58591833be9975cd897bae0f0908c05235 codeclimate < coverage/lcov.info",
-    "preinstall": "bundle",
-    "test": "grunt test"
+    "test": "bundle && grunt test"
   },
   "dependencies": {
     "lodash": "^3.6.0",

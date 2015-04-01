@@ -11,6 +11,8 @@ module.exports = function (grunt) {
         message;
 
     opts = this.options({
+      config: null,
+      gemVersion: null,
       reporterOutput: null,
       bundleExec: false,
       colouriseOutput: false,

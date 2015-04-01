@@ -129,8 +129,6 @@ exports.init = function (grunt) {
 
   exports.lint = function (files, options, done) {
     var args = [],
-        config = options['config'],
-        exclude = options['exclude'],
         env = process.env,
         fileCount = _.isArray(files) ? files.length : 1,
         child;
@@ -141,14 +139,18 @@ exports.init = function (grunt) {
       args.unshift('bundle', 'exec');
     }
 
-    if (config) {
-      args.push('-c');
-      args.push(config);
+    if (options.gemVersion) {
+      args.push('"_' + options.gemVersion + '_"');
     }
 
-    if (exclude) {
+    if (options.config) {
+      args.push('-c');
+      args.push(options.config);
+    }
+
+    if (options.exclude) {
       args.push('-e');
-      args.push(grunt.file.expand(exclude).join(','));
+      args.push(grunt.file.expand(options.exclude).join(','));
     }
 
     options.colorizeOutput = options.colorizeOutput || options.colouriseOutput;

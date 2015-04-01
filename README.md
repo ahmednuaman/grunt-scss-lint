@@ -61,6 +61,13 @@ Group related linted files for more easier error review. XML output will still b
 
 Specify a configuration file.
 
+#### gemVersion
+
+- Type: `String`
+- Default: `null`.
+
+Specify a gem version for the scsslint gem.
+
 #### exclude
 
 - Type: `String` or `Array`

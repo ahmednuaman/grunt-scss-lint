@@ -96,6 +96,40 @@ describe('grunt-scss-lint', function () {
     });
   });
 
+  it('config file', function (done) {
+    var configFile = path.join(fixtures, '.scss-lint-test.yml'),
+        instance = nockExec('scss-lint -c ' + configFile + ' ' + filePass).exit(0),
+        scsslint = proxyquire('../tasks/lib/scss-lint', {
+          'child_process': nockExec.moduleStub
+        }).init(grunt);
+
+    testOptions = _.assign({}, defaultOptions, {
+      config: configFile
+    });
+
+    scsslint.lint(filePass, testOptions, function (results) {
+      expect(instance.ran()).to.be.ok();
+      done();
+    });
+  });
+
+  it('gem version', function (done) {
+    var gemVersion = '1.2.3',
+        instance = nockExec('scss-lint "_' + gemVersion + '_" ' + filePass).exit(0),
+        scsslint = proxyquire('../tasks/lib/scss-lint', {
+          'child_process': nockExec.moduleStub
+        }).init(grunt);
+
+    testOptions = _.assign({}, defaultOptions, {
+      gemVersion: gemVersion
+    });
+
+    scsslint.lint(filePass, testOptions, function (results) {
+      expect(instance.ran()).to.be.ok();
+      done();
+    });
+  });
+
   it('pass with excluded file', function (done) {
     spawn({
       cmd: 'grunt',
@@ -280,13 +314,13 @@ describe('grunt-scss-lint', function () {
   it('exit code and output on missing ruby', function () {
     var nockExec = require('nock-exec'),
         proxyquire = require('proxyquire'),
-        linter = proxyquire('../tasks/lib/scss-lint', {
+        scsslint = proxyquire('../tasks/lib/scss-lint', {
           'child_process': nockExec.moduleStub
         }).init(grunt);
 
     nockExec('scss-lint ' + filePass)
       .exit(127);
-    linter.lint(filePass, {
+    scsslint.lint(filePass, {
       bundleExec: false
     }, function (results) {
       expect(results).to.contain('1. Please make sure you have ruby installed: `ruby -v`');

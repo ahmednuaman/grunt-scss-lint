@@ -20,6 +20,8 @@ var _ = require('lodash'),
     reporterOutFile = path.join(process.cwd(), 'scss-lint-report.xml'),
 
     filePass = path.join(fixtures, 'pass.scss'),
+    fileError = path.join(fixtures, 'error.scss'),
+    fileMixedIssues = path.join(fixtures, 'mixed-issues.scss'),
     fileFail = path.join(fixtures, 'fail.scss'),
     fileFail2 = path.join(fixtures, 'fail2.scss');
 
@@ -193,6 +195,89 @@ describe('grunt-scss-lint', function () {
           expect(results).to.contain(styles.magenta.open + '1');
           expect(results).to.contain(styles.yellow.open + '[W]');
           done();
+        });
+      });
+    });
+  });
+
+  describe('Show numbers of issues in a summary line', function () {
+    var scsslint = require('../tasks/lib/scss-lint').init(grunt);
+
+    describe('with colour', function () {
+      ['colouriseOutput', 'colorizeOutput'].forEach(function (task) {
+        var testOptions = _.assign({}, defaultOptions, {
+          compact: true
+        });
+        testOptions[task] = true;
+        it(task + ' only with warnings', function (done) {
+          scsslint.lint(fileFail, testOptions, function (results) {
+            var summaryLine = results.split('\n').pop();
+
+            expect(summaryLine).to.contain(chalk.styles.yellow.open + '>>');
+            expect(summaryLine).to.contain('0 failures');
+            expect(summaryLine).to.contain('5 warnings');
+            done();
+          });
+        });
+
+        it(task + ' only with error', function (done) {
+          scsslint.lint(fileError, testOptions, function (results) {
+            var summaryLine = results.split('\n').pop();
+
+            expect(summaryLine).to.contain(chalk.styles.red.open + '>>');
+            expect(summaryLine).to.contain('1 failures');
+            expect(summaryLine).to.contain('0 warnings');
+            done();
+          });
+        });
+
+        it(task + ' stops any counting after an error occurs', function (done) {
+          scsslint.lint(fileMixedIssues, testOptions, function (results) {
+            var summaryLine = results.split('\n').pop();
+
+            expect(summaryLine).to.contain(chalk.styles.red.open + '>>');
+            expect(summaryLine).to.contain('1 failures');
+            expect(summaryLine).to.contain('0 warnings');
+            done();
+          });
+        });
+      });
+    });
+
+    describe('without colour', function () {
+      ['colouriseOutput', 'colorizeOutput'].forEach(function (task) {
+        var testOptions = _.assign({}, defaultOptions, {
+          compact: true
+        });
+        testOptions[task] = false;
+        it(task + ' only with warnings', function (done) {
+          scsslint.lint(fileFail, testOptions, function (results) {
+            var summaryLine = results.split('\n').pop();
+
+            expect(summaryLine).to.contain('>>');
+            expect(summaryLine).not.to.contain(chalk.styles.red.open + '>>');
+            done();
+          });
+        });
+
+        it(task + ' only with error', function (done) {
+          scsslint.lint(fileError, testOptions, function (results) {
+            var summaryLine = results.split('\n').pop();
+
+            expect(summaryLine).to.contain('>>');
+            expect(summaryLine).not.to.contain(chalk.styles.red.open + '>>');
+            done();
+          });
+        });
+
+        it(task + ' stops any counting after an error occurs', function (done) {
+          scsslint.lint(fileMixedIssues, testOptions, function (results) {
+            var summaryLine = results.split('\n').pop();
+
+            expect(summaryLine).to.contain('>>');
+            expect(summaryLine).not.to.contain(chalk.styles.yellow.open + '>>');
+            done();
+          });
         });
       });
     });

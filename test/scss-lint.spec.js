@@ -214,7 +214,7 @@ describe('grunt-scss-lint', function () {
           results = results.split('\n');
 
           expect(results[1]).to.contain(fileFail);
-          expect(results[2]).to.contain('1: [W] SelectorFormat:');
+          expect(results[2]).to.contain('1:\t[W] SelectorFormat:');
           expect(results[1]).not.to.contain(styles.cyan.open + fileFail);
           expect(results[2]).not.to.contain(styles.magenta.open + '1');
           done();

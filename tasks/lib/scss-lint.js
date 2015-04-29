@@ -101,14 +101,14 @@ exports.init = function (grunt) {
           if (error.type === '[W]') {
             warningCount += 1;
             errorMsg += '  ' +
-                        chalk.magenta(error.line) + ':\t' +
+                        chalk.magenta(error.line) + ': ' +
                         chalk.yellow(error.type) + ' ' +
                         chalk.green(error.description[0]) + ': ' +
                         error.description[1] + '\n';
           } else {
             errorCount += 1;
             errorMsg += '  ' +
-                        chalk.magenta(error.line) + ':\t' +
+                        chalk.magenta(error.line) + ': ' +
                         chalk.red(error.type) + ' ' +
                         chalk.green(error.description[0]) + ': ' +
                         error.description[1] + '\n';

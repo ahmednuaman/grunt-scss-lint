@@ -13,7 +13,6 @@ install:
   - ruby --version
   - gem update --system --no-ri --no-rdoc
   - gem install bundler --no-document
-  - bundle install
   - ps: Update-NodeJsInstallation (Get-NodeJsLatestBuild $env:nodejs_version)
   - npm install -g grunt-cli
   - npm install
@@ -23,5 +22,9 @@ build: off
 test_script:
   - node --version
   - npm --version
-  - ps: grunt test --no-color
-  - cmd: grunt test --no-color
+  - ps: npm test --no-color
+  - cmd: npm test --no-color
+
+after_test:
+  - ps: npm run codeclimate --no-color
+  - cmd: npm run codeclimate --no-color

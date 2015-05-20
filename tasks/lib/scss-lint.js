@@ -66,6 +66,7 @@ exports.init = function (grunt) {
      if ( output.indexOf(".json") == -1 ){
       output = output+'.json';
     }
+      results = '{"scsslint":['+results+']}';
     grunt.file.write(output, results);
   }
 };

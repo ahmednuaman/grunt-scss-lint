@@ -83,10 +83,10 @@ Exclude one or more files from being linted.
 The jUnit XML file to save the output to. If you don't want this then set the option as `null`.
 
 #### reporter
-- type: 'string'
-- Default: 'xml'
+- type: `string`
+- Default: `xml`
 
-The output format from 'reporterOutput'. Either 'xml' or 'json'.
+The output format from reporterOutput. Either `xml` or `json`.
 
 #### emitError
 - Type: `Boolean`

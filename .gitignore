@@ -3,4 +3,3 @@ node_modules
 npm-debug.log
 scss-lint-report.xml
 test/output.xml
-tasks/lib/scss-lintcomment.js

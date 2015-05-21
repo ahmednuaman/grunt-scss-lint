@@ -68,110 +68,110 @@ exports.init = function (grunt) {
       if (output.indexOf('.json') == -1) {
         output = output + '.json';
       }
-    // Add a wrapper to output in case this file is concatenated in a config file
-    results = '{"scsslint":' + results + '}';
-    // JSON output engine outs a clean json so only a write is required here
-    grunt.file.write(output, results);
-  }
-};
+      // Add a wrapper to output in case this file is concatenated in a config file
+      results = '{"scsslint":' + results + '}';
+      // JSON output engine outs a clean json so only a write is required here
+      grunt.file.write(output, results);
+    }
+  };
 
-compact = {
-  make: function (results) {
-    var output = {},
-    fileName = '',
-    matchesRe = /^(.+?\.scss)\:(\d+?)\s(\[\w+?\])\s(.+)/,
-    matches;
+  compact = {
+    make: function (results) {
+      var output = {},
+      fileName = '',
+      matchesRe = /^(.+?\.scss)\:(\d+?)\s(\[\w+?\])\s(.+)/,
+      matches;
 
-    results = chalk.stripColor(results);
-    results = results.length !== 0 ? results.split('\n') : [];
+      results = chalk.stripColor(results);
+      results = results.length !== 0 ? results.split('\n') : [];
 
-    _.forEach(results, function (result) {
-      if (result === '') {
-        return false;
-      }
-
-      matches = matchesRe.exec(result);
-
-      if (matches) {
-        if (fileName !== matches[1]) {
-          fileName = matches[1];
-          output[fileName] = [];
+      _.forEach(results, function (result) {
+        if (result === '') {
+          return false;
         }
 
-        output[fileName].push({
-          line: matches[2],
-          type: matches[3],
-          description: matches[4].split(':')
-        });
-      }
-    });
+        matches = matchesRe.exec(result);
 
-    return output;
-  },
-  output: function (results) {
-    var str = '',
-    iterateErrors;
+        if (matches) {
+          if (fileName !== matches[1]) {
+            fileName = matches[1];
+            output[fileName] = [];
+          }
 
-    iterateErrors = function (errors) {
-      var errorMsg = '';
-
-      _.forEach(errors, function (error) {
-        if (error.type === '[W]') {
-          errorMsg += '  ' +
-          chalk.magenta(error.line) + ': ' +
-          chalk.yellow(error.type) + ' ' +
-          chalk.green(error.description[0]) + ': ' +
-          error.description[1] + '\n';
-        } else {
-          errorMsg += '  ' +
-          chalk.magenta(error.line) + ': ' +
-          chalk.red(error.type) + ' ' +
-          chalk.green(error.description[0]) + ': ' +
-          error.description[1] + '\n';
+          output[fileName].push({
+            line: matches[2],
+            type: matches[3],
+            description: matches[4].split(':')
+          });
         }
       });
 
-      return errorMsg;
-    };
+      return output;
+    },
+    output: function (results) {
+      var str = '',
+      iterateErrors;
 
-    results = compact.make(results);
+      iterateErrors = function (errors) {
+        var errorMsg = '';
 
-    _.forEach(results, function (result, index, collection) {
-      str += '\n';
-      str += chalk.cyan.bold(index);
-      str += '\n';
-      str += iterateErrors(result);
-    });
+        _.forEach(errors, function (error) {
+          if (error.type === '[W]') {
+            errorMsg += '  ' +
+            chalk.magenta(error.line) + ': ' +
+            chalk.yellow(error.type) + ' ' +
+            chalk.green(error.description[0]) + ': ' +
+            error.description[1] + '\n';
+          } else {
+            errorMsg += '  ' +
+            chalk.magenta(error.line) + ': ' +
+            chalk.red(error.type) + ' ' +
+            chalk.green(error.description[0]) + ': ' +
+            error.description[1] + '\n';
+          }
+        });
 
-    return str;
-  }
-};
+        return errorMsg;
+      };
 
-exports.lint = function (files, options, done) {
-  var args = [],
-  env = process.env,
-  fileCount = _.isArray(files) ? files.length : 1,
-  child;
+      results = compact.make(results);
 
-  args.push('scss-lint');
+      _.forEach(results, function (result, index, collection) {
+        str += '\n';
+        str += chalk.cyan.bold(index);
+        str += '\n';
+        str += iterateErrors(result);
+      });
 
-  if (options.bundleExec) {
-    args.unshift('bundle', 'exec');
-  }
+      return str;
+    }
+  };
 
-  if (options.gemVersion) {
-    args.push('"_' + options.gemVersion + '_"');
-  }
+  exports.lint = function (files, options, done) {
+    var args = [],
+    env = process.env,
+    fileCount = _.isArray(files) ? files.length : 1,
+    child;
 
-  if (options.config) {
-    args.push('-c');
-    args.push(options.config);
-  }
+    args.push('scss-lint');
 
-  if (options.exclude) {
-    args.push('-e');
-    args.push(grunt.file.expand(options.exclude).join(','));
-  }
+    if (options.bundleExec) {
+      args.unshift('bundle', 'exec');
+    }
+
+    if (options.gemVersion) {
+      args.push('"_' + options.gemVersion + '_"');
+    }
+
+    if (options.config) {
+      args.push('-c');
+      args.push(options.config);
+    }
+
+    if (options.exclude) {
+      args.push('-e');
+      args.push(grunt.file.expand(options.exclude).join(','));
+    }
 
   // Pass the Json argument to the linter if Json format is requested
   if(options.reporter == 'json') {
@@ -242,20 +242,20 @@ exports.lint = function (files, options, done) {
     if (options.reporterOutput) {
      writeReport(options.reporterOutput, grunt.log.uncolor(rawResults), options.reporter);
      // Align the log output to the write output by checking if correct format / extensions are used
-      if (options.reporter == 'xml') {
-        if (options.reporterOutput.indexOf('.xml') == -1) {
-          options.reporterOutput = options.reporterOutput + '.xml';
-        }
+     if (options.reporter == 'xml') {
+      if (options.reporterOutput.indexOf('.xml') == -1) {
+        options.reporterOutput = options.reporterOutput + '.xml';
       }
-      if (options.reporter == 'json') {
-        if (options.reporterOutput.indexOf('.json') == -1) {
-          options.reporterOutput = options.reporterOutput + '.json';
-        }
-      }
-      grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
     }
-    done(results);
+    if (options.reporter == 'json') {
+      if (options.reporterOutput.indexOf('.json') == -1) {
+        options.reporterOutput = options.reporterOutput + '.json';
+      }
+    }
+    grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
+  }
+  done(results);
   });
-};
-  return exports;
+  };
+return exports
 };

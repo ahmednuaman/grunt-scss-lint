@@ -13,6 +13,7 @@ module.exports = function (grunt) {
     opts = this.options({
       config: null,
       gemVersion: null,
+      // Added default reporter
       reporter: 'xml',
       reporterOutput: null,
       bundleExec: false,

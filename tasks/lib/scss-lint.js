@@ -7,6 +7,7 @@ exports.init = function (grunt) {
   xmlBuilder = require('xmlbuilder'),
   writeReport;
 
+  //  Add format to writeReport function
   writeReport = function (output, results, format) {
     var files = {},
     file,
@@ -17,8 +18,10 @@ exports.init = function (grunt) {
       return;
     }
 
+    // Conditional for xml parser
     if (format == 'xml'){
-      
+
+      // Auto add extension if none of incorrect extension specified
       if (output.indexOf(".xml") == -1){
         output = output+'.xml';
       }
@@ -61,12 +64,14 @@ exports.init = function (grunt) {
       grunt.file.write(output, xml.end());
     };
     
-
+    // Auto add extension if none of incorrect extension specified
     if (format == 'json'){
      if ( output.indexOf(".json") == -1 ){
       output = output+'.json';
     }
-      results = '{"scsslint":['+results+']}';
+    // Add a wrapper to output in case this file is concatenated in a config file
+    results = '{"scsslint":'+results+'}';
+    // JSON output engine outs a clean json so only a write is required here
     grunt.file.write(output, results);
   }
 };
@@ -169,6 +174,7 @@ exports.lint = function (files, options, done) {
     args.push(grunt.file.expand(options.exclude).join(','));
   }
 
+  // Pass the Json argument to the linter if Json format is requested
   if(options.reporter == 'json'){
     args.push('-f JSON');
 
@@ -237,11 +243,23 @@ exports.lint = function (files, options, done) {
 
     if (options.reporterOutput) {
      writeReport(options.reporterOutput, grunt.log.uncolor(rawResults), options.reporter);
-     grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
-   }
+     // Align the log output to the write output by checking if correct format / extensions are used
+     if (options.reporter == 'xml'){
+      if (options.reporterOutput.indexOf(".xml") == -1){
+        options.reporterOutput = options.reporterOutput+'.xml';
+      }
+    }
+    if (options.reporter == 'json'){
+      if (options.reporterOutput.indexOf(".json") == -1){
+        options.reporterOutput = options.reporterOutput+'.json';
+      }
+    }
+    
+    grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
+  }
 
-   done(results);
- });
+  done(results);
+});
 };
 
 return exports;

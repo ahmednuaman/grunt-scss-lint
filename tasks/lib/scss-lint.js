@@ -19,11 +19,10 @@ exports.init = function (grunt) {
     }
 
     // Conditional for xml parser
-    if (format == 'xml'){
-
+    if (format == 'xml') {
       // Auto add extension if none of incorrect extension specified
-      if (output.indexOf(".xml") == -1){
-        output = output+'.xml';
+      if (output.indexOf('.xml') == -1) {
+        output = output + '.xml';
       }
       
       results = (results.length !== 0) ? results.split('\n') : [];
@@ -65,12 +64,12 @@ exports.init = function (grunt) {
     };
     
     // Auto add extension if none of incorrect extension specified
-    if (format == 'json'){
-     if ( output.indexOf(".json") == -1 ){
-      output = output+'.json';
+    if (format == 'json') {
+     if ( output.indexOf('.json') == -1 ) {
+      output = output + '.json';
     }
     // Add a wrapper to output in case this file is concatenated in a config file
-    results = '{"scsslint":'+results+'}';
+    results = '{"scsslint":' + results + '}';
     // JSON output engine outs a clean json so only a write is required here
     grunt.file.write(output, results);
   }
@@ -175,9 +174,8 @@ exports.lint = function (files, options, done) {
   }
 
   // Pass the Json argument to the linter if Json format is requested
-  if(options.reporter == 'json'){
+  if(options.reporter == 'json') {
     args.push('-f JSON');
-
   }
 
   options.colorizeOutput = options.colorizeOutput || options.colouriseOutput;
@@ -244,14 +242,14 @@ exports.lint = function (files, options, done) {
     if (options.reporterOutput) {
      writeReport(options.reporterOutput, grunt.log.uncolor(rawResults), options.reporter);
      // Align the log output to the write output by checking if correct format / extensions are used
-     if (options.reporter == 'xml'){
-      if (options.reporterOutput.indexOf(".xml") == -1){
-        options.reporterOutput = options.reporterOutput+'.xml';
+     if (options.reporter == 'xml') {
+      if (options.reporterOutput.indexOf('.xml') == -1) {
+        options.reporterOutput = options.reporterOutput + '.xml';
       }
     }
-    if (options.reporter == 'json'){
-      if (options.reporterOutput.indexOf(".json") == -1){
-        options.reporterOutput = options.reporterOutput+'.json';
+    if (options.reporter == 'json') {
+      if (options.reporterOutput.indexOf('.json') == -1) {
+        options.reporterOutput = options.reporterOutput + '.json';
       }
     }
     

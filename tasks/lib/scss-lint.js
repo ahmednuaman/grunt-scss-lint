@@ -163,7 +163,7 @@ exports.init = function (grunt) {
       args.push(grunt.file.expand(options.exclude).join(','));
     }
 
-    if(options.reporter == 'json') {
+    if (options.reporter == 'json') {
       args.push('-f JSON');
     }
 

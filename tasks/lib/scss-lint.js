@@ -1,30 +1,22 @@
 exports.init = function (grunt) {
   var _ = require('lodash'),
-  chalk = require('chalk'),
-  exec = require('child_process').exec,
-  exports = {},
-  compact = {},
-  xmlBuilder = require('xmlbuilder'),
-  writeReport;
+      chalk = require('chalk'),
+      exec = require('child_process').exec,
+      exports = {},
+      compact = {},
+      xmlBuilder = require('xmlbuilder'),
+      writeReport;
 
-  
   writeReport = function (output, results, format) {
     var files = {},
-    file,
-    spec,
-    xml;
+        file,
+        spec,
+        xml;
 
     if (!output) {
       return;
     }
-
-
     if (format == 'xml') {
-
-      if (output.indexOf('.xml') == -1) {
-        output = output + '.xml';
-      }
-      
       results = (results.length !== 0) ? results.split('\n') : [];
 
       xml = xmlBuilder.create('testsuites');
@@ -61,9 +53,7 @@ exports.init = function (grunt) {
       });
 
       grunt.file.write(output, xml.end());
-    };
-    
-    
+    }
     if (format == 'json') {
       if (output.indexOf('.json') == -1) {
         output = output + '.json';
@@ -78,9 +68,9 @@ exports.init = function (grunt) {
   compact = {
     make: function (results) {
       var output = {},
-      fileName = '',
-      matchesRe = /^(.+?\.scss)\:(\d+?)\s(\[\w+?\])\s(.+)/,
-      matches;
+          fileName = '',
+          matchesRe = /^(.+?\.scss)\:(\d+?)\s(\[\w+?\])\s(.+)/,
+          matches;
 
       results = chalk.stripColor(results);
       results = results.length !== 0 ? results.split('\n') : [];
@@ -110,7 +100,7 @@ exports.init = function (grunt) {
     },
     output: function (results) {
       var str = '',
-      iterateErrors;
+          iterateErrors;
 
       iterateErrors = function (errors) {
         var errorMsg = '';
@@ -118,16 +108,16 @@ exports.init = function (grunt) {
         _.forEach(errors, function (error) {
           if (error.type === '[W]') {
             errorMsg += '  ' +
-            chalk.magenta(error.line) + ': ' +
-            chalk.yellow(error.type) + ' ' +
-            chalk.green(error.description[0]) + ': ' +
-            error.description[1] + '\n';
+                        chalk.magenta(error.line) + ': ' +
+                        chalk.yellow(error.type) + ' ' +
+                        chalk.green(error.description[0]) + ': ' +
+                        error.description[1] + '\n';
           } else {
             errorMsg += '  ' +
-            chalk.magenta(error.line) + ': ' +
-            chalk.red(error.type) + ' ' +
-            chalk.green(error.description[0]) + ': ' +
-            error.description[1] + '\n';
+                        chalk.magenta(error.line) + ': ' +
+                        chalk.red(error.type) + ' ' +
+                        chalk.green(error.description[0]) + ': ' +
+                        error.description[1] + '\n';
           }
         });
 
@@ -149,9 +139,9 @@ exports.init = function (grunt) {
 
   exports.lint = function (files, options, done) {
     var args = [],
-    env = process.env,
-    fileCount = _.isArray(files) ? files.length : 1,
-    child;
+        env = process.env,
+        fileCount = _.isArray(files) ? files.length : 1,
+        child;
 
     args.push('scss-lint');
 
@@ -172,7 +162,6 @@ exports.init = function (grunt) {
       args.push('-e');
       args.push(grunt.file.expand(options.exclude).join(','));
     }
-
 
     if(options.reporter == 'json') {
       args.push('-f JSON');
@@ -196,7 +185,7 @@ exports.init = function (grunt) {
       env: env
     }, function (err, results, code) {
       var message,
-      rawResults;
+          rawResults;
 
       if (err && err.code !== 1 && err.code !== 2 && err.code !== 65) {
         if (err.code === 127) {
@@ -240,22 +229,23 @@ exports.init = function (grunt) {
       }
 
       if (options.reporterOutput) {
-       writeReport(options.reporterOutput, grunt.log.uncolor(rawResults), options.reporter);
+        writeReport(options.reporterOutput, grunt.log.uncolor(rawResults), options.reporter);
+        if (options.reporter == 'xml') {
+          if (options.reporterOutput.indexOf('.xml') == -1) {
+            options.reporterOutput = options.reporterOutput + '.xml';
+          }
+        }
+        if (options.reporter == 'json') {
+          if (options.reporterOutput.indexOf('.json') == -1) {
+            options.reporterOutput = options.reporterOutput + '.json';
+          }
+        }
+        grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
+      }
 
-       if (options.reporter == 'xml') {
-        if (options.reporterOutput.indexOf('.xml') == -1) {
-          options.reporterOutput = options.reporterOutput + '.xml';
-        }
-      }
-      if (options.reporter == 'json') {
-        if (options.reporterOutput.indexOf('.json') == -1) {
-          options.reporterOutput = options.reporterOutput + '.json';
-        }
-      }
-      grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
-    }
-    done(results);
+      done(results);
     });
   };
-  return exports
+
+  return exports;
 };

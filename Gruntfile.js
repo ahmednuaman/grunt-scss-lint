@@ -52,6 +52,13 @@ module.exports = function (grunt) {
         },
         src: ['test/fixtures/pass.scss']
       },
+      passcheckstyle: {
+        options: {
+          format: 'Checkstyle',
+          require: 'scss_lint_reporter_checkstyle'
+        },
+        src: ['test/fixtures/pass.scss']
+      },
       options: {
         reporterOutput: 'scss-lint-report.xml'
       }

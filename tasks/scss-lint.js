@@ -31,7 +31,9 @@ module.exports = function (grunt) {
       colorizeOutput: false,
       compact: false,
       force: false,
-      maxBuffer: 300 * 1024
+      maxBuffer: 300 * 1024,
+      format: null,
+      require: null
     });
 
     if (opts.bundleExec) {

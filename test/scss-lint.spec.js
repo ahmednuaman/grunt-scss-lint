@@ -5,7 +5,7 @@ var _ = require('lodash'),
     nockExec = require('nock-exec'),
     proxyquire = require('proxyquire'),
     sinon = require('sinon'),
-    
+
     escapeRe = function (str) {
       return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
     },
@@ -176,6 +176,19 @@ describe('grunt-scss-lint', function () {
     });
   });
 
+  it('reporter in checkstyle format', function (done) {
+    spawn({
+      cmd: 'grunt',
+      args: ['scsslint:passcheckstyle']
+    }, function (error, results, code) {
+      var report = grunt.file.read(reporterOutFile);
+
+      expect(report).to.contain('<checkstyle version=');
+      expect(report).to.contain('</checkstyle>');
+      done();
+    });
+  });
+
   describe('colourised output', function () {
     ['colouriseOutput', 'colorizeOutput'].forEach(function (task) {
       it(task, function (done) {
@@ -237,7 +250,7 @@ describe('grunt-scss-lint', function () {
         scsslint.lint(fileFail, testOptions, function (results) {
           var styles = chalk.styles;
           results = results.split('\n');
-          
+
           expect(results[1]).to.contain(styles.cyan.open + styles.bold.open + fileFail);
           expect(results[2]).to.contain(styles.magenta.open + '1');
           done();
@@ -303,7 +316,7 @@ describe('grunt-scss-lint', function () {
 
   it('exit code on failure', function (done) {
     spawn({
-      cmd: 'grunt', 
+      cmd: 'grunt',
       args: ['scsslint']
     }, function (error, result, code) {
       expect(code).not.to.be(0);
@@ -331,7 +344,7 @@ describe('grunt-scss-lint', function () {
 
   it('exit code on success', function (done) {
     spawn({
-      cmd: 'grunt', 
+      cmd: 'grunt',
       args: ['scsslint:pass']
     }, function (error, result, code) {
       expect(code).to.be(0);

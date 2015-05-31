@@ -388,7 +388,7 @@ describe('grunt-scss-lint', function () {
 
   it('exit code on failure', function (done) {
     spawn({
-      cmd: 'grunt', 
+      cmd: 'grunt',
       args: ['scsslint']
     }, function (error, result, code) {
       expect(code).not.to.be(0);
@@ -416,7 +416,7 @@ describe('grunt-scss-lint', function () {
 
   it('exit code on success', function (done) {
     spawn({
-      cmd: 'grunt', 
+      cmd: 'grunt',
       args: ['scsslint:pass']
     }, function (error, result, code) {
       expect(code).to.be(0);

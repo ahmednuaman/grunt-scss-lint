@@ -5,7 +5,14 @@ exports.init = function (grunt) {
       exports = {},
       compact = {},
       xmlBuilder = require('xmlbuilder'),
+      noScssLint,
       writeReport;
+
+  noScssLint = function () {
+    grunt.log.errorlns('1. Please make sure you have ruby installed: `ruby -v`');
+    grunt.log.errorlns('2. Install the `scss_lint` gem by running:');
+    grunt.log.errorlns('gem update --system && gem install scss_lint');
+  };
 
   writeReport = function (output, results) {
     var files = {},
@@ -128,98 +135,113 @@ exports.init = function (grunt) {
   };
 
   exports.lint = function (files, options, done) {
-    var args = [],
+    var args = ['scss-lint'],
         env = process.env,
         fileCount = _.isArray(files) ? files.length : 1,
         child;
-
-    args.push('scss-lint');
 
     if (options.bundleExec) {
       args.unshift('bundle', 'exec');
     }
 
-    if (options.gemVersion) {
-      args.push('"_' + options.gemVersion + '_"');
-    }
+    args.push('-v');
 
-    if (options.config) {
-      args.push('-c');
-      args.push(options.config);
-    }
-
-    if (options.exclude) {
-      args.push('-e');
-      args.push(grunt.file.expand(options.exclude).join(','));
-    }
-
-    options.colorizeOutput = options.colorizeOutput || options.colouriseOutput;
-
-    if (options.colorizeOutput) {
-      env.CLICOLOR_FORCE = '1';
-    }
-
-    args = args.concat(files);
-
-    if (grunt.option('debug') !== undefined) {
-      grunt.log.debug('Run command: ' + args.join(' '));
-    }
-
-    child = exec(args.join(' '), {
+    exec(args.join(' '), {
       maxBuffer: options.maxBuffer,
       cwd: process.cwd(),
       env: env
     }, function (err, results, code) {
-      var message,
-          rawResults;
-
-      if (err && err.code !== 1 && err.code !== 2 && err.code !== 65) {
-        if (err.code === 127) {
-          grunt.log.errorlns('1. Please make sure you have ruby installed: `ruby -v`');
-          grunt.log.errorlns('2. Install the `scss-lint` gem by running:');
-          grunt.log.errorlns('gem update --system && gem install scss-lint');
-        } else {
-          grunt.log.errorlns('scss-lint failed with error code: ' + err.code);
-          grunt.log.errorlns('and the following message:' + err);
-        }
-
+      if (err || /^scss-lint [0-9.]+/.test(results) !== true) {
+        noScssLint();
         return done(false);
       }
 
-      results = results.trim();
-      rawResults = results;
+      args = ['scss-lint'];
 
-      if (results && options.compact) {
-        results = compact.output(results);
-        if (!options.colorizeOutput) {
-          results = chalk.stripColor(results);
-        }
+      if (options.bundleExec) {
+        args.unshift('bundle', 'exec');
       }
 
-      if (!results) {
-        if (!options.emitSuccess) {
-          message = fileCount + grunt.util.pluralize(fileCount, ' file is lint free/ files are lint free');
-          grunt.log.oklns(message);
+      if (options.gemVersion) {
+        args.push('"_' + options.gemVersion + '_"');
+      }
+
+      if (options.config) {
+        args.push('-c');
+        args.push(options.config);
+      }
+
+      if (options.exclude) {
+        args.push('-e');
+        args.push(grunt.file.expand(options.exclude).join(','));
+      }
+
+      options.colorizeOutput = options.colorizeOutput || options.colouriseOutput;
+
+      if (options.colorizeOutput) {
+        env.CLICOLOR_FORCE = '1';
+      }
+
+      args = args.concat(files);
+
+      if (grunt.option('debug') !== undefined) {
+        grunt.log.debug('Run command: ' + args.join(' '));
+      }
+
+      child = exec(args.join(' '), {
+        maxBuffer: options.maxBuffer,
+        cwd: process.cwd(),
+        env: env
+      }, function (err, results, code) {
+        var message,
+            rawResults;
+
+        if (err && err.code !== 1 && err.code !== 2 && err.code !== 65) {
+          if (err.code === 127) {
+            noScssLint();
+          } else {
+            grunt.log.errorlns('scss-lint failed with error code: ' + err.code);
+            grunt.log.errorlns('and the following message:' + err);
+          }
+
+          return done(false);
+        }
+
+        results = results.trim();
+        rawResults = results;
+
+        if (results && options.compact) {
+          results = compact.output(results);
+          if (!options.colorizeOutput) {
+            results = chalk.stripColor(results);
+          }
+        }
+
+        if (!results) {
+          if (!options.emitSuccess) {
+            message = fileCount + grunt.util.pluralize(fileCount, ' file is lint free/ files are lint free');
+            grunt.log.oklns(message);
+          } else {
+            grunt.event.emit('scss-lint-success');
+          }
         } else {
-          grunt.event.emit('scss-lint-success');
+          if (!options.emitError) {
+            grunt.log.writeln(results);
+          } else {
+            grunt.event.emit('scss-lint-error', results);
+          }
+          if (options.force) {
+            grunt.log.writeln('scss-lint failed, but was run in force mode');
+          }
         }
-      } else {
-        if (!options.emitError) {
-          grunt.log.writeln(results);
-        } else {
-          grunt.event.emit('scss-lint-error', results);
-        }
-        if (options.force) {
-          grunt.log.writeln('scss-lint failed, but was run in force mode');
-        }
-      }
 
-      if (options.reporterOutput) {
-        writeReport(options.reporterOutput, grunt.log.uncolor(rawResults));
-        grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
-      }
+        if (options.reporterOutput) {
+          writeReport(options.reporterOutput, grunt.log.uncolor(rawResults));
+          grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
+        }
 
-      done(results);
+        done(results);
+      });
     });
   };
 

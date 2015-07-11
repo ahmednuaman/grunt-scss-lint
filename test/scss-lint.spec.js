@@ -324,8 +324,8 @@ describe('grunt-scss-lint', function () {
       bundleExec: false
     }, function (results) {
       expect(results).to.contain('1. Please make sure you have ruby installed: `ruby -v`');
-      expect(results).to.contain('2. Install the `scss-lint` gem by running:');
-      expect(results).to.contain('gem update --system && gem install scss-lint');
+      expect(results).to.contain('2. Install the `scss_lint` gem by running:');
+      expect(results).to.contain('gem update --system && gem install scss_lint');
     });
   });
 
@@ -334,6 +334,7 @@ describe('grunt-scss-lint', function () {
       cmd: 'grunt', 
       args: ['scsslint:pass']
     }, function (error, result, code) {
+      console.log(arguments);
       expect(code).to.be(0);
       done();
     });

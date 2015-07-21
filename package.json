@@ -39,9 +39,10 @@
     "test": "bundle && grunt test"
   },
   "dependencies": {
+    "chalk": "^1.0.0",
     "lodash": "^3.6.0",
-    "xmlbuilder": "^2.6.2",
-    "chalk": "^1.0.0"
+    "which": "^1.1.1",
+    "xmlbuilder": "^2.6.2"
   },
   "devDependencies": {
     "codeclimate-test-reporter": "0.0.4",

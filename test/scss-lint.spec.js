@@ -5,6 +5,7 @@ var _ = require('lodash'),
     nockExec = require('nock-exec'),
     proxyquire = require('proxyquire'),
     sinon = require('sinon'),
+    util = require('util'),
     
     escapeRe = function (str) {
       return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
@@ -56,6 +57,7 @@ describe('grunt-scss-lint', function () {
       done();
     });
   });
+
 
   it('pass with force', function (done) {
     spawn({
@@ -173,6 +175,17 @@ describe('grunt-scss-lint', function () {
 
       expect(report).to.contain('errors="0"');
       done();
+    });
+  });
+
+  it('Report on number of files', function (done) {
+    spawn({
+        cmd: 'grunt',
+        args: ['scsslint:fileReport']
+    }, function (error, results, code) {
+        results = results.stdout;
+        expect(results).to.contain('testing 2 files');
+        done();
     });
   });
 

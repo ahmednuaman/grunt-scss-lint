@@ -43,6 +43,12 @@ module.exports = function (grunt) {
         },
         src: ['test/fixtures/fail.scss']
       },
+      fileReport: {
+        options: {
+            fileReport: true
+        },
+        src: ['test/fixtures/fail.scss', 'test/fixtures/fail2.scss']
+      },
       exclude: {
         options: {
           exclude: [

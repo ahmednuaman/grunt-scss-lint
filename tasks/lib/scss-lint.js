@@ -212,6 +212,9 @@ exports.init = function (grunt) {
         if (options.force) {
           grunt.log.writeln('scss-lint failed, but was run in force mode');
         }
+        if (options.fileReport) {
+          grunt.log.writeln('scss-lint failed, testing '+fileCount+' files.');
+        }
       }
 
       if (options.reporterOutput) {

@@ -58,7 +58,6 @@ describe('grunt-scss-lint', function () {
     });
   });
 
-
   it('pass with force', function (done) {
     spawn({
       cmd: 'grunt',
@@ -180,12 +179,12 @@ describe('grunt-scss-lint', function () {
 
   it('Report on number of files', function (done) {
     spawn({
-        cmd: 'grunt',
-        args: ['scsslint:fileReport']
+      cmd: 'grunt',
+      args: ['scsslint:fileReport']
     }, function (error, results, code) {
-        results = results.stdout;
-        expect(results).to.contain('testing 2 files');
-        done();
+      results = results.stdout;
+      expect(results).to.contain('testing 2 files');
+      done();
     });
   });
 

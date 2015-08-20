@@ -39,7 +39,7 @@ module.exports = function (grunt) {
       );
     } else {
       checkBinary('scss-lint',
-        'You need to have Ruby and sscs_lint installed and in your PATH for this task to work.'
+        'You need to have Ruby and scss_lint installed and in your PATH for this task to work.'
       );
     }
 

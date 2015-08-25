@@ -90,19 +90,23 @@ exports.init = function (grunt) {
     },
     output: function (results) {
       var str = '',
-          iterateErrors;
+          iterateErrors,
+          warningCount = 0,
+          errorCount = 0;
 
       iterateErrors = function (errors) {
         var errorMsg = '';
 
         _.forEach(errors, function (error) {
           if (error.type === '[W]') {
+            warningCount += 1;
             errorMsg += '  ' +
                         chalk.magenta(error.line) + ': ' +
                         chalk.yellow(error.type) + ' ' +
                         chalk.green(error.description[0]) + ': ' +
                         error.description[1] + '\n';
           } else {
+            errorCount += 1;
             errorMsg += '  ' +
                         chalk.magenta(error.line) + ': ' +
                         chalk.red(error.type) + ' ' +
@@ -122,6 +126,17 @@ exports.init = function (grunt) {
         str += '\n';
         str += iterateErrors(result);
       });
+
+      if (errorCount || warningCount) {
+        str += '\n' +
+               chalk[errorCount ? 'red' : 'yellow']('>> ') +
+               errorCount + ' failures, ' +
+               warningCount + ' warnings';
+      } else {
+        str += '\n' +
+               chalk.green('>> 0 failures, 0 warnings') +
+               chalk.green('Done, without errors.');
+      }
 
       return str;
     }

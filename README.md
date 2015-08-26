@@ -86,7 +86,7 @@ The jUnit XML file to save the output to. If you don't want this then set the op
 - Type: `Boolean`
 - Default: `false`
 
-Emits a Grunt event on scss-lint error called `scss-lint-error`.
+Emits a Grunt event on scss-lint error called `scss-lint-error`. When set to `true` this will also prevent the errors themselves from being logged to the console. This is particularly useful when combined with `reporterOutput`.
 
 #### emitSuccess
 - Type: `Boolean`

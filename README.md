@@ -6,7 +6,7 @@
 > Lint your `.scss` files
 
 ## Getting Started
-This plugin requires Grunt `>= 0.4.0` and [scss-lint](https://github.com/causes/scss-lint) `>= 0.18.0`.
+This plugin requires Grunt `>= 0.4.0` and [scss-lint](https://github.com/brigade/scss-lint) `>= 0.18.0`. It is recommended to use the `scss_lint` gem as that is the currently maintained version.
 
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
@@ -23,9 +23,9 @@ grunt.loadNpmTasks('grunt-scss-lint');
 ## Scss-lint task
 _Run this task with the `grunt scsslint` command._
 
-[scss-lint](https://github.com/causes/scss-lint) is a Ruby gem written by [The Causes Engineering Team](https://github.com/causes), this plugin is simply a grunt wrapper for the gem.
+[scss-lint](https://github.com/brigade/scss-lint) is a Ruby gem written by [The Causes Engineering Team](https://github.com/causes). It is currently owned and maintained by [brigade](https://github.com/brigade). This plugin is simply a grunt wrapper for the gem.
 
-This task requires you to have [Ruby](http://www.ruby-lang.org/en/downloads/), and [scss-lint](https://github.com/causes/scss-lint#installation) installed. If you're on OS X or Linux you probably already have Ruby installed; test with `ruby -v` in your terminal. When you've confirmed you have Ruby installed, run `gem update --system && gem install scss-lint` to install the `scss-lint` gem.
+This task requires you to have [Ruby](http://www.ruby-lang.org/en/downloads/), and [scss-lint](https://github.com/brigade/scss-lint#installation) installed. If you're on OS X or Linux you probably already have Ruby installed; test with `ruby -v` in your terminal. When you've confirmed you have Ruby installed, run `gem update --system && gem install scss_lint` to install the `scss_lint` gem.
 
 ### Options
 

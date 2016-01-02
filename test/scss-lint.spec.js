@@ -5,9 +5,18 @@ var _ = require('lodash'),
     nockExec = require('nock-exec'),
     proxyquire = require('proxyquire'),
     sinon = require('sinon'),
-    
+
     escapeRe = function (str) {
       return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+    },
+
+    quoteArgument = function (arg) {
+      if (Array.isArray(arg)) {
+        arg = arg.map(quoteArgument);
+      } else if (arg.indexOf(' ') !== -1) {
+        arg = '"' + arg + '"';
+      }
+      return arg;
     },
 
     grunt = require('grunt'),
@@ -81,7 +90,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('bundle exec', function (done) {
-    var instance = nockExec('bundle exec scss-lint ' + filePass).exit(0),
+    var instance = nockExec('bundle exec scss-lint ' + quoteArgument(filePass)).exit(0),
         scsslint = proxyquire('../tasks/lib/scss-lint', {
           'child_process': nockExec.moduleStub
         }).init(grunt);
@@ -98,7 +107,7 @@ describe('grunt-scss-lint', function () {
 
   it('config file', function (done) {
     var configFile = path.join(fixtures, '.scss-lint-test.yml'),
-        instance = nockExec('scss-lint -c ' + configFile + ' ' + filePass).exit(0),
+        instance = nockExec('scss-lint -c ' + quoteArgument(configFile) + ' ' + quoteArgument(filePass)).exit(0),
         scsslint = proxyquire('../tasks/lib/scss-lint', {
           'child_process': nockExec.moduleStub
         }).init(grunt);
@@ -115,7 +124,7 @@ describe('grunt-scss-lint', function () {
 
   it('gem version', function (done) {
     var gemVersion = '1.2.3',
-        instance = nockExec('scss-lint "_' + gemVersion + '_" ' + filePass).exit(0),
+        instance = nockExec('scss-lint "_' + gemVersion + '_" ' + quoteArgument(filePass)).exit(0),
         scsslint = proxyquire('../tasks/lib/scss-lint', {
           'child_process': nockExec.moduleStub
         }).init(grunt);
@@ -237,7 +246,7 @@ describe('grunt-scss-lint', function () {
         scsslint.lint(fileFail, testOptions, function (results) {
           var styles = chalk.styles;
           results = results.split('\n');
-          
+
           expect(results[1]).to.contain(styles.cyan.open + styles.bold.open + fileFail);
           expect(results[2]).to.contain(styles.magenta.open + '1');
           done();
@@ -303,7 +312,7 @@ describe('grunt-scss-lint', function () {
 
   it('exit code on failure', function (done) {
     spawn({
-      cmd: 'grunt', 
+      cmd: 'grunt',
       args: ['scsslint']
     }, function (error, result, code) {
       expect(code).not.to.be(0);
@@ -318,7 +327,7 @@ describe('grunt-scss-lint', function () {
           'child_process': nockExec.moduleStub
         }).init(grunt);
 
-    nockExec('scss-lint ' + filePass)
+    nockExec('scss-lint ' + quoteArgument(filePass))
       .exit(127);
     scsslint.lint(filePass, {
       bundleExec: false
@@ -331,7 +340,7 @@ describe('grunt-scss-lint', function () {
 
   it('exit code on success', function (done) {
     spawn({
-      cmd: 'grunt', 
+      cmd: 'grunt',
       args: ['scsslint:pass']
     }, function (error, result, code) {
       expect(code).to.be(0);

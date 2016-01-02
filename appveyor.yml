@@ -10,7 +10,7 @@ environment:
     - nodejs_version: 1.0
 
 install:
-  - SET PATH=C:\Ruby22;%PATH%
+  - SET PATH=%PATH%;C:\Ruby22
   - echo %PATH%
   - ruby --version
   - gem update --system --no-ri --no-rdoc

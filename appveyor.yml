@@ -10,7 +10,8 @@ environment:
     - nodejs_version: 1.0
 
 install:
-  - cmd: SET PATH=C:\Ruby22\;%PATH%
+  - SET PATH=C:\Ruby22;%PATH%
+  - echo %PATH%
   - ruby --version
   - gem update --system --no-ri --no-rdoc
   - gem install bundler --no-document

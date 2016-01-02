@@ -9,8 +9,10 @@ exports.init = function (grunt) {
       writeReport;
 
   quoteArgument = function (arg) {
-    if (arg.indexOf(' ') !== -1) {
-      arg = '"' + arg + '"';
+    if (Array.isArray(arg)) {
+      return arg.map(quoteArgument);
+    } else if (arg.indexOf(' ') !== -1) {
+      return '"' + arg + '"';
     }
     return arg;
   };
@@ -158,7 +160,7 @@ exports.init = function (grunt) {
 
     if (options.exclude) {
       args.push('-e');
-      args.push(grunt.file.expand(options.exclude).join(','));
+      args.push(grunt.file.expand(options.exclude).map(quoteArgument).join(','));
     }
 
     options.colorizeOutput = options.colorizeOutput || options.colouriseOutput;
@@ -167,7 +169,7 @@ exports.init = function (grunt) {
       env.CLICOLOR_FORCE = '1';
     }
 
-    files = Array.isArray(files) ? files.map(quoteArgument) : quoteArgument(files);
+    files = quoteArgument(files);
 
     args = args.concat(files);
 

@@ -33,6 +33,7 @@ var _ = require('lodash'),
     fileFail2 = path.join(fixtures, 'fail2.scss');
 
 describe('grunt-scss-lint', function () {
+  this.timeout(15000);
   beforeEach(function (done) {
     fs.stat(reporterOutFile, function (err, stats) {
       if (!err) {

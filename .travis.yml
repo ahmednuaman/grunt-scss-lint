@@ -1,5 +1,10 @@
-before_install: gem install bundler; bundle install; npm install -g grunt-cli;
-install: npm install -d
 language: node_js
 node_js:
-- "0.10"
+- "node"
+- "iojs"
+before_install: 
+- gem install bundler
+- npm install -g grunt-cli
+install: npm install
+script: npm test
+after_script: npm run codeclimate

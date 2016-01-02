@@ -1,5 +1,7 @@
 # grunt-scss-lint
-[![Build Status](https://travis-ci.org/ahmednuaman/grunt-scss-lint.png?branch=master)](https://travis-ci.org/ahmednuaman/grunt-scss-lint) [![Code Climate](https://codeclimate.com/github/ahmednuaman/grunt-scss-lint.png)](https://codeclimate.com/github/ahmednuaman/grunt-scss-lint) [![NPM version](https://badge.fury.io/js/grunt-scss-lint.png)](http://badge.fury.io/js/grunt-scss-lint)
+
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ahmednuaman/grunt-scss-lint?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/ahmednuaman/grunt-scss-lint.png?branch=master)](https://travis-ci.org/ahmednuaman/grunt-scss-lint) [![Code Climate](https://codeclimate.com/github/ahmednuaman/grunt-scss-lint/badges/gpa.svg)](https://codeclimate.com/github/ahmednuaman/grunt-scss-lint) [![Test Coverage](https://codeclimate.com/github/ahmednuaman/grunt-scss-lint/badges/coverage.svg)](https://codeclimate.com/github/ahmednuaman/grunt-scss-lint) [![NPM version](https://badge.fury.io/js/grunt-scss-lint.png)](http://badge.fury.io/js/grunt-scss-lint)
 
 > Lint your `.scss` files
 
@@ -55,9 +57,23 @@ Group related linted files for more easier error review. XML output will still b
 #### config
 
 - Type: `String`
-- Default: `scss-lint`'s [default config file](https://github.com/causes/scss-lint/blob/master/config/default.yml).
+- Default: `node_modules/grunt-scss-lint/.scss-lint.yml`.
 
-~~**[Note that this isn't working correctly yet](https://github.com/causes/scss-lint/issues/46).**~~
+Specify a configuration file.
+
+#### gemVersion
+
+- Type: `String`
+- Default: `null`.
+
+Specify a gem version for the scsslint gem.
+
+#### exclude
+
+- Type: `String` or `Array`
+- Default: `null`
+
+Exclude one or more files from being linted.
 
 #### reporterOutput
 
@@ -71,6 +87,12 @@ The jUnit XML file to save the output to. If you don't want this then set the op
 - Default: `false`
 
 Emits a Grunt event on scss-lint error called `scss-lint-error`.
+
+#### emitSuccess
+- Type: `Boolean`
+- Default: `false`
+
+Emits a Grunt event on scss-lint success called `scss-lint-success`.
 
 #### force
 

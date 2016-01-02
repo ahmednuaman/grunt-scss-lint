@@ -1,9 +1,10 @@
 exports.init = function (grunt) {
   var _ = require('lodash'),
+      chalk = require('chalk'),
+      exec = require('child_process').exec,
       exports = {},
       compact = {},
       xmlBuilder = require('xmlbuilder'),
-      chalk = require('chalk'),
       quoteArgument,
       writeReport;
 
@@ -104,16 +105,16 @@ exports.init = function (grunt) {
 
         _.forEach(errors, function (error) {
           if (error.type === '[W]') {
-            errorMsg += '  ' + 
-                        chalk.magenta(error.line) + ': ' + 
-                        chalk.yellow(error.type) + ' ' + 
-                        chalk.green(error.description[0]) + ': ' + 
+            errorMsg += '  ' +
+                        chalk.magenta(error.line) + ': ' +
+                        chalk.yellow(error.type) + ' ' +
+                        chalk.green(error.description[0]) + ': ' +
                         error.description[1] + '\n';
           } else {
-            errorMsg += '  ' + 
-                        chalk.magenta(error.line) + ': ' + 
-                        chalk.red(error.type) + ' ' + 
-                        chalk.green(error.description[0]) + ': ' + 
+            errorMsg += '  ' +
+                        chalk.magenta(error.line) + ': ' +
+                        chalk.red(error.type) + ' ' +
+                        chalk.green(error.description[0]) + ': ' +
                         error.description[1] + '\n';
           }
         });
@@ -136,11 +137,8 @@ exports.init = function (grunt) {
 
   exports.lint = function (files, options, done) {
     var args = [],
-        config = options['config'],
-        exclude = options['exclude'],
-        exec = require('child_process').exec,
         env = process.env,
-        fileCount = Array.isArray(files) ? files.length : 1,
+        fileCount = _.isArray(files) ? files.length : 1,
         child;
 
     args.push('scss-lint');
@@ -149,15 +147,21 @@ exports.init = function (grunt) {
       args.unshift('bundle', 'exec');
     }
 
-    if (config) {
-      args.push('-c');
-      args.push(quoteArgument(config));
+    if (options.gemVersion) {
+      args.push('"_' + options.gemVersion + '_"');
     }
 
-    if (exclude) {
-      args.push('-e');
-      args.push(grunt.file.expand(exclude).map(quoteArgument).join(','));
+    if (options.config) {
+      args.push('-c');
+      args.push(quoteArgument(options.config));
     }
+
+    if (options.exclude) {
+      args.push('-e');
+      args.push(grunt.file.expand(options.exclude).join(','));
+    }
+
+    options.colorizeOutput = options.colorizeOutput || options.colouriseOutput;
 
     if (options.colorizeOutput) {
       env.CLICOLOR_FORCE = '1';
@@ -177,7 +181,7 @@ exports.init = function (grunt) {
       env: env
     }, function (err, results, code) {
       var message,
-      rawResults;
+          rawResults;
 
       if (err && err.code !== 1 && err.code !== 2 && err.code !== 65) {
         if (err.code === 127) {
@@ -203,8 +207,12 @@ exports.init = function (grunt) {
       }
 
       if (!results) {
-        message = fileCount + grunt.util.pluralize(fileCount, ' file is lint free/ files are lint free');
-        grunt.log.oklns(message);
+        if (!options.emitSuccess) {
+          message = fileCount + grunt.util.pluralize(fileCount, ' file is lint free/ files are lint free');
+          grunt.log.oklns(message);
+        } else {
+          grunt.event.emit('scss-lint-success');
+        }
       } else {
         if (!options.emitError) {
           grunt.log.writeln(results);

@@ -2,13 +2,13 @@ GEM
   remote: https://rubygems.org/
   specs:
     rainbow (2.0.0)
-    sass (3.3.11)
-    scss-lint (0.24.1)
+    sass (3.4.16)
+    scss_lint (0.40.1)
       rainbow (~> 2.0)
-      sass (~> 3.3.0)
+      sass (~> 3.4.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  scss-lint (~> 0.24.0)
+  scss_lint (~> 0.40.1)

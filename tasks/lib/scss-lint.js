@@ -167,6 +167,8 @@ exports.init = function (grunt) {
 
     if (options.colorizeOutput) {
       env.CLICOLOR_FORCE = '1';
+    } else {
+      env.CLICOLOR_FORCE = '0';
     }
 
     files = quoteArgument(files);

@@ -4,7 +4,6 @@ var _ = require('lodash'),
   fs = require('fs'),
   nockExec = require('nock-exec'),
   proxyquire = require('proxyquire'),
-  os = require('os'),
   sinon = require('sinon'),
 
   quoteArgument = function (arg) {
@@ -184,80 +183,75 @@ describe('grunt-scss-lint', function () {
     });
   });
 
-  // Skip colorized output tests on Windows because there are issues with this.
-  // Might be fixed with next `scss-lint` release when
-  // `--color` and `--no-color` options are added.
-  if (os.platform() !== 'win32') {
-    describe('colourised output', function () {
-      ['colouriseOutput', 'colorizeOutput'].forEach(function (task) {
-        it(task, function (done) {
-          var scsslint = require('../tasks/lib/scss-lint').init(grunt),
-            testOptions;
+  describe('colourised output', function () {
+    ['colouriseOutput', 'colorizeOutput'].forEach(function (task) {
+      it(task, function (done) {
+        var scsslint = require('../tasks/lib/scss-lint').init(grunt),
+          testOptions;
 
-          testOptions = _.assign({}, defaultOptions);
-          testOptions[task] = true;
+        testOptions = _.assign({}, defaultOptions);
+        testOptions[task] = true;
 
-          scsslint.lint(fileFail, testOptions, function (results) {
-            var styles = chalk.styles;
-            results = results.split('\n')[0];
+        scsslint.lint(fileFail, testOptions, function (results) {
+          var styles = chalk.styles;
+          results = results.split('\n')[0];
 
-            expect(results).to.contain(styles.cyan.open + fileFail);
-            expect(results).to.contain(styles.magenta.open + '1');
-            expect(results).to.contain(styles.yellow.open + '[W]');
-            done();
-          });
+          expect(results).to.contain(styles.cyan.open + fileFail);
+          expect(results).to.contain(styles.magenta.open + '1');
+          expect(results).to.contain(styles.yellow.open + '[W]');
+          done();
         });
       });
     });
+  });
 
-    describe('compact without colour', function () {
-      ['colouriseOutput', 'colorizeOutput'].forEach(function (task) {
-        it(task, function (done) {
-          var scsslint = require('../tasks/lib/scss-lint').init(grunt),
-            testOptions;
+  describe('compact without colour', function () {
+    ['colouriseOutput', 'colorizeOutput'].forEach(function (task) {
+      it(task, function (done) {
+        var scsslint = require('../tasks/lib/scss-lint').init(grunt),
+          testOptions;
 
-          testOptions = _.assign({}, defaultOptions, {
-            compact: true
-          });
-          testOptions[task] = false;
+        testOptions = _.assign({}, defaultOptions, {
+          compact: true
+        });
+        testOptions[task] = false;
 
-          scsslint.lint(fileFail, testOptions, function (results) {
-            var styles = chalk.styles;
-            results = results.split('\n');
+        scsslint.lint(fileFail, testOptions, function (results) {
+          var styles = chalk.styles;
+          results = results.split('\n');
 
-            expect(results[1]).to.contain(fileFail);
-            expect(results[2]).to.contain('1: [W] SelectorFormat:');
-            expect(results[1]).not.to.contain(styles.cyan.open + fileFail);
-            expect(results[2]).not.to.contain(styles.magenta.open + '1');
-            done();
-          });
+          expect(results[1]).to.contain(fileFail);
+          expect(results[2]).to.contain('1: [W] SelectorFormat:');
+          expect(results[1]).not.to.contain(styles.cyan.open + fileFail);
+          expect(results[2]).not.to.contain(styles.magenta.open + '1');
+          done();
         });
       });
     });
+  });
 
-    describe('compact with colour', function () {
-      ['colouriseOutput', 'colorizeOutput'].forEach(function (task) {
-        it(task, function (done) {
-          var scsslint = require('../tasks/lib/scss-lint').init(grunt),
-            testOptions;
+  describe('compact with colour', function () {
+    ['colouriseOutput', 'colorizeOutput'].forEach(function (task) {
+      it(task, function (done) {
+        var scsslint = require('../tasks/lib/scss-lint').init(grunt),
+          testOptions;
 
-          testOptions = _.assign({}, defaultOptions, {
-            compact: true
-          });
-          testOptions[task] = true;
+        testOptions = _.assign({}, defaultOptions, {
+          compact: true
+        });
+        testOptions[task] = true;
 
-          scsslint.lint(fileFail, testOptions, function (results) {
-            var styles = chalk.styles;
-            results = results.split('\n');
+        scsslint.lint(fileFail, testOptions, function (results) {
+          var styles = chalk.styles;
+          results = results.split('\n');
 
-            expect(results[1]).to.contain(styles.cyan.open + styles.bold.open + fileFail);
-            expect(results[2]).to.contain(styles.magenta.open + '1');
-            done();
-          });
+          expect(results[1]).to.contain(styles.cyan.open + styles.bold.open + fileFail);
+          expect(results[2]).to.contain(styles.magenta.open + '1');
+          done();
         });
       });
     });
-  }
+  });
 
   it('pluralise single file', function (done) {
     spawn({

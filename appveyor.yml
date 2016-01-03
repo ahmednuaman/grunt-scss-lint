@@ -10,8 +10,8 @@ environment:
     - nodejs_version: 1.0
 
 install:
-  - SET PATH=C:\Ruby22;C:\Ruby22\bin;%PATH%
-  - echo %PATH%
+  - npm install npm -g
+  - set PATH=%APPDATA%\npm;C:\Ruby22\bin;%PATH%
   - ruby --version
   - gem update --system --no-ri --no-rdoc
   - gem install bundler --no-document

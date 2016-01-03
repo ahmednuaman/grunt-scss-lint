@@ -1,7 +1,7 @@
 {
   "name": "grunt-scss-lint",
   "description": "Validate `.scss` files with `scss-lint`.",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "homepage": "https://github.com/ahmednuaman/grunt-scss-lint",
   "author": {
     "name": "Ahmed Nuaman",
@@ -19,6 +19,10 @@
     {
       "name": "Thomas Bremer",
       "url": "https://github.com/tbremer/"
+    },
+    {
+      "name": "Meinaart van Straalen",
+      "url": "https://github.com/meinaart/"
     }
   ],
   "repository": {
@@ -28,12 +32,7 @@
   "bugs": {
     "url": "https://github.com/ahmednuaman/grunt-scss-lint/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/ahmednuaman/grunt-scss-lint/blob/master/LICENSE-MIT"
-    }
-  ],
+  "license": "MIT",
   "scripts": {
     "codeclimate": "CODECLIMATE_REPO_TOKEN=dbf49c8de102d946c65f8195714e9d58591833be9975cd897bae0f0908c05235 codeclimate < coverage/lcov.info",
     "test": "bundle && grunt test"

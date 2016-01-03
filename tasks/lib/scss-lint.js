@@ -5,7 +5,17 @@ exports.init = function (grunt) {
       exports = {},
       compact = {},
       xmlBuilder = require('xmlbuilder'),
+      quoteArgument,
       writeReport;
+
+  quoteArgument = function (arg) {
+    if (Array.isArray(arg)) {
+      return arg.map(quoteArgument);
+    } else if (arg.indexOf(' ') !== -1) {
+      return '"' + arg + '"';
+    }
+    return arg;
+  };
 
   writeReport = function (output, results) {
     var files = {},
@@ -145,12 +155,12 @@ exports.init = function (grunt) {
 
     if (options.config) {
       args.push('-c');
-      args.push(options.config);
+      args.push(quoteArgument(options.config));
     }
 
     if (options.exclude) {
       args.push('-e');
-      args.push(grunt.file.expand(options.exclude).join(','));
+      args.push(grunt.file.expand(options.exclude).map(quoteArgument).join(','));
     }
 
     options.colorizeOutput = options.colorizeOutput || options.colouriseOutput;
@@ -158,6 +168,8 @@ exports.init = function (grunt) {
     if (options.colorizeOutput) {
       env.CLICOLOR_FORCE = '1';
     }
+
+    files = quoteArgument(files);
 
     args = args.concat(files);
 

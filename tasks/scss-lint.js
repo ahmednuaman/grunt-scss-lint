@@ -25,6 +25,7 @@ module.exports = function (grunt) {
       config: null,
       gemVersion: null,
       reporterOutput: null,
+      reporterOutputFormat: null,    
       bundleExec: false,
       colouriseOutput: false,
       colorizeOutput: false,

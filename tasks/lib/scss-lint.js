@@ -17,46 +17,46 @@ exports.init = function (grunt) {
       return;
     }
     
-    if(format == 'txt') {
+    if (format == 'txt') {
       grunt.file.write(output, results);
     } else {
-    	results = (results.length !== 0) ? results.split('\n') : [];
+      results = (results.length !== 0) ? results.split('\n') : [];
 
-    	xml = xmlBuilder.create('testsuites');
+      xml = xmlBuilder.create('testsuites');
 
-    	xml.ele('testsuite', {
-      	name: 'scss-lint',
-      	timestamp: (new Date()).toISOString().substr(0, 19)
-    	});
+      xml.ele('testsuite', {
+        name: 'scss-lint',
+        timestamp: (new Date()).toISOString().substr(0, 19)
+      });
 
-    	xml.att('errors', results.length);
+      xml.att('errors', results.length);
 
-    	_.forEach(results, function (result) {
-      	if (!result) {
-        	return;
-      	}
+      _.forEach(results, function (result) {
+        if (!result) {
+          return;
+        }
 
-      	file = result.match(/^([^:])+/)[0];
+        file = result.match(/^([^:])+/)[0];
 
-      	if (!files[file]) {
-        	files[file] = [];
-      	}
+        if (!files[file]) {
+          files[file] = [];
+        }
 
-      	files[file].push(result);
-    	});
+        files[file].push(result);
+      });
 
-    	_.forEach(files, function (fileErrors, fileName) {
-      	spec = xml.ele('testcase', {
-        	name: fileName
-      	});
+      _.forEach(files, function (fileErrors, fileName) {
+        spec = xml.ele('testcase', {
+          name: fileName
+        });
 
-      	_.forEach(fileErrors, function (error) {
-        	spec.ele('failure', {}, error);
-      	});
-    	});
+        _.forEach(fileErrors, function (error) {
+          spec.ele('failure', {}, error);
+        });
+      });
 
-    	grunt.file.write(output, xml.end());
-		}
+      grunt.file.write(output, xml.end());
+    }
   };
 
   compact = {

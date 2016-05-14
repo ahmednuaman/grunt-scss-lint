@@ -19,7 +19,10 @@ module.exports = function (grunt) {
     },
 
     'mocha_istanbul': {
-      tests: ['test/**/*.js']
+      tests: ['test/**/*.js'],
+      options: {
+        timeout: 10000
+      }
     },
 
     scsslint: {

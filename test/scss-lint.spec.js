@@ -52,7 +52,8 @@ describe('grunt-scss-lint', function () {
     }, function (error, results, code) {
       results = results.stdout;
       expect(results).to.contain('1 file is lint free');
-      expect(results).to.contain('Done, without errors.');
+      expect(results).to.not.contain('errors');
+      expect(results).to.contain('Done.');
       done();
     });
   });
@@ -64,7 +65,8 @@ describe('grunt-scss-lint', function () {
     }, function (error, results, code) {
       results = results.stdout;
       expect(results).to.contain('scss-lint failed, but was run in force mode');
-      expect(results).to.contain('Done, without errors.');
+      expect(results).to.not.contain('errors');
+      expect(results).to.contain('Done.');
       done();
     });
   });
@@ -137,7 +139,8 @@ describe('grunt-scss-lint', function () {
     }, function (error, results, code) {
       results = results.stdout;
       expect(results).to.contain('1 file is lint free');
-      expect(results).to.contain('Done, without errors.');
+      expect(results).to.not.contain('errors');
+      expect(results).to.contain('Done.');
       done();
     });
   });

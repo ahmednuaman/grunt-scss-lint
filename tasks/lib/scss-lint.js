@@ -178,6 +178,9 @@ exports.init = function (grunt) {
 
     if (options.colorizeOutput) {
       env.CLICOLOR_FORCE = '1';
+      args.push('--color');
+    } else {
+      args.push('--no-color');
     }
 
     args = args.concat(files);

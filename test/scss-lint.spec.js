@@ -318,7 +318,6 @@ describe('grunt-scss-lint', function () {
     grunt.event.on('scss-lint-error', eventSpy);
 
     scsslint.lint(fileFail, testOptions, function (results) {
-      expect(results).to.equal('hell');
       results = results.split('\n');
       expect(results.length).to.be(5);
       expect(eventSpy.calledOne).to.be.ok();

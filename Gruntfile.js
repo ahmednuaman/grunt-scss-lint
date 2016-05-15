@@ -21,7 +21,9 @@ module.exports = function (grunt) {
     'mocha_istanbul': {
       tests: ['test/**/*.js'],
       options: {
-        timeout: 10000
+        timeout: 10000,
+        quiet: true, // output confuses AppVeyor
+        mochaOptions: ['--no-exit']
       }
     },
 

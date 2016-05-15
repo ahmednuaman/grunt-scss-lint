@@ -179,7 +179,7 @@ exports.init = function (grunt) {
     options.colorizeOutput = options.colorizeOutput || options.colouriseOutput;
 
     if (options.colorizeOutput) {
-      env.CLICOLOR_FORCE = '1';
+      env.FORCE_COLOR = '1';
       args.push('--color');
     } else {
       args.push('--no-color');

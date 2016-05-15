@@ -320,7 +320,7 @@ describe('grunt-scss-lint', function () {
     scsslint.lint(fileFail, testOptions, function (results) {
       results = results.split('\n');
       expect(results.length).to.be(5);
-      expect(eventSpy.calledOne).to.be.ok();
+      expect(eventSpy.calledOnce).to.be.ok();
       done();
     });
   });

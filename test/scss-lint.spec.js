@@ -2,8 +2,7 @@ var _ = require('lodash'),
     chalk = require('chalk'),
     expect = require('expect.js'),
     fs = require('fs'),
-    nockExec = require('nock-exec'),
-    proxyquire = require('proxyquire'),
+    proxyquire = require('proxyquire').noPreserveCache(),
     sinon = require('sinon'),
 
     escapeRe = function (str) {
@@ -23,8 +22,29 @@ var _ = require('lodash'),
     fileFail = path.join(fixtures, 'fail.scss'),
     fileFail2 = path.join(fixtures, 'fail2.scss');
 
+function mockChildProcess(expectedCommandLine, exitCode) {
+  var result = {
+    exec: function (commandLine, options, callback) {
+      var err = !exitCode ? null : {code: exitCode};
+      result.commandLine = commandLine;
+      result.options = options;
+      callback(err, '', exitCode || 0);
+    },
+
+    verify: function () {
+      expect(result.commandLine).to.equal(expectedCommandLine);
+    }
+  };
+
+  return result;
+}
+
 describe('grunt-scss-lint', function () {
+  var sandbox;
+
   beforeEach(function (done) {
+    sandbox = sinon.sandbox.create();
+
     fs.stat(reporterOutFile, function (err, stats) {
       if (!err) {
         fs.unlink(reporterOutFile, done);
@@ -32,6 +52,10 @@ describe('grunt-scss-lint', function () {
         done();
       }
     });
+  });
+
+  afterEach(function () {
+    sandbox.restore();
   });
 
   it('fail', function (done) {
@@ -83,9 +107,9 @@ describe('grunt-scss-lint', function () {
   });
 
   it('bundle exec', function (done) {
-    var instance = nockExec('bundle exec scss-lint ' + filePass).exit(0),
+    var childProcessStub = mockChildProcess('bundle exec scss-lint --no-color ' + filePass),
         scsslint = proxyquire('../tasks/lib/scss-lint', {
-          'child_process': nockExec.moduleStub
+          'child_process': childProcessStub
         }).init(grunt);
 
     testOptions = _.assign({}, defaultOptions, {
@@ -93,16 +117,16 @@ describe('grunt-scss-lint', function () {
     });
 
     scsslint.lint(filePass, testOptions, function (results) {
-      expect(instance.ran()).to.be.ok();
+      childProcessStub.verify();
       done();
     });
   });
 
   it('config file', function (done) {
     var configFile = path.join(fixtures, '.scss-lint-test.yml'),
-        instance = nockExec('scss-lint -c ' + configFile + ' ' + filePass).exit(0),
+      childProcessStub = mockChildProcess('scss-lint -c ' + configFile + ' --no-color ' + filePass),
         scsslint = proxyquire('../tasks/lib/scss-lint', {
-          'child_process': nockExec.moduleStub
+          'child_process': childProcessStub
         }).init(grunt);
 
     testOptions = _.assign({}, defaultOptions, {
@@ -110,24 +134,24 @@ describe('grunt-scss-lint', function () {
     });
 
     scsslint.lint(filePass, testOptions, function (results) {
-      expect(instance.ran()).to.be.ok();
+      childProcessStub.verify();
       done();
     });
   });
 
   it('gem version', function (done) {
-    var gemVersion = '1.2.3',
-        instance = nockExec('scss-lint "_' + gemVersion + '_" ' + filePass).exit(0),
-        scsslint = proxyquire('../tasks/lib/scss-lint', {
-          'child_process': nockExec.moduleStub
-        }).init(grunt);
+    var childProcessStub = mockChildProcess('scss-lint "_1.2.3_" --no-color ' + filePass),
+      gemVersion = '1.2.3',
+      scsslint = proxyquire('../tasks/lib/scss-lint', {
+        'child_process': childProcessStub
+      }).init(grunt);
 
     testOptions = _.assign({}, defaultOptions, {
       gemVersion: gemVersion
     });
 
     scsslint.lint(filePass, testOptions, function (results) {
-      expect(instance.ran()).to.be.ok();
+      childProcessStub.verify();
       done();
     });
   });
@@ -282,8 +306,8 @@ describe('grunt-scss-lint', function () {
     });
   });
 
-  it('emit error', function () {
-    var eventSpy = sinon.spy(),
+  it('emit error', function (done) {
+    var eventSpy = sandbox.spy(),
         scsslint = require('../tasks/lib/scss-lint').init(grunt),
         testOptions;
 
@@ -294,15 +318,16 @@ describe('grunt-scss-lint', function () {
     grunt.event.on('scss-lint-error', eventSpy);
 
     scsslint.lint(fileFail, testOptions, function (results) {
+      expect(results).to.equal('hell');
       results = results.split('\n');
-
       expect(results.length).to.be(5);
-      sinon.assert.calledOnce(eventSpy);
+      expect(eventSpy.calledOne).to.be.ok();
+      done();
     });
   });
 
-  it('emit success', function () {
-    var eventSpy = sinon.spy(),
+  it('emit success', function (done) {
+    var eventSpy = sandbox.spy(),
         scsslint = require('../tasks/lib/scss-lint').init(grunt),
         testOptions;
 
@@ -314,34 +339,34 @@ describe('grunt-scss-lint', function () {
 
     scsslint.lint(filePass, testOptions, function (results) {
       expect(eventSpy.called).to.be.ok();
+      done();
     });
   });
 
   it('exit code on failure', function (done) {
     spawn({
       cmd: 'grunt',
-      args: ['scsslint']
+      args: ['scsslint:fail']
     }, function (error, result, code) {
       expect(code).not.to.be(0);
       done();
     });
   });
 
-  it('exit code and output on missing ruby', function () {
-    var nockExec = require('nock-exec'),
-        proxyquire = require('proxyquire'),
+  it('exit code and output on missing ruby', function (done) {
+    var logSpy = sandbox.spy(grunt.log, 'errorlns'),
+      childProcessStub = mockChildProcess('scss-lint ' + filePass, 127),
         scsslint = proxyquire('../tasks/lib/scss-lint', {
-          'child_process': nockExec.moduleStub
+          'child_process': childProcessStub
         }).init(grunt);
 
-    nockExec('scss-lint ' + filePass)
-      .exit(127);
     scsslint.lint(filePass, {
       bundleExec: false
     }, function (results) {
-      expect(results).to.contain('1. Please make sure you have ruby installed: `ruby -v`');
-      expect(results).to.contain('2. Install the `scss-lint` gem by running:');
-      expect(results).to.contain('gem update --system && gem install scss-lint');
+      expect(logSpy.calledWith('1. Please make sure you have ruby installed: `ruby -v`')).to.equal(true);
+      expect(logSpy.calledWith('2. Install the `scss-lint` gem by running:')).to.equal(true);
+      expect(logSpy.calledWith('gem update --system && gem install scss-lint')).to.equal(true);
+      done();
     });
   });
 
@@ -355,12 +380,10 @@ describe('grunt-scss-lint', function () {
     });
   });
 
-  it('max buffer', function () {
-    var execSpy = sinon.spy(),
+  it('max buffer', function (done) {
+    var childProcessStub = mockChildProcess('hey'),
         scsslint = proxyquire('../tasks/lib/scss-lint', {
-          'child_process': {
-            exec: execSpy
-          }
+          'child_process': childProcessStub
         }).init(grunt),
         testOptions;
 
@@ -368,7 +391,9 @@ describe('grunt-scss-lint', function () {
       maxBuffer: 100
     });
 
-    scsslint.lint(filePass, testOptions);
-    sinon.assert.calledWith(execSpy, sinon.match.string, sinon.match.has('maxBuffer', 100), sinon.match.func);
+    scsslint.lint(filePass, testOptions, function () {
+      expect(childProcessStub.options.maxBuffer).to.equal(100);
+      done();
+    });
   });
 });

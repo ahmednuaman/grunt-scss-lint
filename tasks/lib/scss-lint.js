@@ -1,10 +1,12 @@
+var _ = require('lodash'),
+    chalk = require('chalk'),
+    xmlBuilder = require('xmlbuilder');
+
 exports.init = function (grunt) {
-  var _ = require('lodash'),
-      chalk = require('chalk'),
-      exec = require('child_process').exec,
+  var
       exports = {},
       compact = {},
-      xmlBuilder = require('xmlbuilder'),
+      exec = require('child_process').exec,
       writeReport;
 
   writeReport = function (output, results, format) {

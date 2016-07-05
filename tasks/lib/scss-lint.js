@@ -7,7 +7,7 @@ exports.init = function (grunt) {
       xmlBuilder = require('xmlbuilder'),
       writeReport;
 
-  writeReport = function (output, results) {
+  writeReport = function (output, results, format) {
     var files = {},
         file,
         spec,
@@ -16,43 +16,53 @@ exports.init = function (grunt) {
     if (!output) {
       return;
     }
+    if (format == 'xml') {
+      results = (results.length !== 0) ? results.split('\n') : [];
 
-    results = (results.length !== 0) ? results.split('\n') : [];
+      xml = xmlBuilder.create('testsuites');
 
-    xml = xmlBuilder.create('testsuites');
-
-    xml.ele('testsuite', {
-      name: 'scss-lint',
-      timestamp: (new Date()).toISOString().substr(0, 19)
-    });
-
-    xml.att('errors', results.length);
-
-    _.forEach(results, function (result) {
-      if (!result) {
-        return;
-      }
-
-      file = result.match(/^([^:])+/)[0];
-
-      if (!files[file]) {
-        files[file] = [];
-      }
-
-      files[file].push(result);
-    });
-
-    _.forEach(files, function (fileErrors, fileName) {
-      spec = xml.ele('testcase', {
-        name: fileName
+      xml.ele('testsuite', {
+        name: 'scss-lint',
+        timestamp: (new Date()).toISOString().substr(0, 19)
       });
 
-      _.forEach(fileErrors, function (error) {
-        spec.ele('failure', {}, error);
-      });
-    });
+      xml.att('errors', results.length);
 
-    grunt.file.write(output, xml.end());
+      _.forEach(results, function (result) {
+        if (!result) {
+          return;
+        }
+
+        file = result.match(/^([^:])+/)[0];
+
+        if (!files[file]) {
+          files[file] = [];
+        }
+
+        files[file].push(result);
+      });
+
+      _.forEach(files, function (fileErrors, fileName) {
+        spec = xml.ele('testcase', {
+          name: fileName
+        });
+
+        _.forEach(fileErrors, function (error) {
+          spec.ele('failure', {}, error);
+        });
+      });
+
+      grunt.file.write(output, xml.end());
+    }
+    if (format == 'json') {
+      if (output.indexOf('.json') == -1) {
+        output = output + '.json';
+      }
+      
+      results = '{"scsslint":' + results + '}';
+      
+      grunt.file.write(output, results);
+    }
   };
 
   compact = {
@@ -153,6 +163,10 @@ exports.init = function (grunt) {
       args.push(grunt.file.expand(options.exclude).join(','));
     }
 
+    if (options.reporter == 'json') {
+      args.push('-f JSON');
+    }
+
     options.colorizeOutput = options.colorizeOutput || options.colouriseOutput;
 
     if (options.colorizeOutput) {
@@ -215,7 +229,17 @@ exports.init = function (grunt) {
       }
 
       if (options.reporterOutput) {
-        writeReport(options.reporterOutput, grunt.log.uncolor(rawResults));
+        writeReport(options.reporterOutput, grunt.log.uncolor(rawResults), options.reporter);
+        if (options.reporter == 'xml') {
+          if (options.reporterOutput.indexOf('.xml') == -1) {
+            options.reporterOutput = options.reporterOutput + '.xml';
+          }
+        }
+        if (options.reporter == 'json') {
+          if (options.reporterOutput.indexOf('.json') == -1) {
+            options.reporterOutput = options.reporterOutput + '.json';
+          }
+        }
         grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
       }
 

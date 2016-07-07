@@ -80,7 +80,15 @@ Exclude one or more files from being linted.
 - Type: `String`
 - Default: `null`
 
-The jUnit XML file to save the output to. If you don't want this then set the option as `null`.
+The file to save the output to. If you don't want this then set the option as `null`.
+
+#### reporterOutputFormat
+
+- Type: `String`
+- Default: `null`
+- Options: `txt`, `xml`
+
+This will ultimately default to the file extension used for `reporterOutput` if left `null`
 
 #### emitError
 - Type: `Boolean`

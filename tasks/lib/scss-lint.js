@@ -7,7 +7,7 @@ exports.init = function (grunt) {
       xmlBuilder = require('xmlbuilder'),
       writeReport;
 
-  writeReport = function (output, results) {
+  writeReport = function (output, results, format) {
     var files = {},
         file,
         spec,
@@ -16,43 +16,47 @@ exports.init = function (grunt) {
     if (!output) {
       return;
     }
+    
+    if (format == 'txt') {
+      grunt.file.write(output, results);
+    } else {
+      results = (results.length !== 0) ? results.split('\n') : [];
 
-    results = (results.length !== 0) ? results.split('\n') : [];
+      xml = xmlBuilder.create('testsuites');
 
-    xml = xmlBuilder.create('testsuites');
-
-    xml.ele('testsuite', {
-      name: 'scss-lint',
-      timestamp: (new Date()).toISOString().substr(0, 19)
-    });
-
-    xml.att('errors', results.length);
-
-    _.forEach(results, function (result) {
-      if (!result) {
-        return;
-      }
-
-      file = result.match(/^([^:])+/)[0];
-
-      if (!files[file]) {
-        files[file] = [];
-      }
-
-      files[file].push(result);
-    });
-
-    _.forEach(files, function (fileErrors, fileName) {
-      spec = xml.ele('testcase', {
-        name: fileName
+      xml.ele('testsuite', {
+        name: 'scss-lint',
+        timestamp: (new Date()).toISOString().substr(0, 19)
       });
 
-      _.forEach(fileErrors, function (error) {
-        spec.ele('failure', {}, error);
-      });
-    });
+      xml.att('errors', results.length);
 
-    grunt.file.write(output, xml.end());
+      _.forEach(results, function (result) {
+        if (!result) {
+          return;
+        }
+
+        file = result.match(/^([^:])+/)[0];
+
+        if (!files[file]) {
+          files[file] = [];
+        }
+
+        files[file].push(result);
+      });
+
+      _.forEach(files, function (fileErrors, fileName) {
+        spec = xml.ele('testcase', {
+          name: fileName
+        });
+
+        _.forEach(fileErrors, function (error) {
+          spec.ele('failure', {}, error);
+        });
+      });
+
+      grunt.file.write(output, xml.end());
+    }
   };
 
   compact = {
@@ -215,7 +219,9 @@ exports.init = function (grunt) {
       }
 
       if (options.reporterOutput) {
-        writeReport(options.reporterOutput, grunt.log.uncolor(rawResults));
+        // Force a format if the option is set. If not use the file extenion from the output file
+        var format = options.reporterOutputFormat || options.reporterOutput.split(/[. ]+/).pop();
+        writeReport(options.reporterOutput, grunt.log.uncolor(rawResults), format);
         grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
       }
 

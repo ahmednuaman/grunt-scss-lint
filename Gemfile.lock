@@ -1,18 +1,19 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    rake (11.2.2)
     sass (3.4.22)
     scss_lint (0.48.0)
+      rake (>= 0.9, < 12)
       sass (~> 3.4.15)
     scss_lint_reporter_checkstyle (0.2.0)
 
 PLATFORMS
   ruby
-  x64-mingw32
 
 DEPENDENCIES
   scss_lint (~> 0.48.0)
   scss_lint_reporter_checkstyle (~> 0.2.0)
 
 BUNDLED WITH
-   1.12.3
+   1.12.5

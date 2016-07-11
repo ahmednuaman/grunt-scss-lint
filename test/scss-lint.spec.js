@@ -5,6 +5,7 @@ var _ = require('lodash'),
     nockExec = require('nock-exec'),
     proxyquire = require('proxyquire'),
     sinon = require('sinon'),
+    util = require('util'),
     
     escapeRe = function (str) {
       return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
@@ -35,6 +36,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('fail', function (done) {
+    this.timeout(5000);
     spawn({
       cmd: 'grunt',
       args: ['scsslint:fail']
@@ -46,6 +48,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('pass', function (done) {
+    this.timeout(5000);
     spawn({
       cmd: 'grunt',
       args: ['scsslint:pass']
@@ -58,6 +61,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('pass with force', function (done) {
+    this.timeout(5000);
     spawn({
       cmd: 'grunt',
       args: ['scsslint:force']
@@ -70,6 +74,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('debug option', function (done) {
+    this.timeout(5000);
     spawn({
       cmd: 'grunt',
       args: ['scsslint:pass', '--debug']
@@ -81,6 +86,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('bundle exec', function (done) {
+    this.timeout(5000);
     var instance = nockExec('bundle exec scss-lint ' + filePass).exit(0),
         scsslint = proxyquire('../tasks/lib/scss-lint', {
           'child_process': nockExec.moduleStub
@@ -97,6 +103,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('config file', function (done) {
+    this.timeout(5000);
     var configFile = path.join(fixtures, '.scss-lint-test.yml'),
         instance = nockExec('scss-lint -c ' + configFile + ' ' + filePass).exit(0),
         scsslint = proxyquire('../tasks/lib/scss-lint', {
@@ -114,6 +121,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('gem version', function (done) {
+    this.timeout(5000);
     var gemVersion = '1.2.3',
         instance = nockExec('scss-lint "_' + gemVersion + '_" ' + filePass).exit(0),
         scsslint = proxyquire('../tasks/lib/scss-lint', {
@@ -131,6 +139,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('pass with excluded file', function (done) {
+    this.timeout(5000);
     spawn({
       cmd: 'grunt',
       args: ['scsslint:exclude']
@@ -143,6 +152,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('fail with bad options', function (done) {
+    this.timeout(5000);
     var files = '--incorrectlySpecifyingAnOptionAsAFile',
         scsslint = require('../tasks/lib/scss-lint').init(grunt);
 
@@ -153,6 +163,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('reporter with errors', function (done) {
+    this.timeout(5000);
     spawn({
       cmd: 'grunt',
       args: ['scsslint:fail']
@@ -165,6 +176,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('reporter without errors', function (done) {
+    this.timeout(5000);
     spawn({
       cmd: 'grunt',
       args: ['scsslint:pass']
@@ -176,9 +188,22 @@ describe('grunt-scss-lint', function () {
     });
   });
 
+  it('Report on number of files', function (done) {
+    this.timeout(5000);
+    spawn({
+      cmd: 'grunt',
+      args: ['scsslint:fileReport']
+    }, function (error, results, code) {
+      results = results.stdout;
+      expect(results).to.contain('testing 2 files');
+      done();
+    });
+  });
+
   describe('colourised output', function () {
     ['colouriseOutput', 'colorizeOutput'].forEach(function (task) {
       it(task, function (done) {
+        this.timeout(5000);
         var scsslint = require('../tasks/lib/scss-lint').init(grunt),
             testOptions;
 
@@ -201,6 +226,7 @@ describe('grunt-scss-lint', function () {
   describe('compact without colour', function () {
     ['colouriseOutput', 'colorizeOutput'].forEach(function (task) {
       it(task, function (done) {
+        this.timeout(5000);
         var scsslint = require('../tasks/lib/scss-lint').init(grunt),
             testOptions;
 
@@ -226,6 +252,7 @@ describe('grunt-scss-lint', function () {
   describe('compact with colour', function () {
     ['colouriseOutput', 'colorizeOutput'].forEach(function (task) {
       it(task, function (done) {
+        this.timeout(5000);
         var scsslint = require('../tasks/lib/scss-lint').init(grunt),
             testOptions;
 
@@ -247,6 +274,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('pluralise single file', function (done) {
+    this.timeout(5000);
     spawn({
       cmd: 'grunt',
       args: ['scsslint:pass']
@@ -257,6 +285,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('pluralise multiple files', function (done) {
+    this.timeout(5000);
     spawn({
       cmd: 'grunt',
       args: ['scsslint:multiple']
@@ -267,6 +296,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('emit error', function () {
+    this.timeout(5000);
     var eventSpy = sinon.spy(),
         scsslint = require('../tasks/lib/scss-lint').init(grunt),
         testOptions;
@@ -286,6 +316,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('emit success', function () {
+    this.timeout(5000);
     var eventSpy = sinon.spy(),
         scsslint = require('../tasks/lib/scss-lint').init(grunt),
         testOptions;
@@ -302,6 +333,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('exit code on failure', function (done) {
+    this.timeout(5000);
     spawn({
       cmd: 'grunt', 
       args: ['scsslint']
@@ -312,6 +344,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('exit code and output on missing ruby', function () {
+    this.timeout(5000);
     var nockExec = require('nock-exec'),
         proxyquire = require('proxyquire'),
         scsslint = proxyquire('../tasks/lib/scss-lint', {
@@ -330,6 +363,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('exit code on success', function (done) {
+    this.timeout(5000);
     spawn({
       cmd: 'grunt', 
       args: ['scsslint:pass']
@@ -340,6 +374,7 @@ describe('grunt-scss-lint', function () {
   });
 
   it('max buffer', function () {
+    this.timeout(5000);
     var execSpy = sinon.spy(),
         scsslint = proxyquire('../tasks/lib/scss-lint', {
           'child_process': {

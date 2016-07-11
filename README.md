@@ -116,6 +116,13 @@ Set `force` to `true` to report scss-lint errors but not fail the task.
 
 Set `maxBuffer` for the `child_process.exec` process, [if you're linting a lot of files and you're recieving no output](https://github.com/ahmednuaman/grunt-scss-lint/issues/63) then you can try and increase this value. Setting it to `false`, `0`, `NaN` or `Infinite` will not return any `stdout` or `stderr` and the task will think that everything's fine.
 
+#### fileReport
+
+- Type: `Boolean`
+- Default: `false`
+
+Prints the number of inspected files in case of failing.
+
 ### Usage Examples
 
 #### Example config

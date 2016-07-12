@@ -1,10 +1,12 @@
+var _ = require('lodash'),
+    chalk = require('chalk'),
+    xmlBuilder = require('xmlbuilder');
+
 exports.init = function (grunt) {
-  var _ = require('lodash'),
-      chalk = require('chalk'),
-      exec = require('child_process').exec,
+  var
       exports = {},
       compact = {},
-      xmlBuilder = require('xmlbuilder'),
+      exec = require('child_process').exec,
       writeReport;
 
   writeReport = function (output, results, format) {
@@ -16,7 +18,7 @@ exports.init = function (grunt) {
     if (!output) {
       return;
     }
-    
+
     if (format == 'txt') {
       grunt.file.write(output, results);
     } else {
@@ -157,10 +159,30 @@ exports.init = function (grunt) {
       args.push(grunt.file.expand(options.exclude).join(','));
     }
 
+    if (options.require) {
+      args.push('-r');
+      args.push(options.require);
+    }
+
+    if (options.format) {
+      args.push('-f');
+      args.push(options.format);
+
+      // if using an output file with an explicit formatter,
+      // send the output directly to that file via the -o parameter.
+      if (options.reporterOutput) {
+        args.push('-o');
+        args.push(options.reporterOutput);
+      }
+    }
+
     options.colorizeOutput = options.colorizeOutput || options.colouriseOutput;
 
     if (options.colorizeOutput) {
-      env.CLICOLOR_FORCE = '1';
+      env.FORCE_COLOR = '1';
+      args.push('--color');
+    } else {
+      args.push('--no-color');
     }
 
     args = args.concat(files);
@@ -221,7 +243,13 @@ exports.init = function (grunt) {
       if (options.reporterOutput) {
         // Force a format if the option is set. If not use the file extenion from the output file
         var format = options.reporterOutputFormat || options.reporterOutput.split(/[. ]+/).pop();
-        writeReport(options.reporterOutput, grunt.log.uncolor(rawResults), format);
+
+        // if an explicit formatter was used, the output is already sent to the output file,
+        // no need to write the report
+        if (!options.format) {
+          writeReport(options.reporterOutput, grunt.log.uncolor(rawResults), format);
+        }
+
         grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
       }
 

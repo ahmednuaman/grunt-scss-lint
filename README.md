@@ -102,12 +102,18 @@ Emits a Grunt event on scss-lint error called `scss-lint-error`.
 
 Emits a Grunt event on scss-lint success called `scss-lint-success`.
 
+#### failOnWarning
+- Type: `Boolean`
+- Default: `true`
+
+Disable to fail the task only on errors. You can set the severity level for individual linters in your configuration file.
+
 #### force
 
 - Type: `Boolean`
 - Default: `false`
 
-Set `force` to `true` to report scss-lint errors but not fail the task.
+Set `force` to `true` to report scss-lint warnings and errors but not fail the task. This overrides `failOnWarning`.
 
 #### maxBuffer
 

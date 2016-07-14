@@ -65,7 +65,7 @@ exports.init = function (grunt) {
     make: function (results) {
       var output = {},
           fileName = '',
-          matchesRe = /^(.+?\.scss)\:(\d+?)\s(\[\w+?\])\s(.+)/,
+          matchesRe = /^(.+?\.scss)\:(\d+?)\:(?:\d+?)\s(\[\w+?\])\s(.+)/,
           matches;
 
       results = chalk.stripColor(results);

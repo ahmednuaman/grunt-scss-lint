@@ -19,7 +19,12 @@ module.exports = function (grunt) {
     },
 
     'mocha_istanbul': {
-      tests: ['test/**/*.js']
+      tests: ['test/**/*.js'],
+      options: {
+        timeout: 10000,
+        quiet: true, // output confuses AppVeyor
+        mochaOptions: ['--no-exit']
+      }
     },
 
     scsslint: {
@@ -49,6 +54,13 @@ module.exports = function (grunt) {
             'test/fixtures/fail.scss',
             'test/fixtures/fail2.scss'
           ]
+        },
+        src: ['test/fixtures/pass.scss']
+      },
+      passcheckstyle: {
+        options: {
+          format: 'Checkstyle',
+          require: 'scss_lint_reporter_checkstyle'
         },
         src: ['test/fixtures/pass.scss']
       },

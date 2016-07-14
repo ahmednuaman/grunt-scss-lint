@@ -32,7 +32,9 @@ module.exports = function (grunt) {
       compact: false,
       force: false,
       failOnWarning: true,
-      maxBuffer: 300 * 1024
+      maxBuffer: 300 * 1024,
+      format: null,
+      require: null
     });
 
     if (opts.bundleExec) {

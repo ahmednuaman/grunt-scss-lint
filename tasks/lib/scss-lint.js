@@ -210,7 +210,7 @@ exports.init = function (grunt) {
           grunt.log.errorlns('and the following message:' + err);
         }
 
-        return done(false);
+        return done(false, results);
       }
 
       results = results.trim();
@@ -258,7 +258,7 @@ exports.init = function (grunt) {
         grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
       }
 
-      done(failed);
+      done(failed, results);
     });
   };
 

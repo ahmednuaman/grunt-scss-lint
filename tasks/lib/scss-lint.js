@@ -65,7 +65,7 @@ exports.init = function (grunt) {
     make: function (results) {
       var output = {},
           fileName = '',
-          matchesRe = /^(.+?\.scss)\:(\d+?)\s(\[\w+?\])\s(.+)/,
+          matchesRe = /^(.+?\.scss)\:(\d+?)\:(?:\d+?)\s(\[\w+?\])\s(.+)/,
           matches;
 
       results = chalk.stripColor(results);
@@ -197,7 +197,8 @@ exports.init = function (grunt) {
       env: env
     }, function (err, results, code) {
       var message,
-          rawResults;
+          rawResults,
+          failed = true;
 
       if (err && err.code !== 1 && err.code !== 2 && err.code !== 65) {
         if (err.code === 127) {
@@ -209,7 +210,7 @@ exports.init = function (grunt) {
           grunt.log.errorlns('and the following message:' + err);
         }
 
-        return done(false);
+        return done(false, results);
       }
 
       results = results.trim();
@@ -229,6 +230,7 @@ exports.init = function (grunt) {
         } else {
           grunt.event.emit('scss-lint-success');
         }
+        failed = false;
       } else {
         if (!options.emitError) {
           grunt.log.writeln(results);
@@ -236,7 +238,10 @@ exports.init = function (grunt) {
           grunt.event.emit('scss-lint-error', results);
         }
         if (options.force) {
+          failed = false;
           grunt.log.writeln('scss-lint failed, but was run in force mode');
+        } else if (err && err.code === 1 && !options.failOnWarning) { // we have just warnings
+          failed = false;
         }
       }
 
@@ -253,7 +258,7 @@ exports.init = function (grunt) {
         grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
       }
 
-      done(results);
+      done(failed, results);
     });
   };
 

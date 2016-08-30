@@ -266,7 +266,7 @@ describe('grunt-scss-lint', function () {
         bundleExec: true
       });
 
-      scsslint.lint(filePass, testOptions, function (results) {
+      scsslint.lint(filePass, testOptions, function (failed, results) {
         childProcessStub.verify();
         done();
       });
@@ -283,7 +283,7 @@ describe('grunt-scss-lint', function () {
         config: configFile
       });
 
-      scsslint.lint(filePass, testOptions, function (results) {
+      scsslint.lint(filePass, testOptions, function (failed, results) {
         childProcessStub.verify();
         done();
       });
@@ -300,7 +300,7 @@ describe('grunt-scss-lint', function () {
         gemVersion: gemVersion
       });
 
-      scsslint.lint(filePass, testOptions, function (results) {
+      scsslint.lint(filePass, testOptions, function (failed, results) {
         childProcessStub.verify();
         done();
       });
@@ -345,8 +345,8 @@ describe('grunt-scss-lint', function () {
       var files = '--incorrectlySpecifyingAnOptionAsAFile',
           scsslint = require('../tasks/lib/scss-lint').init(grunt);
 
-      scsslint.lint(files, defaultOptions, function (results) {
-        expect(results).to.not.be.ok();
+      scsslint.lint(files, defaultOptions, function (failed, results) {
+        expect(failed).to.not.be.ok();
         expect(errorlnsStub.getCall(0).args[0]).to.equal('scss-lint failed with error code: 64');
         done();
       });
@@ -361,7 +361,7 @@ describe('grunt-scss-lint', function () {
           testOptions = _.assign({}, defaultOptions);
           testOptions[task] = true;
 
-          scsslint.lint(fileFail, testOptions, function (results) {
+          scsslint.lint(fileFail, testOptions, function (failed, results) {
             var styles = chalk.styles;
             results = results.split('\n')[0];
 
@@ -385,7 +385,7 @@ describe('grunt-scss-lint', function () {
           });
           testOptions[task] = false;
 
-          scsslint.lint(fileFail, testOptions, function (results) {
+          scsslint.lint(fileFail, testOptions, function (failed, results) {
             var styles = chalk.styles;
             results = results.split('\n');
 
@@ -412,7 +412,7 @@ describe('grunt-scss-lint', function () {
           });
           testOptions[task] = true;
 
-          scsslint.lint(fileFail, testOptions, function (results) {
+          scsslint.lint(fileFail, testOptions, function (failed, results) {
             var styles = chalk.styles;
             results = results.split('\n');
 
@@ -435,7 +435,7 @@ describe('grunt-scss-lint', function () {
 
       grunt.event.on('scss-lint-error', eventSpy);
 
-      scsslint.lint(fileFail, testOptions, function (results) {
+      scsslint.lint(fileFail, testOptions, function (failed, results) {
         results = results.split('\n');
         expect(results.length).to.be(5);
         expect(eventSpy.calledOnce).to.be.ok();
@@ -454,7 +454,7 @@ describe('grunt-scss-lint', function () {
 
       grunt.event.on('scss-lint-success', eventSpy);
 
-      scsslint.lint(filePass, testOptions, function (results) {
+      scsslint.lint(filePass, testOptions, function (failed, results) {
         expect(eventSpy.called).to.be.ok();
         done();
       });

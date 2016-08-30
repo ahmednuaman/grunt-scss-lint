@@ -31,6 +31,7 @@ module.exports = function (grunt) {
       colorizeOutput: false,
       compact: false,
       force: false,
+      failOnWarning: true,
       maxBuffer: 300 * 1024,
       format: null,
       require: null
@@ -49,8 +50,8 @@ module.exports = function (grunt) {
     grunt.verbose.writeflags(opts, 'scss-lint options');
     grunt.log.writeln('Running scss-lint on ' + target);
 
-    scsslint.lint(files, opts, function (results) {
-      if (opts.force || !results) {
+    scsslint.lint(files, opts, function (failed, results) {
+      if (opts.force || !failed) {
         done();
       } else {
         done(false);

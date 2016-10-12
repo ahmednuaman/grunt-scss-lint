@@ -178,12 +178,12 @@ exports.init = function (grunt) {
 
     options.colorizeOutput = options.colorizeOutput || options.colouriseOutput;
 
-    if (options.colorizeOutput) {
-      env.FORCE_COLOR = '1';
-      args.push('--color');
-    } else {
-      args.push('--no-color');
-    }
+    // if (options.colorizeOutput) {
+    //   env.FORCE_COLOR = '1';
+    //   args.push('--color');
+    // } else {
+    //   args.push('--no-color');
+    // }
 
     args = args.concat(files);
 

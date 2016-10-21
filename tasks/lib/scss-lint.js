@@ -1,5 +1,6 @@
 var _ = require('lodash'),
     chalk = require('chalk'),
+    reporter = require('scss-lint-html-reporter'),
     xmlBuilder = require('xmlbuilder');
 
 exports.init = function (grunt) {
@@ -253,12 +254,27 @@ exports.init = function (grunt) {
         // no need to write the report
         if (!options.format) {
           writeReport(options.reporterOutput, grunt.log.uncolor(rawResults), format);
+        }else{
+          var jsonObj = grunt.file.read(options.reporterOutput);
+          var generatingReport = true;
+          process.argv.push('-o');
+          process.argv.push(options.reporterOutput);
+          grunt.log.writeln(jsonObj);
+          reporter(jsonObj);
+
         }
 
         grunt.log.writeln('Results have been written to: ' + options.reporterOutput);
       }
 
-      done(failed, results);
+     if(!generatingReport){
+       done(failed, results);
+     }else{
+       setTimeout(function(){
+         done(failed,results);
+       },2000);
+     }
+
     });
   };
 

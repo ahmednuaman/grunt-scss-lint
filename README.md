@@ -94,7 +94,7 @@ This will ultimately default to the file extension used for `reporterOutput` if 
 - Type: `Boolean`
 - Default: `false`
 
-Emits a Grunt event on scss-lint error called `scss-lint-error`.
+Emits a Grunt event on scss-lint error called `scss-lint-error`. When set to `true` this will also prevent the errors themselves from being logged to the console. This is particularly useful when combined with `reporterOutput`.
 
 #### emitSuccess
 - Type: `Boolean`

@@ -129,9 +129,11 @@ Set `maxBuffer` for the `child_process.exec` process, [if you're linting a lot o
 ```javascript
 grunt.initConfig({
   scsslint: {
-    allFiles: [
-      'test/fixtures/*.scss',
-    ],
+    allFiles: {
+      src: [
+        'test/fixtures/*.scss',
+      ]
+    },
     options: {
       bundleExec: true,
       config: '.scss-lint.yml',

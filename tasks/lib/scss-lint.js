@@ -156,7 +156,7 @@ exports.init = function (grunt) {
 
     if (options.exclude) {
       args.push('-e');
-      args.push(grunt.file.expand(options.exclude).join(','));
+      args.push(options.exclude.join(','));
     }
 
     if (options.require) {

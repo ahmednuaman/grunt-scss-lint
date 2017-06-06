@@ -9,11 +9,13 @@ exports.init = function (grunt) {
       exec = require('child_process').exec,
       writeReport;
 
-  writeReport = function (output, results, format) {
+  writeReport = function (output, results, format, allFiles) {
     var files = {},
-        file,
-        spec,
-        xml;
+      file,
+      spec,
+      xml,
+      failedFileNames = [],
+      passedFileNames = [];
 
     if (!output) {
       return;
@@ -28,10 +30,10 @@ exports.init = function (grunt) {
 
       xml.ele('testsuite', {
         name: 'scss-lint',
-        timestamp: (new Date()).toISOString().substr(0, 19)
+        timestamp: (new Date()).toISOString().substr(0, 19),
+        tests: allFiles.length,
+        errors: results.length
       });
-
-      xml.att('errors', results.length);
 
       _.forEach(results, function (result) {
         if (!result) {
@@ -44,8 +46,16 @@ exports.init = function (grunt) {
           files[file] = [];
         }
 
+        //Add file names to array
+        failedFileNames.push(file);
+
         files[file].push(result);
       });
+
+      //Remove duplicate file names
+      failedFileNames = _.uniq(failedFileNames);
+      //Get difference between failed files and all files
+      passedFileNames = _.difference(allFiles, failedFileNames);
 
       _.forEach(files, function (fileErrors, fileName) {
         spec = xml.ele('testcase', {
@@ -54,6 +64,12 @@ exports.init = function (grunt) {
 
         _.forEach(fileErrors, function (error) {
           spec.ele('failure', {}, error);
+        });
+      });
+
+      _.forEach(passedFileNames, function (fileName) {
+        spec = xml.ele('testcase', {
+          name: fileName
         });
       });
 
@@ -256,7 +272,7 @@ exports.init = function (grunt) {
         // if an explicit formatter was used, the output is already sent to the output file,
         // no need to write the report
         if (!options.format) {
-          writeReport(options.reporterOutput, grunt.log.uncolor(rawResults), format);
+          writeReport(options.reporterOutput, grunt.log.uncolor(rawResults), format, files);
         }
 
         grunt.log.writeln('Results have been written to: ' + options.reporterOutput);

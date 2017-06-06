@@ -137,7 +137,8 @@ exports.init = function (grunt) {
     var args = [],
         env = process.env,
         fileCount = _.isArray(files) ? files.length : 1,
-        child;
+        child,
+        excludes;
 
     args.push('scss-lint');
 
@@ -155,8 +156,11 @@ exports.init = function (grunt) {
     }
 
     if (options.exclude) {
-      args.push('-e');
-      args.push(grunt.file.expand(options.exclude).join(','));
+      excludes = grunt.file.expand(options.exclude);
+      if(excludes) {
+        args.push('-e');
+        args.push(excludes.join(','));
+      }
     }
 
     if (options.require) {

@@ -31,8 +31,7 @@ exports.init = function (grunt) {
       xml.ele('testsuite', {
         name: 'scss-lint',
         timestamp: (new Date()).toISOString().substr(0, 19),
-        tests: allFiles.length,
-        errors: results.length
+        tests: allFiles.length
       });
 
       _.forEach(results, function (result) {
@@ -46,16 +45,18 @@ exports.init = function (grunt) {
           files[file] = [];
         }
 
-        //Add file names to array
+        // Add file names to array
         failedFileNames.push(file);
 
         files[file].push(result);
       });
 
-      //Remove duplicate file names
+      // Remove duplicate file names
       failedFileNames = _.uniq(failedFileNames);
-      //Get difference between failed files and all files
+      // Get difference between failed files and all files
       passedFileNames = _.difference(allFiles, failedFileNames);
+
+      xml.attr('errors', failedFileNames.length);
 
       _.forEach(files, function (fileErrors, fileName) {
         spec = xml.ele('testcase', {
@@ -173,7 +174,7 @@ exports.init = function (grunt) {
 
     if (options.exclude) {
       excludes = grunt.file.expand(options.exclude);
-      if(excludes) {
+      if (excludes) {
         args.push('-e');
         args.push(excludes.join(','));
       }

@@ -56,7 +56,7 @@ exports.init = function (grunt) {
       // Get difference between failed files and all files
       passedFileNames = _.difference(allFiles, failedFileNames);
 
-      xml.attr('errors', failedFileNames.length);
+      xml.att('errors', failedFileNames.length);
 
       _.forEach(files, function (fileErrors, fileName) {
         spec = xml.ele('testcase', {

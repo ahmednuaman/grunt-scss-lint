@@ -184,7 +184,7 @@ describe('grunt-scss-lint', function () {
       }, function (error, results, code) {
         var report = grunt.file.read(reporterOutFile);
 
-        expect(report).to.contain('errors="5"');
+        expect(report).to.contain('errors="1"');
         done();
       });
     });

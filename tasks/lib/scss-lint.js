@@ -26,9 +26,7 @@ exports.init = function (grunt) {
     } else {
       results = (results.length !== 0) ? results.split('\n') : [];
 
-      xml = xmlBuilder.create('testsuites');
-
-      xml.ele('testsuite', {
+      xml = xmlBuilder.create('testsuite', {
         name: 'scss-lint',
         timestamp: (new Date()).toISOString().substr(0, 19),
         tests: allFiles.length
